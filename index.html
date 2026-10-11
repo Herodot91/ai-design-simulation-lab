@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Design Simulation Lab</title>
+<style>
+  :root {
+    --bg: #0f172a; --panel: #1e293b; --border: #334155; --text: #e2e8f0;
+    --muted: #94a3b8; --accent: #6366f1; --accent2: #22d3ee; --ok: #34d399; --warn: #fbbf24;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .app { display: grid; grid-template-columns: 360px 1fr; height: 100vh; }
+  aside { background: var(--panel); border-right: 1px solid var(--border); padding: 20px; overflow-y: auto; }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  .sub { color: var(--muted); font-size: 13px; margin-bottom: 16px; }
+  h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 20px 0 8px; }
+  .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .tabs button { padding: 8px 4px; font-size: 12px; line-height: 1.25; }
+  .tabs button.active { background: var(--accent); border-color: var(--accent); font-weight: 600; }
+  .tabs button.done { border-color: var(--ok); }
+  .tabs .ic { display: block; font-size: 18px; }
+  .lesson { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 13px;
+    line-height: 1.5; margin-top: 14px; }
+  .lesson b { color: var(--accent2); }
+  .lesson .metaphor { color: var(--muted); font-style: italic; margin-top: 6px; }
+  label { display: block; font-size: 13px; margin: 10px 0 4px; color: var(--muted); }
+  input[type=text], select, textarea { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--bg); color: var(--text); font: inherit; font-size: 13px; }
+  input[type=range] { width: 100%; accent-color: var(--accent); }
+  .row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  button { flex: 1; padding: 9px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg);
+    color: var(--text); font: inherit; font-size: 13px; cursor: pointer; }
+  button.primary { background: var(--accent); border-color: var(--accent); font-weight: 600; }
+  button:hover { filter: brightness(1.15); }
+  button:disabled { opacity: .4; cursor: not-allowed; }
+  .chip, .scr, .seg { flex: none; padding: 5px 10px; border-radius: 99px; font-size: 12px; }
+  .scr.active, .seg.active { background: var(--accent); border-color: var(--accent); }
+  .check { display: flex; align-items: center; gap: 8px; font-size: 13px; margin-top: 10px; color: var(--text); }
+  .status { margin-top: 10px; padding: 8px 10px; border-radius: 8px; font-size: 13px; border: 1px solid var(--border); }
+  .status.ok { border-color: var(--ok); color: var(--ok); }
+  .status.bad { border-color: var(--warn); color: var(--warn); }
+  .log { font: 12px/1.5 ui-monospace, Consolas, monospace; background: var(--bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px; height: 100px; overflow-y: auto; color: var(--muted); }
+  .log b { color: var(--accent2); font-weight: 600; }
+  .panel { display: none; }
+  .panel.on { display: block; }
+  main { position: relative; background: #0b1220; overflow: hidden; }
+  .view { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; padding: 16px; }
+  .view.on { display: flex; }
+  .view canvas.flat { max-width: 100%; max-height: 100%; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,.5); }
+  #stage { width: 100%; height: 100%; display: block; cursor: grab; touch-action: none; }
+  #view4 { padding: 0; }
+  #haze { position: absolute; inset: 0; pointer-events: none; opacity: 0; }
+  .hint, .badge { position: absolute; font-size: 12px; background: rgba(15,23,42,.75); padding: 6px 12px;
+    border-radius: 99px; pointer-events: none; }
+  .hint { left: 50%; bottom: 16px; transform: translateX(-50%); color: var(--muted); }
+  .badge { top: 16px; right: 16px; color: var(--accent2); }
+  #photoStage { position: relative; display: block; user-select: none; }
+  #photoImg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
+  #shot { position: absolute; left: 0; top: 0; width: 400px; height: 800px; transform-origin: 0 0; overflow: hidden;
+    border-radius: 46px; pointer-events: none; box-shadow: inset 0 0 60px rgba(0,0,0,.28); }
+  #shotCv { width: 400px; height: 800px; display: block; }
+  #cut { position: absolute; background: #050507; display: none; }
+  #gloss { position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(115deg, rgba(255,255,255,.38) 0%, rgba(255,255,255,0) 38%, rgba(255,255,255,0) 70%, rgba(255,255,255,.14) 100%); }
+  .handle { position: absolute; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; background: rgba(99,102,241,.85);
+    border: 2px solid #fff; color: #fff; font: 700 9px/22px Inter, sans-serif; text-align: center; cursor: move; touch-action: none; }
+  #credit { position: absolute; left: 12px; bottom: 10px; font-size: 11px; color: rgba(255,255,255,.7); text-shadow: 0 1px 3px rgba(0,0,0,.7); }
+  #credit a { color: inherit; }
+  @media (max-width: 860px) {
+    .app { grid-template-columns: 1fr; grid-template-rows: auto 70vh; height: auto; }
+    aside { border-right: 0; border-bottom: 1px solid var(--border); }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <h1>AI Design Simulation Lab</h1>
+    <div class="sub">Transit ticket app · from raw code to a real-world 3D demo.</div>
+
+    <div class="tabs" id="tabs">
+      <button data-step="1"><span class="ic">🛠️</span>1 · Architecture</button>
+      <button data-step="2"><span class="ic">✏️</span>2 · Wireframes</button>
+      <button data-step="3"><span class="ic">🎨</span>3 · UI Mockup</button>
+      <button data-step="4"><span class="ic">⚡</span>4 · AI Sim</button>
+    </div>
+
+    <!-- STEP 1 -->
+    <section class="panel" data-step="1">
+      <div class="lesson">
+        <b>The Plumbing.</b> A raw map of servers, passenger routes and API endpoints. Without mapping where ticket data is
+        stored, we can't create the digital ticket.
+        <div class="metaphor">Like drawing plumbing lines before deciding where the bathroom goes.</div>
+      </div>
+      <label class="check"><input type="checkbox" id="chkTicketDb" checked> Tickets database mapped</label>
+      <label class="check"><input type="checkbox" id="chkRouteDb" checked> Routes database mapped</label>
+      <div class="status" id="archStatus"></div>
+    </section>
+
+    <!-- STEP 2 -->
+    <section class="panel" data-step="2">
+      <div class="lesson">
+        <b>The Blueprint.</b> Low-fidelity grayscale layouts focused on clicking, navigating and logic. No logos, no colours.
+        <div class="metaphor">Where is the map? Where is the ticket? Find the simplest way to travel.</div>
+      </div>
+      <label for="homeScreen">Which screen opens first?</label>
+      <select id="homeScreen">
+        <option value="map">Map</option>
+        <option value="ticket">Ticket</option>
+        <option value="routes">Routes list</option>
+      </select>
+      <label class="check"><input type="checkbox" id="chkNotes" checked> Show annotations</label>
+      <div class="status" id="wireStatus"></div>
+    </section>
+
+    <!-- STEP 3 -->
+    <section class="panel" data-step="3">
+      <div class="lesson">
+        <b>The Interior Design.</b> Pixel-perfect style: brand colours, user cards and scan-ready QR codes. This is the
+        high-fidelity skin that makes the app feel user-ready.
+      </div>
+      <label for="pname">Passenger name</label>
+      <input type="text" id="pname" value="SE Student" maxlength="24">
+      <label for="route">Route</label>
+      <select id="route">
+        <option>Central Station → Airport</option>
+        <option>Harbor Line → Old Town</option>
+        <option>North Gate → University</option>
+      </select>
+      <label for="theme">Brand palette</label>
+      <select id="theme">
+        <option value="indigo">Indigo Gradient</option>
+        <option value="sunset">Sunset Orange</option>
+        <option value="forest">Forest Green</option>
+        <option value="pale">Pale Yellow (poor contrast)</option>
+      </select>
+      <div class="row"><button id="btnQR">New QR code</button></div>
+      <div class="status" id="uiStatus"></div>
+      <div class="status" style="color:var(--muted)">Click any screen or its buttons (Get ticket, tabs, route cards) to try the flow. The highlighted screen is the one shown in the 3D simulation.</div>
+    </section>
+
+    <!-- STEP 4 -->
+    <section class="panel" data-step="4">
+      <div class="lesson">
+        <b>The Cinematic Reveal.</b> High-fidelity mockup + text prompt = a simulated real-world device presentation. Compare
+        how lighting, depth and environment sell a digital product.
+      </div>
+      <h2>View</h2>
+      <div class="row"><button class="seg active" id="modePhoto">📷 Real photo</button><button class="seg" id="mode3d">🧊 3D model</button></div>
+      <div id="ctlPhoto">
+        <div class="row"><button class="seg" data-scene="sit">🪑 Seated commuter</button><button class="seg" data-scene="hand">🧼 Clean hand shot</button></div>
+        <div class="row"><button id="btnUpload">⬆ Upload your own photo</button><input type="file" id="fileIn" accept="image/*" hidden></div>
+        <label class="check"><input type="checkbox" id="adjust"> Adjust screen corners (drag the 4 dots)</label>
+        <label for="bright">Screen brightness</label><input type="range" id="bright" min="0.6" max="1.3" step="0.02" value="0.95">
+        <label for="glare">Glass glare</label><input type="range" id="glare" min="0" max="1" step="0.02" value="0.5">
+      </div>
+      <h2>Interactive prototype</h2>
+      <div class="status" style="color:var(--muted)">Click the buttons and tabs on the phone screen itself. The prototype responds like the real app.</div>
+      <div class="row">
+        <button class="scr" data-screen="map">🗺️ Map</button>
+        <button class="scr" data-screen="ticket">🎫 Ticket</button>
+        <button class="scr" data-screen="routes">🚇 Routes</button>
+      </div>
+      <label for="envPrompt">Environment prompt</label>
+      <textarea id="envPrompt" rows="2">Phone held at a busy train station platform at night</textarea>
+      <div class="row">
+        <button class="primary" id="btnRender">Generate scene</button>
+      </div>
+      <div class="row">
+        <button class="chip" data-p="Phone at a bright metro station platform in the daytime">Metro, day</button>
+        <button class="chip" data-p="Phone inside a bus at sunset, warm golden light">Bus, sunset</button>
+        <button class="chip" data-p="Phone at a train station platform at night, rainy and foggy">Station, rain</button>
+        <button class="chip" data-p="Clean studio shot, soft light">Studio</button>
+      </div>
+      <div class="status" id="interp"></div>
+      <div id="ctl3d" style="display:none"><label for="light">Light intensity</label>
+      <input type="range" id="light" min="0" max="2.5" step="0.05" value="1">
+      <label for="depth">Atmosphere haze</label>
+      <input type="range" id="depth" min="0" max="1" step="0.02" value="0.4">
+      <label class="check"><input type="checkbox" id="blurBg" checked> Blurred background (shallow depth of field)</label>
+      <label for="spin">Rotation speed</label>
+      <input type="range" id="spin" min="0" max="2" step="0.05" value="0.4">
+      <label class="check"><input type="checkbox" id="auto" checked> Auto-rotate</label>
+      <div class="row"><button id="btnReset">Reset view</button></div></div>
+    </section>
+
+    <div class="row">
+      <button id="btnPrev">← Back</button>
+      <button class="primary" id="btnNext">Next step →</button>
+    </div>
+
+    <h2>Log</h2>
+    <div class="log" id="log"></div>
+  </aside>
+
+  <main>
+    <div class="view" id="view1"><canvas class="flat" id="arch" width="1000" height="600"></canvas></div>
+    <div class="view" id="view2"><canvas class="flat" id="wire" width="1000" height="600"></canvas></div>
+    <div class="view" id="view3"><canvas class="flat" id="mockView" width="1000" height="600" style="cursor:pointer"></canvas></div>
+    <div class="view" id="view4">
+      <canvas id="stage"></canvas><div id="haze"></div>
+      <div id="photoStage"><img id="photoImg" alt="Person holding a phone"><div id="shot"><canvas id="shotCv" width="400" height="800"></canvas><div id="cut"></div><div id="gloss"></div></div><div id="handles"></div></div>
+      <div id="credit">Photos: <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a></div>
+    </div>
+    <div class="badge" id="badge"></div>
+    <div class="hint" id="hint"></div>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/js/loaders/RGBELoader.js"></script>
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const logEl = $('log');
+  function log(msg) { logEl.innerHTML += '<div>' + msg + '</div>'; logEl.scrollTop = logEl.scrollHeight; }
+  function rrect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    if (ctx.roundRect) { ctx.roundRect(x, y, w, h, r); return; }
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+  }
+  function setStatus(el, ok, text) { el.className = 'status ' + (ok ? 'ok' : 'bad'); el.textContent = text; }
+
+  /* =================== STEP 1 · ARCHITECTURE =================== */
+  const arch = $('arch'), actx = arch.getContext('2d');
+  const NODES = {
+    app:    { x: 60,  y: 260, label: 'Passenger App',  sub: 'iOS / Android', c: '#6366f1' },
+    gw:     { x: 300, y: 260, label: 'API Gateway',    sub: 'REST /v1', c: '#22d3ee' },
+    auth:   { x: 560, y: 90,  label: 'Auth Service',   sub: 'POST /login', c: '#a78bfa' },
+    routes: { x: 560, y: 260, label: 'Routes Service', sub: 'GET /routes', c: '#a78bfa' },
+    ticket: { x: 560, y: 430, label: 'Ticket Service', sub: 'POST /tickets', c: '#a78bfa' },
+    rdb:    { x: 800, y: 260, label: 'Routes DB',      sub: 'stops, timetables', c: '#34d399', db: 'route' },
+    tdb:    { x: 800, y: 430, label: 'Tickets DB',     sub: 'passes, QR payloads', c: '#34d399', db: 'ticket' }
+  };
+  const EDGES = [['app', 'gw'], ['gw', 'auth'], ['gw', 'routes'], ['gw', 'ticket'], ['routes', 'rdb'], ['ticket', 'tdb']];
+  const NW = 170, NH = 70;
+  const state = { ticketDb: true, routeDb: true };
+  const dbOn = (n) => (n.db === 'ticket' ? state.ticketDb : n.db === 'route' ? state.routeDb : true);
+
+  function drawArch() {
+    const c = actx;
+    c.fillStyle = '#0f172a'; c.fillRect(0, 0, 1000, 600);
+    c.strokeStyle = 'rgba(148,163,184,.08)'; c.lineWidth = 1;
+    for (let i = 0; i < 1000; i += 40) { c.beginPath(); c.moveTo(i, 0); c.lineTo(i, 600); c.stroke(); }
+    for (let i = 0; i < 600; i += 40) { c.beginPath(); c.moveTo(0, i); c.lineTo(1000, i); c.stroke(); }
+    c.fillStyle = '#94a3b8'; c.font = '600 14px Inter, sans-serif'; c.textAlign = 'left';
+    c.fillText('SYSTEM ARCHITECTURE · transit ticketing', 24, 34);
+
+    EDGES.forEach(([a, b]) => {
+      const A = NODES[a], B = NODES[b], broken = !dbOn(B);
+      c.strokeStyle = broken ? '#fbbf24' : '#64748b'; c.lineWidth = 4;
+      c.setLineDash(broken ? [8, 8] : []);
+      c.beginPath();
+      const x1 = A.x + NW, y1 = A.y + NH / 2, x2 = B.x, y2 = B.y + NH / 2, mx = (x1 + x2) / 2;
+      c.moveTo(x1, y1); c.lineTo(mx, y1); c.lineTo(mx, y2); c.lineTo(x2, y2); c.stroke();
+      c.setLineDash([]);
+    });
+    Object.values(NODES).forEach((n) => {
+      const on = dbOn(n);
+      c.globalAlpha = on ? 1 : 0.35;
+      c.fillStyle = '#1e293b'; rrect(c, n.x, n.y, NW, NH, 12); c.fill();
+      c.strokeStyle = n.c; c.lineWidth = 3; rrect(c, n.x, n.y, NW, NH, 12); c.stroke();
+      c.fillStyle = '#e2e8f0'; c.font = '700 15px Inter, sans-serif'; c.textAlign = 'center';
+      c.fillText(n.label, n.x + NW / 2, n.y + 30);
+      c.fillStyle = '#94a3b8'; c.font = '12px Inter, sans-serif';
+      c.fillText(n.sub, n.x + NW / 2, n.y + 52);
+      c.globalAlpha = 1;
+    });
+    if (!state.ticketDb) {
+      c.fillStyle = '#fbbf24'; c.font = '700 15px Inter, sans-serif'; c.textAlign = 'center';
+      c.fillText('⚠ Ticket data has nowhere to live', 885, 535);
+    }
+    c.textAlign = 'left';
+  }
+  function updateArch() {
+    state.ticketDb = $('chkTicketDb').checked;
+    state.routeDb = $('chkRouteDb').checked;
+    drawArch();
+    if (!state.ticketDb) setStatus($('archStatus'), false, 'No Tickets DB → the Ticket Service has nowhere to store passes, so no digital ticket can be created.');
+    else if (!state.routeDb) setStatus($('archStatus'), false, 'Tickets can be stored, but there is no route data to sell tickets for.');
+    else setStatus($('archStatus'), true, 'Data flow complete: app → gateway → services → databases.');
+    drawMock(); drawWire();
+  }
+  $('chkTicketDb').onchange = $('chkRouteDb').onchange = () => { updateArch(); log('<b>architecture</b> ticketDb=' + state.ticketDb + ' routeDb=' + state.routeDb); };
+
+  /* =================== STEP 2 · WIREFRAMES =================== */
+  const wire = $('wire'), wctx = wire.getContext('2d');
+  function wireScreen(c, x, y, kind, highlight) {
+    const w = 240, h = 460;
+    c.fillStyle = '#e5e7eb'; rrect(c, x, y, w, h, 22); c.fill();
+    c.strokeStyle = highlight ? '#6366f1' : '#9ca3af'; c.lineWidth = highlight ? 5 : 2; rrect(c, x, y, w, h, 22); c.stroke();
+    c.fillStyle = '#9ca3af'; c.font = '600 12px Inter, sans-serif'; c.textAlign = 'center';
+    const box = (bx, by, bw, bh, t, fill) => {
+      c.fillStyle = fill || '#d1d5db'; c.fillRect(x + bx, y + by, bw, bh);
+      c.strokeStyle = '#9ca3af'; c.lineWidth = 1.5; c.strokeRect(x + bx, y + by, bw, bh);
+      if (t) { c.fillStyle = '#4b5563'; c.fillText(t, x + bx + bw / 2, y + by + bh / 2 + 4); }
+    };
+    box(16, 20, w - 32, 28, 'Header · ' + kind.toUpperCase());
+    if (kind === 'map') {
+      box(16, 60, w - 32, 36, 'Search destination');
+      box(16, 106, w - 32, 240, 'MAP');
+      box(16, 356, w - 32, 44, 'Get ticket  ▸');
+      box(16, 410, (w - 40) / 2, 34, 'Routes'); box(24 + (w - 40) / 2, 410, (w - 40) / 2, 34, 'Ticket');
+    } else if (kind === 'ticket') {
+      box(16, 60, w - 32, 40, 'Passenger');
+      box(40, 112, w - 80, w - 80, '✕  QR');
+      box(16, 112 + w - 70, w - 32, 36, 'Route · Zone · Valid until');
+      box(16, 410, w - 32, 34, 'Back to map');
+    } else {
+      for (let i = 0; i < 6; i++) box(16, 60 + i * 56, w - 32, 46, 'Route ' + (i + 1));
+      box(16, 410, w - 32, 34, 'Back to map');
+    }
+    c.textAlign = 'left';
+  }
+  function drawWire() {
+    const c = wctx, home = $('homeScreen').value, notes = $('chkNotes').checked;
+    c.fillStyle = '#f3f4f6'; c.fillRect(0, 0, 1000, 600);
+    c.fillStyle = '#6b7280'; c.font = '600 14px Inter, sans-serif'; c.fillText('WIREFRAMES · grayscale, low fidelity', 24, 34);
+    const order = [home].concat(['map', 'ticket', 'routes'].filter((k) => k !== home));
+    order.forEach((k, i) => {
+      const x = 40 + i * 320;
+      wireScreen(c, x, 70, k, i === 0);
+      c.fillStyle = i === 0 ? '#4f46e5' : '#6b7280'; c.font = '700 13px Inter, sans-serif'; c.textAlign = 'center';
+      c.fillText(i === 0 ? '▶ HOME: ' + k.toUpperCase() : k.toUpperCase(), x + 120, 560);
+      if (i < 2) {
+        c.strokeStyle = '#9ca3af'; c.lineWidth = 3; c.beginPath(); c.moveTo(x + 250, 300); c.lineTo(x + 310, 300); c.stroke();
+        c.beginPath(); c.moveTo(x + 310, 300); c.lineTo(x + 300, 292); c.lineTo(x + 300, 308); c.closePath(); c.fillStyle = '#9ca3af'; c.fill();
+      }
+      c.textAlign = 'left';
+    });
+    if (notes) {
+      c.fillStyle = '#b45309'; c.font = '12px Inter, sans-serif';
+      const taps = home === 'ticket' ? 0 : 1;
+      c.fillText('Taps from launch to a scannable ticket: ' + taps, 24, 585);
+    }
+    const taps = home === 'ticket' ? 0 : 1;
+    setStatus($('wireStatus'), taps === 0,
+      taps === 0 ? 'Ticket is the home screen: 0 taps to board. Is the map still reachable? (yes, via nav)'
+                 : 'Passenger needs ' + taps + ' tap to reach the ticket. Fine for planning, slow at a gate.');
+  }
+  $('homeScreen').onchange = () => { drawWire(); log('<b>wireframe</b> home = ' + $('homeScreen').value); };
+  $('chkNotes').onchange = drawWire;
+
+  /* =================== STEP 3 · UI MOCKUP =================== */
+  const mkCanvas = (w, h) => { const cv = document.createElement('canvas'); cv.width = w; cv.height = h; return cv; };
+  const mock = mkCanvas(400, 800), mctx = mock.getContext('2d');          // ticket screen
+  const mapCv = mkCanvas(400, 800), routesCv = mkCanvas(400, 800);
+  const phoneCv = mkCanvas(400, 800), pctx = phoneCv.getContext('2d');     // what the 3D phone shows
+  const mockView = $('mockView'), vctx = mockView.getContext('2d');
+  let current = 'map';
+  const ROUTES = ['Central Station → Airport', 'Harbor Line → Old Town', 'North Gate → University'];
+  const THEMES = {
+    indigo: ['#4f46e5', '#7c3aed', '#f1f5f9'],
+    sunset: ['#c2410c', '#be185d', '#fff7ed'],
+    forest: ['#047857', '#0e7490', '#ecfdf5'],
+    pale:   ['#fde68a', '#fef08a', '#ffffff']
+  };
+  let qrSeed = 7, seed = 7;
+  function rand() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+  function lum(hex) {
+    const n = parseInt(hex.slice(1), 16);
+    return [n >> 16, (n >> 8) & 255, n & 255].map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); })
+      .reduce((s, v, i) => s + v * [0.2126, 0.7152, 0.0722][i], 0);
+  }
+  function contrast(a, b) { const l1 = lum(a), l2 = lum(b); return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05); }
+
+  let mockVersion = 0;
+  function drawMock() {
+    const c = mctx, W = 400, H = 800;
+    const [c1, c2, bg] = THEMES[$('theme').value];
+    const name = $('pname').value.trim() || 'Passenger';
+    const [from, to] = $('route').value.split(' → ');
+    seed = qrSeed;
+
+    c.clearRect(0, 0, W, H); c.fillStyle = bg; c.fillRect(0, 0, W, H);
+    const g = c.createLinearGradient(0, 0, W, 230); g.addColorStop(0, c1); g.addColorStop(1, c2);
+    c.fillStyle = g; c.fillRect(0, 0, W, 230);
+
+    c.fillStyle = 'rgba(255,255,255,.95)'; c.font = '600 15px Inter, sans-serif';
+    c.textAlign = 'left'; c.fillText('9:41', 24, 32); c.textAlign = 'right'; c.fillText('5G ▮▮▮', W - 24, 32);
+    c.textAlign = 'left'; c.font = '700 28px Inter, sans-serif'; c.fillText('Metro Pass', 28, 100);
+    c.font = '400 15px Inter, sans-serif'; c.fillText('Single journey · Zone 1–3', 28, 128);
+
+    c.shadowColor = 'rgba(15,23,42,.2)'; c.shadowBlur = 18; c.shadowOffsetY = 8;
+    c.fillStyle = '#fff'; rrect(c, 24, 170, W - 48, 100, 16); c.fill();
+    c.shadowColor = 'transparent';
+    c.fillStyle = '#334155'; c.font = '700 21px Inter, sans-serif'; c.fillText('Hello, ' + name + '!', 44, 212);
+    c.fillStyle = '#64748b'; c.font = '500 14px Inter, sans-serif'; c.fillText(from + '  →  ' + to, 44, 244);
+
+    c.shadowColor = 'rgba(15,23,42,.2)'; c.shadowBlur = 18; c.shadowOffsetY = 8;
+    c.fillStyle = '#fff'; rrect(c, 24, 296, W - 48, 340, 20); c.fill();
+    c.shadowColor = 'transparent';
+
+    const cells = 13, qr = 260, cs = qr / cells, qx = (W - qr) / 2, qy = 326;
+    if (state.ticketDb) {
+      c.fillStyle = '#0f172a';
+      const fin = (i, j) => (i < 4 && j < 4) || (i > cells - 5 && j < 4) || (i < 4 && j > cells - 5);
+      for (let i = 0; i < cells; i++) for (let j = 0; j < cells; j++) {
+        if (fin(i, j)) continue;
+        if (rand() > 0.5) c.fillRect(qx + i * cs, qy + j * cs, cs - 1, cs - 1);
+      }
+      [[0, 0], [cells - 3, 0], [0, cells - 3]].forEach(([i, j]) => {
+        const x = qx + i * cs, y = qy + j * cs;
+        c.fillStyle = '#0f172a'; c.fillRect(x, y, cs * 3, cs * 3);
+        c.fillStyle = '#fff'; c.fillRect(x + cs * .5, y + cs * .5, cs * 2, cs * 2);
+        c.fillStyle = '#0f172a'; c.fillRect(x + cs, y + cs, cs, cs);
+      });
+      c.fillStyle = '#64748b'; c.font = '500 14px Inter, sans-serif'; c.textAlign = 'center';
+      c.fillText('Scan at the gate', W / 2, 622);
+    } else {
+      c.fillStyle = '#fef3c7'; rrect(c, qx, qy, qr, qr, 12); c.fill();
+      c.fillStyle = '#b45309'; c.textAlign = 'center'; c.font = '700 18px Inter, sans-serif';
+      c.fillText('NO TICKET DATA', W / 2, qy + 120);
+      c.font = '13px Inter, sans-serif'; c.fillText('Tickets DB missing in Step 1', W / 2, qy + 148);
+    }
+
+    const bgd = c.createLinearGradient(0, 0, W, 0); bgd.addColorStop(0, c1); bgd.addColorStop(1, c2);
+    c.fillStyle = bgd; rrect(c, 24, 650, W - 48, 52, 26); c.fill();
+    c.fillStyle = '#ffffff'; c.textAlign = 'center'; c.font = '700 17px Inter, sans-serif'; c.fillText('Add to wallet', W / 2, 683);
+    drawTabBar(c, 'ticket');
+    c.textAlign = 'left';
+
+    const ratio = contrast(c1, '#ffffff');
+    setStatus($('uiStatus'), ratio >= 4.5, 'White text on header colour: contrast ' + ratio.toFixed(2) + ':1 · ' +
+      (ratio >= 4.5 ? 'passes WCAG AA (4.5:1)' : 'FAILS WCAG AA, not accessible'));
+    composeAll();
+  }
+
+  /* ---- shared pieces for the other screens ---- */
+  function palette() { return THEMES[$('theme').value]; }
+  const TABS = [['map', '🗺️', 'Map'], ['ticket', '🎫', 'Ticket'], ['routes', '🚇', 'Routes']];
+  function drawTabBar(c, active) {
+    const [c1] = palette();
+    c.fillStyle = '#ffffff'; c.fillRect(0, 724, 400, 76);
+    c.fillStyle = '#e2e8f0'; c.fillRect(0, 724, 400, 1.5);
+    TABS.forEach(([k, ic, label], i) => {
+      const cx = 400 / 6 + i * (400 / 3);
+      c.textAlign = 'center';
+      c.globalAlpha = k === active ? 1 : 0.5;
+      c.font = '22px sans-serif'; c.fillStyle = '#000'; c.fillText(ic, cx, 756);
+      c.font = (k === active ? '700 ' : '500 ') + '12px Inter, sans-serif';
+      c.fillStyle = k === active ? c1 : '#64748b'; c.fillText(label, cx, 776);
+      c.globalAlpha = 1;
+    });
+    c.textAlign = 'left';
+  }
+  function drawHeader(c, title, sub, h) {
+    const [c1, c2, bg] = palette();
+    c.fillStyle = bg; c.fillRect(0, 0, 400, 800);
+    const g = c.createLinearGradient(0, 0, 400, h); g.addColorStop(0, c1); g.addColorStop(1, c2);
+    c.fillStyle = g; c.fillRect(0, 0, 400, h);
+    c.fillStyle = 'rgba(255,255,255,.95)'; c.font = '600 15px Inter, sans-serif';
+    c.textAlign = 'left'; c.fillText('9:41', 24, 32); c.textAlign = 'right'; c.fillText('5G ▮▮▮', 376, 32);
+    c.textAlign = 'left'; c.font = '700 28px Inter, sans-serif'; c.fillText(title, 28, 84);
+    c.font = '400 15px Inter, sans-serif'; c.fillText(sub, 28, 110);
+  }
+  function ctaButton(c, y, text) {
+    const [c1, c2] = palette();
+    const g = c.createLinearGradient(0, 0, 400, 0); g.addColorStop(0, c1); g.addColorStop(1, c2);
+    c.fillStyle = g; rrect(c, 24, y, 352, 56, 28); c.fill();
+    c.fillStyle = '#fff'; c.textAlign = 'center'; c.font = '700 17px Inter, sans-serif'; c.fillText(text, 200, y + 35);
+    c.textAlign = 'left';
+  }
+  function drawMap() {
+    const c = mapCv.getContext('2d'), [c1] = palette();
+    const [from, to] = $('route').value.split(' → ');
+    drawHeader(c, 'Plan your trip', 'Where to today?', 200);
+    c.shadowColor = 'rgba(15,23,42,.2)'; c.shadowBlur = 14; c.shadowOffsetY = 6;
+    c.fillStyle = '#fff'; rrect(c, 24, 140, 352, 52, 26); c.fill(); c.shadowColor = 'transparent';
+    c.fillStyle = '#64748b'; c.font = '500 15px Inter, sans-serif'; c.fillText('🔍  ' + to, 48, 172);
+    // map
+    c.fillStyle = '#e2e8f0'; c.fillRect(0, 214, 400, 330);
+    c.fillStyle = '#bfdbfe'; c.beginPath(); c.moveTo(0, 470); c.bezierCurveTo(120, 420, 240, 520, 400, 440); c.lineTo(400, 544); c.lineTo(0, 544); c.fill();
+    c.strokeStyle = '#fff'; c.lineWidth = 10;
+    [[0, 280, 400, 300], [0, 380, 400, 360], [90, 214, 120, 544], [270, 214, 250, 544]].forEach(([a, b, d, e]) => { c.beginPath(); c.moveTo(a, b); c.lineTo(d, e); c.stroke(); });
+    c.fillStyle = '#bbf7d0'; rrect(c, 290, 300, 80, 50, 10); c.fill();
+    c.strokeStyle = c1; c.lineWidth = 7; c.lineJoin = 'round'; c.beginPath();
+    c.moveTo(60, 400); c.lineTo(110, 340); c.lineTo(200, 330); c.lineTo(250, 270); c.lineTo(340, 255); c.stroke();
+    [[60, 400], [110, 340], [200, 330], [250, 270], [340, 255]].forEach(([x, y], i, a) => {
+      c.fillStyle = '#fff'; c.beginPath(); c.arc(x, y, 9, 0, 7); c.fill();
+      c.strokeStyle = c1; c.lineWidth = 4; c.stroke();
+    });
+    c.fillStyle = '#0f172a'; c.font = '700 12px Inter, sans-serif'; c.fillText(from, 34, 428); c.fillText(to, 282, 242);
+    c.shadowColor = 'rgba(15,23,42,.25)'; c.shadowBlur = 14; c.shadowOffsetY = 4;
+    c.fillStyle = '#fff'; rrect(c, 24, 470, 352, 62, 14); c.fill(); c.shadowColor = 'transparent';
+    c.fillStyle = '#334155'; c.font = '700 15px Inter, sans-serif'; c.fillText('Next train in 3 min', 44, 497);
+    c.fillStyle = '#64748b'; c.font = '13px Inter, sans-serif'; c.fillText('24 min · 8 stops · Zone 1–3', 44, 518);
+    ctaButton(c, 566, 'Get ticket');
+    c.fillStyle = '#64748b'; c.font = '13px Inter, sans-serif'; c.textAlign = 'center';
+    c.fillText('Tap "Get ticket" to continue', 200, 648); c.textAlign = 'left';
+    drawTabBar(c, 'map');
+  }
+  function drawRoutes() {
+    const c = routesCv.getContext('2d'), [c1, c2] = palette(), sel = $('route').selectedIndex;
+    drawHeader(c, 'Routes', 'Pick a line to ride', 150);
+    ROUTES.forEach((r, i) => {
+      const y = 176 + i * 150, [a, b] = r.split(' → ');
+      c.shadowColor = 'rgba(15,23,42,.15)'; c.shadowBlur = 14; c.shadowOffsetY = 5;
+      c.fillStyle = '#fff'; rrect(c, 24, y, 352, 128, 16); c.fill(); c.shadowColor = 'transparent';
+      c.strokeStyle = i === sel ? c1 : '#e2e8f0'; c.lineWidth = i === sel ? 3 : 1.5; rrect(c, 24, y, 352, 128, 16); c.stroke();
+      c.fillStyle = [c1, c2, '#0891b2'][i]; rrect(c, 24, y, 10, 128, 5); c.fill();
+      c.fillStyle = '#334155'; c.font = '700 17px Inter, sans-serif'; c.fillText(a, 52, y + 36);
+      c.fillStyle = '#94a3b8'; c.font = '600 14px Inter, sans-serif'; c.fillText('↓', 52, y + 58);
+      c.fillStyle = '#334155'; c.font = '700 17px Inter, sans-serif'; c.fillText(b, 52, y + 82);
+      c.fillStyle = '#64748b'; c.font = '13px Inter, sans-serif'; c.fillText('Every ' + (5 + i * 2) + ' min · ' + (24 + i * 9) + ' min trip', 52, y + 108);
+      if (i === sel) { c.fillStyle = c1; rrect(c, 286, y + 14, 74, 26, 13); c.fill(); c.fillStyle = '#fff'; c.font = '700 12px Inter, sans-serif'; c.textAlign = 'center'; c.fillText('Selected', 323, y + 32); c.textAlign = 'left'; }
+    });
+    drawTabBar(c, 'routes');
+  }
+
+  /* ---- clickable regions (in 400×800 screen coordinates) ---- */
+  const tabHot = [['map', 0], ['ticket', 133], ['routes', 266]].map(([go, x]) => ({ x, y: 724, w: x === 266 ? 134 : 133, h: 76, go }));
+  const HOT = {
+    map:    [{ x: 24, y: 566, w: 352, h: 56, go: 'ticket', label: 'Get ticket' }].concat(tabHot),
+    ticket: [{ x: 24, y: 650, w: 352, h: 52, toast: 'Added to wallet ✓' }].concat(tabHot),
+    routes: [0, 1, 2].map((i) => ({ x: 24, y: 176 + i * 150, w: 352, h: 128, route: i, go: 'ticket' })).concat(tabHot)
+  };
+  const SCREEN_CV = { map: mapCv, ticket: mock, routes: routesCv };
+  function hitTest(screen, x, y) {
+    return HOT[screen].find((h) => x >= h.x && x <= h.x + h.w && y >= h.y && y <= h.y + h.h) || null;
+  }
+  function activate(h, screen) {
+    if (h.route !== undefined) { $('route').selectedIndex = h.route; drawMock(); log('<b>prototype</b> route → ' + ROUTES[h.route]); }
+    if (h.toast) { log('<b>prototype</b> ' + h.toast); flash(h.toast); }
+    if (h.go) navigate(h.go);
+  }
+  function navigate(go) {
+    if (go === current) return;
+    current = go; composeAll(); log('<b>prototype</b> screen → ' + go);
+  }
+  let toastText = '', toastUntil = 0;
+  function flash(t) { toastText = t; toastUntil = performance.now() + 1200; composeAll(); setTimeout(composeAll, 1250); }
+
+  function composeAll() {
+    drawMap(); drawRoutes();
+    pctx.drawImage(SCREEN_CV[current], 0, 0);
+    if (toastText && performance.now() < toastUntil) {
+      pctx.fillStyle = 'rgba(15,23,42,.9)'; rrect(pctx, 60, 600, 280, 44, 22); pctx.fill();
+      pctx.fillStyle = '#fff'; pctx.font = '600 15px Inter, sans-serif'; pctx.textAlign = 'center'; pctx.fillText(toastText, 200, 628); pctx.textAlign = 'left';
+    }
+    // overview of all three screens
+    const c = vctx;
+    c.fillStyle = '#e2e8f0'; c.fillRect(0, 0, 1000, 600);
+    c.fillStyle = '#475569'; c.font = '600 14px Inter, sans-serif'; c.fillText('UI MOCKUPS · high fidelity, click to interact', 24, 34);
+    ['map', 'ticket', 'routes'].forEach((k, i) => {
+      const x = 40 + i * 320, y = 70, w = 240, h = 480;
+      c.save(); c.shadowColor = 'rgba(15,23,42,.3)'; c.shadowBlur = 24; c.shadowOffsetY = 10;
+      c.fillStyle = '#fff'; rrect(c, x, y, w, h, 22); c.fill(); c.restore();
+      c.save(); rrect(c, x, y, w, h, 22); c.clip(); c.drawImage(SCREEN_CV[k], x, y, w, h); c.restore();
+      c.lineWidth = k === current ? 5 : 2; c.strokeStyle = k === current ? '#4f46e5' : '#94a3b8'; rrect(c, x, y, w, h, 22); c.stroke();
+      c.fillStyle = k === current ? '#4f46e5' : '#64748b'; c.font = '700 13px Inter, sans-serif'; c.textAlign = 'center';
+      c.fillText((k === current ? '▶ ' : '') + k.toUpperCase() + (k === current ? ' · shown in simulation' : ''), x + w / 2, 578);
+      c.textAlign = 'left';
+    });
+    document.querySelectorAll('.scr').forEach((b) => b.classList.toggle('active', b.dataset.screen === current));
+    shotCtx2().drawImage(phoneCv, 0, 0);
+    mockVersion++;
+  }
+  function shotCtx2() { return $('shotCv').getContext('2d'); }
+  mockView.addEventListener('click', (e) => {
+    const r = mockView.getBoundingClientRect(), s = mockView.width / r.width;
+    const px = (e.clientX - r.left) * s, py = (e.clientY - r.top) * s;
+    const i = Math.floor((px - 40) / 320), lx = (px - 40) - i * 320;
+    if (i < 0 || i > 2 || lx < 0 || lx > 240 || py < 70 || py > 550) return;
+    const k = ['map', 'ticket', 'routes'][i], sx = lx * 400 / 240, sy = (py - 70) * 800 / 480;
+    const h = hitTest(k, sx, sy);
+    if (k !== current) { current = k; composeAll(); log('<b>mockup</b> viewing ' + k); }
+    if (h) activate(h, k);
+  });
+  document.querySelectorAll('.scr').forEach((b) => b.onclick = () => navigate(b.dataset.screen));
+  ['theme', 'pname', 'route'].forEach((id) => $(id).addEventListener('input', drawMock));
+  $('theme').addEventListener('change', () => log('<b>ui</b> palette ' + $('theme').value));
+  $('btnQR').onclick = () => { qrSeed = 1 + Math.floor(Math.random() * 99999); drawMock(); log('<b>ui</b> new QR payload generated'); };
+
+  /* =================== STEP 4 · THREE.JS SCENE =================== */
+  const canvas = $('stage');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0b1220);
+  const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 100);   // longer lens = product-photo look
+  const camHome = new THREE.Vector3(0, 0.1, 11);
+  camera.position.copy(camHome);
+
+  const key = new THREE.DirectionalLight(0xffffff, 1);
+  key.position.set(3, 6, 6);
+  key.castShadow = true;
+  key.shadow.mapSize.set(1024, 1024);
+  key.shadow.radius = 8; key.shadow.bias = -0.0005;
+  Object.assign(key.shadow.camera, { left: -6, right: 6, top: 6, bottom: -6, near: 1, far: 20 });
+  const rim = new THREE.DirectionalLight(0x93c5fd, 0.6); rim.position.set(-5, 2, -4);
+  scene.add(key, rim);
+
+  const pbr = [];                                  // materials that follow the light slider
+  const PBR = (params) => { const m = new THREE.MeshPhysicalMaterial(params); pbr.push(m); return m; };
+
+  /* ---- phone ---- */
+  const phone = new THREE.Group(); scene.add(phone);
+  const PW = 1.8, PH = 3.7, PD = 0.16, R = 0.3, BT = 0.04;
+  function roundedShape(w, h, r) {
+    const s = new THREE.Shape(), x = -w / 2, y = -h / 2;
+    s.moveTo(x + r, y); s.lineTo(x + w - r, y); s.quadraticCurveTo(x + w, y, x + w, y + r);
+    s.lineTo(x + w, y + h - r); s.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    s.lineTo(x + r, y + h); s.quadraticCurveTo(x, y + h, x, y + h - r);
+    s.lineTo(x, y + r); s.quadraticCurveTo(x, y, x + r, y); return s;
+  }
+  const frameMat = PBR({ color: 0x9a9da4, metalness: 1, roughness: 0.28 });
+  const body = new THREE.Mesh(new THREE.ExtrudeGeometry(roundedShape(PW, PH, R), {
+    depth: PD, bevelEnabled: true, bevelSize: 0.04, bevelThickness: BT, bevelSegments: 10, curveSegments: 24 }), frameMat);
+  body.position.z = -PD / 2; body.castShadow = true; phone.add(body);
+
+  // back glass
+  const back = new THREE.Mesh(new THREE.ShapeGeometry(roundedShape(PW - 0.02, PH - 0.02, R - 0.02), 24),
+    PBR({ color: 0x1b2230, metalness: 0.15, roughness: 0.18, clearcoat: 1, clearcoatRoughness: 0.08 }));
+  back.rotation.y = Math.PI; back.position.z = -PD / 2 - BT - 0.001; phone.add(back);
+
+  // front screen (the interactive texture)
+  const screenTex = new THREE.CanvasTexture(phoneCv);
+  screenTex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  screenTex.encoding = THREE.sRGBEncoding;
+  const screenMat = new THREE.MeshBasicMaterial({ map: screenTex, toneMapped: false });
+  const SW = PW - 0.12, SH = PH - 0.12;
+  const screenGeo = new THREE.ShapeGeometry(roundedShape(SW, SH, R - 0.06), 24);
+  (function () {
+    const uv = screenGeo.attributes.uv, pos = screenGeo.attributes.position;
+    for (let i = 0; i < uv.count; i++) uv.setXY(i, pos.getX(i) / SW + 0.5, pos.getY(i) / SH + 0.5);
+  })();
+  const screen = new THREE.Mesh(screenGeo, screenMat);
+  const ZF = PD / 2 + BT + 0.002;
+  screen.position.z = ZF; phone.add(screen);
+
+  // cover glass: subtle reflections over the screen
+  const glass = new THREE.Mesh(screenGeo, PBR({ color: 0xffffff, transparent: true, opacity: 0.07, roughness: 0.02,
+    metalness: 0, clearcoat: 1, clearcoatRoughness: 0.02, depthWrite: false }));
+  glass.position.z = ZF + 0.003; phone.add(glass);
+
+  // dynamic island
+  const island = new THREE.Mesh(new THREE.SphereGeometry(0.07, 32, 16), new THREE.MeshBasicMaterial({ color: 0x000000 }));
+  island.scale.set(3.4, 1, 0.05); island.position.set(0, PH / 2 - 0.19, ZF + 0.002); phone.add(island);
+
+  // side buttons
+  const btnMat = PBR({ color: 0x8c8f96, metalness: 1, roughness: 0.35 });
+  [[-1, 0.9, 0.34], [-1, 0.4, 0.34], [1, 0.7, 0.55]].forEach(([side, y, h]) => {
+    const b = new THREE.Mesh(new THREE.BoxGeometry(0.035, h, 0.07), btnMat);
+    b.position.set(side * (PW / 2 + 0.035), y, 0); phone.add(b);
+  });
+
+  // camera plateau + lenses
+  const plateau = new THREE.Mesh(new THREE.ExtrudeGeometry(roundedShape(0.82, 0.82, 0.2), { depth: 0.03, bevelEnabled: true, bevelSize: 0.01, bevelThickness: 0.01, bevelSegments: 4 }),
+    PBR({ color: 0x2b3342, metalness: 0.2, roughness: 0.15, clearcoat: 1 }));
+  plateau.rotation.y = Math.PI; plateau.position.set(0.36, PH / 2 - 0.58, -PD / 2 - BT - 0.005); phone.add(plateau);
+  [[-0.2, 0.2], [0.2, 0.2], [0, -0.2]].forEach(([dx, dy]) => {
+    const g = new THREE.Group();
+    const ring = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 0.06, 40), PBR({ color: 0xb5b8bf, metalness: 1, roughness: 0.2 }));
+    const lens = new THREE.Mesh(new THREE.CylinderGeometry(0.108, 0.108, 0.065, 40), PBR({ color: 0x05070d, metalness: 0.6, roughness: 0.04, clearcoat: 1, clearcoatRoughness: 0 }));
+    const lensTop = new THREE.Mesh(new THREE.CircleGeometry(0.06, 32), new THREE.MeshBasicMaterial({ color: 0x1b2a5a }));
+    ring.rotation.x = lens.rotation.x = Math.PI / 2;
+    lensTop.position.z = -0.034; lensTop.rotation.y = Math.PI;
+    g.add(ring, lens, lensTop);
+    g.position.set(plateau.position.x - dx, plateau.position.y + dy, plateau.position.z - 0.045);
+    phone.add(g);
+  });
+  phone.traverse((o) => { if (o.isMesh && o !== glass) o.castShadow = true; });
+
+  // soft contact shadow on an invisible floor
+  const shadowFloor = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), new THREE.ShadowMaterial({ opacity: 0.28 }));
+  shadowFloor.rotation.x = -Math.PI / 2; shadowFloor.position.y = -2.7; shadowFloor.receiveShadow = true; scene.add(shadowFloor);
+
+  /* ---- image-based environments ---- */
+  const HDR_BASE = 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/textures/equirectangular/';
+  const HDR_FILE = { hub: 'pedestrian_overpass_1k.hdr', sunset: 'venice_sunset_1k.hdr', city: 'royal_esplanade_1k.hdr' };
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  pmrem.compileEquirectangularShader();
+  const envCache = {};
+  function buildStudio() {
+    const s = new THREE.Scene();
+    s.add(new THREE.Mesh(new THREE.BoxGeometry(24, 12, 24), new THREE.MeshBasicMaterial({ color: 0x4b5160, side: THREE.BackSide })));
+    const panel = (w, h, x, y, z, rx, ry, power) => {
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color().setScalar(power), side: THREE.DoubleSide }));
+      m.position.set(x, y, z); m.rotation.set(rx, ry, 0); s.add(m);
+    };
+    panel(9, 9, 0, 5.8, 0, Math.PI / 2, 0, 6);          // overhead softbox
+    panel(2.5, 9, -8, 1, 2, 0, Math.PI / 2, 5);         // left strip
+    panel(2.5, 9, 8, 1, 2, 0, Math.PI / 2, 3.5);        // right strip
+    panel(10, 3, 0, 0, -9, 0, 0, 2);                    // back wash
+    const t = pmrem.fromScene(s, 0.02).texture;
+    return { env: t, sharp: t, blur: t };
+  }
+  function loadEnv(kind) {
+    if (envCache[kind]) return Promise.resolve(envCache[kind]);
+    if (kind === 'studio') return Promise.resolve(envCache.studio = buildStudio());
+    return new Promise((resolve, reject) => {
+      new THREE.RGBELoader().load(HDR_BASE + HDR_FILE[kind], (tex) => {
+        tex.mapping = THREE.EquirectangularReflectionMapping;
+        const env = pmrem.fromEquirectangular(tex).texture;
+        resolve(envCache[kind] = { env, sharp: tex, blur: env });
+      }, undefined, reject);
+    });
+  }
+
+  const ENV = { hdr: 'hub', exposure: 1, keyColor: 0xffffff, keyI: 0.8, rimColor: 0x93c5fd, haze: 0.15, hazeColor: '220,230,240', blur: true, data: null };
+  let envToken = 0;
+  const hazeEl = $('haze');
+  function applyLive() {
+    const li = +$('light').value, hz = +$('depth').value;
+    key.intensity = ENV.keyI * li; key.color.set(ENV.keyColor); rim.color.set(ENV.rimColor); rim.intensity = 0.6 * li;
+    pbr.forEach((m) => { m.envMapIntensity = li; });
+    renderer.toneMappingExposure = ENV.exposure;
+    shadowFloor.material.opacity = ENV.hdr === 'studio' ? 0.28 : 0.1;
+    if (ENV.data) { scene.environment = ENV.data.env; scene.background = $('blurBg').checked ? ENV.data.blur : ENV.data.sharp; }
+    hazeEl.style.background = 'radial-gradient(ellipse at 50% 55%, rgba(' + ENV.hazeColor + ',.55) 0%, rgba(' + ENV.hazeColor + ',.9) 100%)';
+    hazeEl.style.opacity = hz;
+  }
+  function applyEnv(e) {
+    Object.assign(ENV, e);
+    $('light').value = 1; $('depth').value = e.haze;
+    const token = ++envToken;
+    setStatus($('interp'), true, 'Loading environment…');
+    loadEnv(e.hdr).then((d) => {
+      if (token !== envToken) return;
+      ENV.data = d; applyLive();
+      setStatus($('interp'), true, 'Interpreted as: ' + (e.label || ''));
+    }).catch(() => {
+      setStatus($('interp'), false, 'Could not load the environment image (needs internet).');
+      scene.background = new THREE.Color(0x0b1220); applyLive();
+    });
+  }
+  function interpret(prompt) {
+    const p = prompt.toLowerCase(), has = (...w) => w.some((x) => new RegExp('\\b' + x + '\\b').test(p));
+    const e = { hdr: 'hub', exposure: 1, keyColor: 0xffffff, keyI: 0.8, rimColor: 0x93c5fd, haze: 0.12, hazeColor: '220,230,240', blur: true };
+    const tags = [];
+    if (has('studio', 'clean', 'plain')) { e.hdr = 'studio'; e.haze = 0; tags.push('studio softboxes'); }
+    else if (has('street', 'city', 'outdoor', 'outside', 'plaza', 'bus', 'tram')) { e.hdr = 'city'; tags.push('city street'); }
+    else { tags.push('transit hub'); }
+    if (has('sunset', 'golden', 'warm', 'dusk')) { if (e.hdr !== 'studio') e.hdr = 'sunset'; e.keyColor = 0xffb070; e.rimColor = 0xff7a3d; e.exposure = 1.05; tags.push('golden hour'); }
+    if (has('bright', 'day', 'sunny', 'morning', 'daytime')) { e.exposure = 1.3; e.keyI = 1.1; tags.push('bright daylight'); }
+    if (has('night', 'dark', 'evening')) {
+      e.exposure = 0.22; e.keyI = 0.5; e.keyColor = 0x9fb2ff; e.rimColor = 0x818cf8; e.haze = 0.5; e.hazeColor = '10,16,40'; tags.push('night');
+    }
+    if (has('rain', 'fog', 'mist', 'foggy', 'rainy')) { e.haze = 0.55; e.exposure *= 0.85; if (e.hazeColor === '220,230,240') e.hazeColor = '170,185,200'; tags.push('fog / rain'); }
+    e.label = tags.join(' · ');
+    return { env: e, tags };
+  }
+  $('light').oninput = $('depth').oninput = applyLive;
+  $('blurBg').onchange = applyLive;
+
+  function render3D() {
+    const prompt = $('envPrompt').value.trim() || 'studio';
+    pickScene(prompt);
+    const { env, tags } = interpret(prompt);
+    applyEnv(env);
+    log('<b>ai sim</b> "' + prompt + '" → ' + tags.join(', '));
+  }
+  $('btnRender').onclick = render3D;
+  document.querySelectorAll('.chip[data-p]').forEach((b) => b.onclick = () => { $('envPrompt').value = b.dataset.p; render3D(); });
+
+  /* ---- interaction ---- */
+  let rotY = 0.5, rotX = 0, dragging = false, lx = 0, ly = 0, zoom = camHome.z;
+  const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+  let downX = 0, downY = 0;
+  function pickScreen(e) {
+    const r = canvas.getBoundingClientRect();
+    ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+    ray.setFromCamera(ndc, camera);
+    phone.updateMatrixWorld(true);
+    const hit = ray.intersectObject(screen)[0];
+    if (!hit || !hit.uv) return null;
+    const x = hit.uv.x * 400, y = (1 - hit.uv.y) * 800;
+    return { x, y, hot: hitTest(current, x, y) };
+  }
+  canvas.addEventListener('pointerdown', (e) => { dragging = true; downX = lx = e.clientX; downY = ly = e.clientY; canvas.setPointerCapture(e.pointerId); });
+  canvas.addEventListener('pointerup', (e) => {
+    dragging = false;
+    if (Math.hypot(e.clientX - downX, e.clientY - downY) < 5) {   // a click, not a drag
+      const p = pickScreen(e);
+      if (p && p.hot) activate(p.hot, current);
+    }
+  });
+  canvas.addEventListener('pointermove', (e) => {
+    if (!dragging) { const p = pickScreen(e); canvas.style.cursor = p && p.hot ? 'pointer' : 'grab'; return; }
+    rotY += (e.clientX - lx) * 0.01; rotX = Math.max(-0.9, Math.min(0.9, rotX + (e.clientY - ly) * 0.01));
+    lx = e.clientX; ly = e.clientY;
+  });
+  canvas.addEventListener('wheel', (e) => { e.preventDefault(); zoom = Math.max(5, Math.min(16, zoom + e.deltaY * 0.006)); }, { passive: false });
+  $('btnReset').onclick = () => { rotY = 0.5; rotX = 0; zoom = camHome.z; };
+
+  function resize() {
+    const m = canvas.parentElement;
+    if (!m.clientWidth) return;
+    renderer.setSize(m.clientWidth, m.clientHeight, false);
+    camera.aspect = m.clientWidth / m.clientHeight; camera.updateProjectionMatrix();
+  }
+  addEventListener('resize', resize);
+
+  let step = 1, lastTexVersion = -1;
+  const clock = new THREE.Clock();
+  (function loop() {
+    requestAnimationFrame(loop);
+    const dt = clock.getDelta(), t = clock.elapsedTime;
+    if (step !== 4 || mode !== '3d') return;
+    if (lastTexVersion !== mockVersion) { screenTex.needsUpdate = true; lastTexVersion = mockVersion; }
+    if ($('auto').checked && !dragging) rotY += dt * +$('spin').value;
+    phone.rotation.y = rotY + Math.sin(t * 0.5) * 0.04; phone.rotation.x = rotX + Math.sin(t * 0.7) * 0.02;
+    phone.position.y = Math.sin(t * 1.1) * 0.06;
+    camera.position.z += (zoom - camera.position.z) * 0.1;
+    camera.lookAt(0, 0, 0);
+    renderer.render(scene, camera);
+  })();
+
+  /* =================== PHOTO MOCKUP (real photo + warped live screen) =================== */
+  const UNS = (id) => 'https://images.unsplash.com/photo-' + id + '?w=1600&q=85&fit=max';
+  const SCENES = {
+    sit:  { url: UNS('1764831138635-35873bdd671e'), name: 'seated commuter',
+            q: [[0.470, 0.366], [0.598, 0.366], [0.551, 0.759], [0.395, 0.757]],   // TL, TR, BR, BL (fractions of the photo)
+            cut: { l: 140, t: 14, w: 120, h: 36, r: '18px' }, radius: 40 },       // dynamic island
+    hand: { url: UNS('1585060282215-39a72f82385c'), name: 'clean hand shot',
+            q: [[0.420, 0.302], [0.547, 0.300], [0.584, 0.724], [0.450, 0.732]],
+            cut: { l: 86, t: 0, w: 228, h: 26, r: '0 0 18px 18px' }, radius: 38 }    // notch
+  };
+  const photoStage = $('photoStage'), photoImg = $('photoImg'), shot = $('shot'), shotCv = $('shotCv'), handlesEl = $('handles');
+  const shotCtx = shotCv.getContext('2d');
+  let mode = 'photo', sceneKey = 'sit', scn = SCENES.sit, Hfwd = null, Hinv = null, sw = 1, sh = 1;
+
+  function solveH(src, dst) {                       // 4 point pairs → 3×3 homography (row-major, h33 = 1)
+    const A = [], b = [];
+    for (let i = 0; i < 4; i++) {
+      const [x, y] = src[i], [u, v] = dst[i];
+      A.push([x, y, 1, 0, 0, 0, -u * x, -u * y]); b.push(u);
+      A.push([0, 0, 0, x, y, 1, -v * x, -v * y]); b.push(v);
+    }
+    for (let i = 0; i < 8; i++) {                   // gaussian elimination with pivoting
+      let p = i; for (let r = i + 1; r < 8; r++) if (Math.abs(A[r][i]) > Math.abs(A[p][i])) p = r;
+      [A[i], A[p]] = [A[p], A[i]]; [b[i], b[p]] = [b[p], b[i]];
+      for (let r = i + 1; r < 8; r++) { const f = A[r][i] / A[i][i]; for (let c = i; c < 8; c++) A[r][c] -= f * A[i][c]; b[r] -= f * b[i]; }
+    }
+    const h = new Array(8);
+    for (let i = 7; i >= 0; i--) { let s = b[i]; for (let c = i + 1; c < 8; c++) s -= A[i][c] * h[c]; h[i] = s / A[i][i]; }
+    return h.concat(1);
+  }
+  function apply(H, x, y) { const w = H[6] * x + H[7] * y + H[8]; return [(H[0] * x + H[1] * y + H[2]) / w, (H[3] * x + H[4] * y + H[5]) / w]; }
+
+  function layoutPhoto() {
+    const host = $('view4'), W = host.clientWidth, H = host.clientHeight;
+    const iw = photoImg.naturalWidth || 1000, ih = photoImg.naturalHeight || 667, ar = iw / ih;
+    sw = W / H > ar ? H * ar : W; sh = W / H > ar ? H : W / ar;
+    photoStage.style.width = sw + 'px'; photoStage.style.height = sh + 'px';
+    const quad = scn.q.map(([fx, fy]) => [fx * sw, fy * sh]);
+    const src = [[0, 0], [400, 0], [400, 800], [0, 800]];
+    Hfwd = solveH(src, quad); Hinv = solveH(quad, src);
+    const m = Hfwd;
+    shot.style.transform = 'matrix3d(' + [m[0], m[3], 0, m[6], m[1], m[4], 0, m[7], 0, 0, 1, 0, m[2], m[5], 0, 1].join(',') + ')';
+    handlesEl.innerHTML = '';
+    if ($('adjust').checked) quad.forEach(([x, y], i) => {
+      const d = document.createElement('div'); d.className = 'handle'; d.style.left = x + 'px'; d.style.top = y + 'px'; d.textContent = ['TL', 'TR', 'BR', 'BL'][i];
+      d.onpointerdown = (e) => {
+        d.setPointerCapture(e.pointerId);
+        d.onpointermove = (ev) => {
+          const r = photoStage.getBoundingClientRect();
+          scn.q[i] = [Math.max(0, Math.min(1, (ev.clientX - r.left) / sw)), Math.max(0, Math.min(1, (ev.clientY - r.top) / sh))];
+          layoutPhoto();
+        };
+        d.onpointerup = () => { log('<b>corners</b> ' + JSON.stringify(scn.q.map((p) => p.map((v) => +v.toFixed(3))))); };
+      };
+      handlesEl.appendChild(d);
+    });
+  }
+  function setScene(key) {
+    sceneKey = key; scn = SCENES[key];
+    document.querySelectorAll('[data-scene]').forEach((b) => b.classList.toggle('active', b.dataset.scene === key));
+    const cut = $('cut'), c = scn.cut;
+    if (c) { cut.style.cssText = 'display:block;left:' + c.l + 'px;top:' + c.t + 'px;width:' + c.w + 'px;height:' + c.h + 'px;border-radius:' + c.r; }
+    else cut.style.display = 'none';
+    shot.style.borderRadius = (scn.radius || 40) + 'px';
+    photoImg.onload = layoutPhoto;
+    photoImg.src = scn.url;
+    if (photoImg.complete && photoImg.naturalWidth) layoutPhoto();
+    log('<b>photo</b> scene → ' + scn.name);
+  }
+  function setMode(m) {
+    mode = m;
+    $('modePhoto').classList.toggle('active', m === 'photo'); $('mode3d').classList.toggle('active', m === '3d');
+    $('ctlPhoto').style.display = m === 'photo' ? 'block' : 'none';
+    $('ctl3d').style.display = m === '3d' ? 'block' : 'none';
+    photoStage.style.display = m === 'photo' ? 'block' : 'none';
+    $('credit').style.display = m === 'photo' ? 'block' : 'none';
+    canvas.style.display = hazeEl.style.display = m === '3d' ? 'block' : 'none';
+    if (m === 'photo') layoutPhoto(); else { resize(); lastTexVersion = -1; }
+    $('hint').textContent = m === 'photo' ? 'Click the buttons on the phone screen in the photo' : 'Click buttons on the phone · drag to rotate · scroll to zoom';
+  }
+  function photoHit(e) {
+    const r = photoStage.getBoundingClientRect();
+    const [x, y] = apply(Hinv, e.clientX - r.left, e.clientY - r.top);
+    if (x < 0 || y < 0 || x > 400 || y > 800) return null;
+    return hitTest(current, x, y);
+  }
+  photoStage.addEventListener('click', (e) => { if ($('adjust').checked) return; const h = photoHit(e); if (h) activate(h, current); });
+  photoStage.addEventListener('pointermove', (e) => { photoStage.style.cursor = !$('adjust').checked && photoHit(e) ? 'pointer' : 'default'; });
+  $('modePhoto').onclick = () => setMode('photo');
+  $('mode3d').onclick = () => setMode('3d');
+  document.querySelectorAll('[data-scene]').forEach((b) => b.onclick = () => setScene(b.dataset.scene));
+  $('adjust').onchange = layoutPhoto;
+  $('bright').oninput = $('glare').oninput = () => {
+    shot.style.filter = 'brightness(' + $('bright').value + ') contrast(1.03)';
+    $('gloss').style.opacity = $('glare').value;
+  };
+  $('bright').oninput();
+  $('btnUpload').onclick = () => $('fileIn').click();
+  $('fileIn').onchange = (e) => {
+    const f = e.target.files[0]; if (!f) return;
+    SCENES.custom = { url: URL.createObjectURL(f), name: 'your photo', q: [[0.4, 0.3], [0.6, 0.3], [0.6, 0.7], [0.4, 0.7]] };
+    setScene('custom'); $('adjust').checked = true; setMode('photo'); layoutPhoto();
+    log('<b>photo</b> drag the 4 dots onto the corners of the phone screen in your photo');
+  };
+  function pickScene(prompt) {
+    const p = prompt.toLowerCase();
+    const k = /\b(studio|clean|white|plain|wall|minimal)\b/.test(p) ? 'hand' : 'sit';
+    if (k !== sceneKey && SCENES[k]) setScene(k);
+  }
+  addEventListener('resize', () => { if (mode === 'photo') layoutPhoto(); });
+
+  /* =================== STEP NAVIGATION =================== */
+  const HINTS = {
+    1: ['Untick "Tickets database" to see what breaks', 'Blueprint of data flow'],
+    2: ['Change the home screen and watch the tap count', 'Grayscale · no colour yet'],
+    3: ['Click a screen to select it · click its buttons to navigate', 'High-fidelity mockups'],
+    4: ['Click buttons on the phone · drag to rotate · scroll to zoom', 'Interactive 3D prototype']
+  };
+  const done = new Set();
+  function go(n) {
+    step = Math.max(1, Math.min(4, n));
+    document.querySelectorAll('.panel').forEach((p) => p.classList.toggle('on', +p.dataset.step === step));
+    document.querySelectorAll('.view').forEach((v) => v.classList.toggle('on', v.id === 'view' + step));
+    for (let i = 1; i < step; i++) done.add(i);
+    document.querySelectorAll('#tabs button').forEach((b) => {
+      const s = +b.dataset.step;
+      b.classList.toggle('active', s === step);
+      b.classList.toggle('done', s !== step && done.has(s));
+    });
+    $('btnPrev').disabled = step === 1;
+    $('btnNext').disabled = step === 4;
+    $('hint').textContent = HINTS[step][0];
+    $('badge').textContent = 'Step ' + step + ' · ' + HINTS[step][1];
+    if (step === 4) { resize(); lastTexVersion = -1; if (mode === 'photo') layoutPhoto(); }
+    log('→ step ' + step);
+  }
+  document.querySelectorAll('#tabs button').forEach((b) => b.onclick = () => go(+b.dataset.step));
+  $('btnPrev').onclick = () => go(step - 1);
+  $('btnNext').onclick = () => go(step + 1);
+
+  /* ---- init ---- */
+  drawArch(); drawWire(); drawMock(); updateArch();
+  applyEnv(interpret($('envPrompt').value).env);
+  setStatus($('interp'), true, 'Interpreted as: transit hub · night');
+  go(1);
+  setScene('sit'); setMode('photo'); composeAll();
+  log('Ready. Work through the four steps like a design + dev team.');
+})();
+</script>
+</body>
+</html>
