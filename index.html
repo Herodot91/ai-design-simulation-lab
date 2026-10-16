@@ -12,7 +12,7 @@
   * { box-sizing: border-box; }
   html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
     font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
-  .app { display: grid; grid-template-columns: 380px 1fr; height: 100vh; }
+  .app { display: grid; grid-template-columns: 380px 1fr; height: calc(100vh - 52px); }
   aside { background: var(--panel); border-right: 1px solid var(--border); padding: 18px 20px; overflow-y: auto; }
   .top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
   h1 { font-size: 18px; margin: 0 0 4px; }
@@ -103,9 +103,59 @@
   .focusBtn { position: absolute; top: 12px; left: 12px; z-index: 6; flex: none; padding: 6px 12px; border-radius: 99px; font-size: 12px; background: rgba(15,23,42,.85); }
   .app.focus { grid-template-columns: 1fr; }
   .app.focus aside { display: none; }
+
+  /* ---------- COURSE SECTIONS ---------- */
+  body { padding-top: 52px; }
+  #topnav { position: fixed; top: 0; left: 0; right: 0; height: 52px; z-index: 50; display: flex; align-items: center; gap: 12px; padding: 0 14px; background: #0b1220; border-bottom: 1px solid var(--border); }
+  #topnav .brand { font-weight: 800; font-size: 15px; white-space: nowrap; }
+  #secs { display: flex; gap: 6px; flex: 1; justify-content: center; }
+  #secs button { flex: none; padding: 8px 14px; border-radius: 99px; font-size: 13px; font-weight: 600; }
+  #secs button.active { background: var(--accent); border-color: var(--accent); }
+  @media (max-width: 760px) { #topnav .brand span { display: none; } #secs button { padding: 7px 9px; font-size: 12px; } #secs button .lbl { display: none; } #secs button.active .lbl { display: inline; } }
+  #secPres, #secRef { display: none; }
+  body[data-sec="pres"] #secPres { display: flex; } body[data-sec="ref"] #secRef { display: block; }
+  body[data-sec="pres"] .app, body[data-sec="ref"] .app { display: none; }
+  #secPres { height: calc(100vh - 52px); flex-direction: column; background: radial-gradient(circle at 20% 0%, #1e1b4b, #0f172a 60%); }
+  .deck { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; padding: 16px; }
+  .slide { width: 100%; max-width: 1120px; height: 100%; max-height: 660px; background: rgba(30,41,59,.94); border: 1px solid var(--border); border-radius: 22px; padding: 34px 42px; overflow: auto; position: relative; animation: sfade .35s ease; box-shadow: 0 20px 60px rgba(0,0,0,.45); }
+  @keyframes sfade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  .slide h2, .rfsec h2 { font-size: clamp(22px, 3.4vw, 34px); margin: 0 0 14px; color: var(--text); text-transform: none; letter-spacing: 0; } .slide h4 { margin: 14px 0 6px; color: var(--accent2); }
+  .snum { position: absolute; right: 18px; top: 12px; font-size: 12px; color: var(--muted); }
+  .stitle { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 10px; }
+  .stitle h1 { font-size: clamp(32px, 6vw, 60px); margin: 0; line-height: 1.05; } .stitle p { font-size: clamp(15px, 2vw, 20px); color: var(--muted); max-width: 720px; margin: 4px 0 14px; } .sicon { font-size: 64px; }
+  .row.ctr { justify-content: center; } button.big { flex: none; padding: 13px 24px; font-size: 16px; border-radius: 12px; }
+  .sgoals { list-style: none; margin: 18px 0; padding: 0; display: grid; gap: 12px; } .sgoals li { display: flex; gap: 14px; align-items: center; font-size: clamp(15px, 2vw, 19px); background: rgba(255,255,255,.04); padding: 14px 18px; border-radius: 14px; }
+  .sgoals span { flex: none; width: 34px; height: 34px; border-radius: 50%; background: var(--accent); display: grid; place-items: center; font-weight: 800; }
+  .sflow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 18px 0; } .sflow i { font-style: normal; color: var(--muted); }
+  .sstep { flex: none; background: rgba(99,102,241,.16); border: 1px solid var(--accent); border-radius: 12px; padding: 10px 12px; font-size: 13px; font-weight: 600; text-align: center; min-width: 96px; color: var(--text); }
+  .sstep b { display: block; color: var(--accent2); font-size: 11px; } button.sstep { cursor: pointer; }
+  .snote { color: var(--muted); font-size: 15px; line-height: 1.6; max-width: 820px; }
+  .sgrid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; align-items: start; } .stag { color: var(--accent2); font-weight: 800; letter-spacing: .1em; }
+  .stext blockquote { margin: 6px 0 14px; padding: 10px 16px; border-left: 4px solid var(--accent); font-size: clamp(16px, 2.2vw, 21px); font-weight: 600; background: rgba(255,255,255,.04); border-radius: 0 12px 12px 0; }
+  .stext p { font-size: 14.5px; line-height: 1.6; } .mini { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; font-size: 13px; line-height: 1.5; } .mini > div { background: rgba(255,255,255,.05); border-radius: 12px; padding: 10px 12px; } .mini b { color: var(--accent2); }
+  .sprev canvas { width: 100%; border-radius: 14px; box-shadow: 0 10px 30px rgba(0,0,0,.5); display: block; } .spv small { display: block; margin-top: 8px; color: var(--muted); font-size: 12px; }
+  .stable { width: 100%; border-collapse: collapse; font-size: 14px; margin: 8px 0 14px; } .stable th, .stable td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.45; } .stable th { color: var(--accent2); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
+  .scards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 14px 0; } .scards.four { grid-template-columns: repeat(2, 1fr); } .scard { background: rgba(255,255,255,.05); border: 1px solid var(--border); border-radius: 16px; padding: 16px; } .scard h3 { margin: 4px 0 6px; } .scard p { margin: 0; font-size: 14px; line-height: 1.55; } .semoji { font-size: 34px; }
+  .swarn { background: rgba(251,191,36,.1); border: 1px solid var(--warn); color: var(--warn); border-radius: 12px; padding: 12px 16px; font-size: 14px; line-height: 1.55; }
+  .scode { background: #0b1220; border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; font: 12.5px/1.5 ui-monospace, Consolas, monospace; overflow: auto; margin: 6px 0; white-space: pre; color: #bfdbfe; }
+  .deckbar { display: flex; align-items: center; justify-content: center; gap: 14px; padding: 0 16px 14px; } .deckbar button { flex: none; padding: 8px 18px; }
+  #dDots { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; } #dDots i { width: 10px; height: 10px; border-radius: 50%; background: #334155; cursor: pointer; } #dDots i.cur { background: var(--accent2); transform: scale(1.3); }
+  @media (max-width: 860px) { .slide { padding: 22px 18px; max-height: none; } .sgrid, .scards, .scards.four, .mini { grid-template-columns: 1fr; } }
+  #secRef { height: calc(100vh - 52px); overflow-y: auto; background: radial-gradient(circle at 80% 0%, #1e1b4b, #0f172a 55%); }
+  #refBody { max-width: 980px; margin: 0 auto; padding: 26px 18px 60px; }
+  .rfhead h1 { margin: 0 0 6px; font-size: clamp(26px, 4vw, 38px); } .rfhead p { color: var(--muted); line-height: 1.6; max-width: 760px; } .rfhead label { max-width: 360px; } .rfhead small, .rfp { color: var(--muted); font-size: 13px; }
+  .rfsec { background: rgba(30,41,59,.9); border: 1px solid var(--border); border-radius: 18px; padding: 18px 22px; margin: 16px 0; } #refBody .rfsec h2 { margin: 0 0 8px; font-size: 20px; }
+  .rfsum { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; } .rfcv canvas { width: 100%; border-radius: 12px; display: block; } .rfchips { grid-column: 1 / -1; display: flex; gap: 28px; flex-wrap: wrap; align-items: end; } .rfchips small { display: block; color: var(--muted); margin-bottom: 6px; }
+  .sw4 { display: flex; gap: 6px; } .sw4 i { width: 30px; height: 38px; border-radius: 50%; display: block; } .shp { width: 64px; height: 44px; } .fnt { font-size: 28px; font-weight: 700; }
+  .rfrow { display: grid; grid-template-columns: 220px 1fr; gap: 14px; align-items: start; margin: 10px 0; } .rfl b { display: block; } .rfl span { font-size: 13px; color: var(--accent2); }
+  .rfkit { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; } .rfcomp, .rfa11y { list-style: none; padding: 0; margin: 4px 0; font-size: 13px; line-height: 1.5; } .rfcomp li { background: rgba(255,255,255,.05); border-radius: 10px; padding: 8px 12px; margin: 6px 0; }
+  .rfa11y li { margin: 6px 0; } .rfa11y li.ok { color: var(--ok); } .rfa11y li.no { color: var(--warn); }
+  .rfq { margin: 12px 0; } .rfq label { font-size: 14px; color: var(--text); } .rfsa { display: grid; grid-template-columns: 240px 1fr 24px; gap: 12px; align-items: center; margin: 6px 0; } .rfsa label { margin: 0; color: var(--text); } .rfsa b { color: var(--accent2); }
+  @media (max-width: 760px) { .rfsum, .rfkit, .rfrow { grid-template-columns: 1fr; } .rfsa { grid-template-columns: 1fr 1fr 24px; } }
+  @media print { #topnav, .app, #secPres, .deckbar { display: none !important; } body { padding: 0; background: #fff; color: #000; } #secRef { display: block !important; height: auto; overflow: visible; background: #fff; } .rfsec { background: #fff; border-color: #bbb; color: #000; } textarea, input { background: #fff; color: #000; border: 1px solid #999; } .scode { background: #f3f4f6; color: #111; } .rfhead p, .rfp, .rfl span { color: #333; } button { display: none; } }
   @media (max-width: 860px) {
     html, body { overflow: hidden; }
-    .app { grid-template-columns: 1fr; grid-template-rows: 58vh 1fr; height: 100vh; }
+    .app { grid-template-columns: 1fr; grid-template-rows: 58vh 1fr; height: calc(100vh - 52px); }
     main { order: -1; }
     aside { border-right: 0; border-top: 1px solid var(--border); min-height: 0; }
     .app.focus { grid-template-rows: 1fr; }
@@ -114,13 +164,19 @@
 </style>
 </head>
 <body>
+<nav id="topnav">
+  <div class="brand">🎓 <span data-i18n="app.title"></span></div>
+  <div id="secs">
+    <button data-sec="pres">📖 <span class="lbl" data-i18n="nav.pres"></span></button>
+    <button data-sec="sim">🧪 <span class="lbl" data-i18n="nav.sim"></span></button>
+    <button data-sec="ref">🧠 <span class="lbl" data-i18n="nav.ref"></span></button>
+  </div>
+  <div class="lang" id="lang"><button data-lang="en">EN</button><button data-lang="ro">RO</button><button data-lang="fr">FR</button></div>
+</nav>
+
 <div class="app">
   <aside>
-    <div class="top">
-      <h1 data-i18n="app.title"></h1>
-      <div class="lang" id="lang"><button data-lang="en">EN</button><button data-lang="ro">RO</button><button data-lang="fr">FR</button></div>
-    </div>
-    <div class="sub" data-i18n="app.sub"></div>
+    <div class="status note case" data-i18n="sim.case"></div>
 
     <div class="tabs" id="tabs">
       <button data-step="1"><span class="num">01</span><span class="ic">🎯</span><span data-i18n="tab.1"></span></button>
@@ -241,6 +297,7 @@
       <div class="lesson"><b data-i18n="s7.title"></b> <span data-i18n="s7.desc"></span>
         <div class="metaphor" data-i18n="s7.note"></div></div>
       <div class="row"><button class="primary" id="btnBoard" data-i18n="s7.download"></button></div>
+      <div class="row"><button id="btnToRef" data-i18n="sim.toref"></button></div>
     </section>
 
     <!-- COMPARE -->
@@ -332,6 +389,12 @@
     <div class="hint" id="hint"></div>
   </main>
 </div>
+
+<section id="secPres">
+  <div class="deck"><div id="slide" class="slide"></div></div>
+  <div class="deckbar"><button id="dPrev">←</button><div id="dDots"></div><button id="dNext">→</button></div>
+</section>
+<section id="secRef"><div id="refBody"></div></section>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/js/loaders/RGBELoader.js"></script>
@@ -578,6 +641,102 @@
     'mc.mat': ['Materials', 'Materiale', 'Matériaux'], 'mc.form': ['Form study', 'Studiu de formă', 'Étude de forme'], 'mc.col': ['Colour', 'Culoare', 'Couleur'],
     'aw.cluster': ['Instrument cluster', 'Panou de bord digital', 'Combiné d\'instruments'], 'aw.info': ['Infotainment display', 'Ecran infotainment', 'Écran d\'infodivertissement'],
     'aw.wheel': ['Steering wheel', 'Volan', 'Volant'], 'aw.console': ['Centre console', 'Consolă centrală', 'Console centrale'], 'aw.door': ['Door controls', 'Comenzi portieră', 'Commandes de porte']
+  });
+  Object.assign(T, {
+    'nav.pres': ['Presentation', 'Prezentare', 'Présentation'],
+    'nav.sim': ['Simulate', 'Simulare', 'Simuler'],
+    'nav.ref': ['Reflect as a developer', 'Reflecție ca dezvoltator', 'Réfléchir en développeur'],
+    'sim.case': ['Case study: a ticketing app for a city metro. Work through the seven stages, then reflect as a developer.', 'Studiu de caz: o aplicație de bilete pentru metroul unui oraș. Parcurge cele șapte etape, apoi reflectă ca dezvoltator.', 'Étude de cas : une appli de billets pour le métro d\'une ville. Parcourez les sept étapes, puis réfléchissez en développeur.'],
+    'sim.toref': ['🧠 Continue to the developer reflection', '🧠 Continuă spre reflecția ca dezvoltator', '🧠 Continuer vers la réflexion en développeur'],
+    'sl.title': ['Software Visual Design', 'Designul vizual al software-ului', 'Design visuel de logiciel'],
+    'sl.subtitle': ['From concept moodboard to visual proof of concept · course presentation', 'De la moodboard de concept la demonstrator vizual · prezentare de curs', 'Du moodboard de concept au démonstrateur visuel · présentation de cours'],
+    'sl.start': ['Start the presentation →', 'Începe prezentarea →', 'Commencer la présentation →'],
+    'sl.skip': ['Skip to the simulation', 'Sari la simulare', 'Passer à la simulation'],
+    'sl.goals': ['What you will learn', 'Ce vei învăța', 'Ce que vous allez apprendre'],
+    'sl.g1': ['Describe the seven stages of the software visual design process', 'Să descrii cele șapte etape ale procesului de design vizual software', 'Décrire les sept étapes du processus de design visuel logiciel'],
+    'sl.g2': ['Tell a moodboard, a concept sketch and a wireframe apart', 'Să deosebești un moodboard, o schiță de concept și un wireframe', 'Distinguer un moodboard, une esquisse de concept et un wireframe'],
+    'sl.g3': ['Use the car-design analogy to explain each stage', 'Să folosești analogia cu designul auto pentru a explica fiecare etapă', 'Utiliser l\'analogie avec le design automobile pour expliquer chaque étape'],
+    'sl.g4': ['Simulate the process on a real example and reflect on it as a developer', 'Să simulezi procesul pe un exemplu real și să reflectezi asupra lui ca dezvoltator', 'Simuler le processus sur un exemple réel et y réfléchir en développeur'],
+    'sl.process': ['The process at a glance', 'Procesul pe scurt', 'Le processus en bref'],
+    'sl.what': ['What happens', 'Ce se întâmplă', 'Ce qui se passe'],
+    'sl.out': ['Output', 'Livrabil', 'Livrable'],
+    'sl.dev': ['What a developer takes from it', 'Ce preia dezvoltatorul din ea', 'Ce le développeur en retire'],
+    'sl.try': ['Try it in the simulation →', 'Încearcă în simulare →', 'Essayer dans la simulation →'],
+    'sl.preview': ['Preview from the simulation (your current choices)', 'Previzualizare din simulare (alegerile tale curente)', 'Aperçu de la simulation (vos choix actuels)'],
+    'sl.q1': ['What atmosphere, identity and style do we want?', 'Ce atmosferă, identitate și stil dorim?', 'Quelle ambiance, identité et style voulons-nous ?'],
+    'sl.q2': ['How could the product look?', 'Cum ar putea arăta produsul?', 'À quoi pourrait ressembler le produit ?'],
+    'sl.q3': ['Which screens exist, and how does the user move between them?', 'Ce ecrane există și cum se deplasează utilizatorul între ele?', 'Quels écrans existent, et comment l\'utilisateur passe-t-il de l\'un à l\'autre ?'],
+    'sl.q4': ['How are the elements organised and how does the user interact with them?', 'Cum sunt organizate elementele și cum interacționează utilizatorul cu ele?', 'Comment les éléments sont-ils organisés et comment l\'utilisateur interagit-il avec eux ?'],
+    'sl.q5': ['How does the interface look in detail: type, colour, shape, icons?', 'Cum arată interfața în detaliu: tipografie, culoare, formă, icoane?', 'À quoi ressemble l\'interface en détail : typographie, couleur, forme, icônes ?'],
+    'sl.q6': ['How does it look and feel in other variants and real situations?', 'Cum arată și cum se simte în alte variante și în situații reale?', 'Quel est son aspect et son ressenti dans d\'autres variantes et situations réelles ?'],
+    'sl.q7': ['How do we present the aesthetic concept convincingly, without a working app?', 'Cum prezentăm convingător conceptul estetic, fără o aplicație funcțională?', 'Comment présenter de façon convaincante le concept esthétique, sans application fonctionnelle ?'],
+    'sl.o1': ['Moodboard and concept map: palette, type, shapes, references', 'Moodboard și hartă conceptuală: paletă, tipografie, forme, referințe', 'Moodboard et carte conceptuelle : palette, typographie, formes, références'],
+    'sl.o2': ['A set of exploratory sketches of screens and composition', 'Un set de schițe exploratorii ale ecranelor și compoziției', 'Un ensemble d\'esquisses exploratoires des écrans et de la composition'],
+    'sl.o3': ['Sitemap and navigation model', 'Hartă de site și model de navigare', 'Plan du site et modèle de navigation'],
+    'sl.o4': ['Low-fidelity wireframes of the key screens', 'Wireframe-uri de fidelitate redusă ale ecranelor-cheie', 'Wireframes basse fidélité des écrans clés'],
+    'sl.o5': ['High-fidelity mockups with a defined visual style', 'Mockup-uri de înaltă fidelitate cu un stil vizual definit', 'Maquettes haute fidélité avec un style visuel défini'],
+    'sl.o6': ['Visual variants, transitions and usage scenarios', 'Variante vizuale, tranziții și scenarii de utilizare', 'Variantes visuelles, transitions et scénarios d\'usage'],
+    'sl.o7': ['A presentation board or demonstrator of the concept', 'Un panou de prezentare sau demonstrator al conceptului', 'Un tableau de présentation ou démonstrateur du concept'],
+    'sl.d1': ['Design tokens: colours, type scale, radius, tone', 'Design tokens: culori, scală tipografică, rotunjiri, ton', 'Design tokens : couleurs, échelle typographique, arrondis, ton'],
+    'sl.d2': ['Intent and composition ideas to question early', 'Intenția și ideile de compoziție de pus la îndoială din timp', 'Intentions et idées de composition à questionner tôt'],
+    'sl.d3': ['Routes, screen list and navigation components', 'Rute, lista ecranelor și componente de navigare', 'Routes, liste des écrans et composants de navigation'],
+    'sl.d4': ['Layout structure, component inventory, hierarchy', 'Structura layoutului, inventarul de componente, ierarhia', 'Structure de mise en page, inventaire des composants, hiérarchie'],
+    'sl.d5': ['Exact styles, assets, states and accessibility targets', 'Stiluri exacte, resurse, stări și ținte de accesibilitate', 'Styles exacts, ressources, états et objectifs d\'accessibilité'],
+    'sl.d6': ['Edge cases, motion and context of use to test', 'Cazuri-limită, mișcare și context de utilizare de testat', 'Cas limites, animations et contexte d\'usage à tester'],
+    'sl.d7': ['A shared reference for acceptance and hand-off', 'O referință comună pentru acceptare și predare', 'Une référence commune pour la recette et la passation'],
+    'sl.dist': ['Three things that are easy to confuse', 'Trei lucruri ușor de confundat', 'Trois notions faciles à confondre'],
+    'sl.order': ['The recommended order', 'Ordinea recomandată', 'L\'ordre recommandé'],
+    'sl.devtitle': ['Why developers care about visual design', 'De ce contează designul vizual pentru dezvoltatori', 'Pourquoi le design visuel compte pour les développeurs'],
+    'sl.dv1': ['Design tokens: colours, type, radius and spacing become variables in code.', 'Design tokens: culorile, tipografia, rotunjirile și spațierea devin variabile în cod.', 'Design tokens : couleurs, typographie, arrondis et espacements deviennent des variables dans le code.'],
+    'sl.dv2': ['Components: every block in the wireframe becomes a reusable component.', 'Componente: fiecare bloc din wireframe devine o componentă reutilizabilă.', 'Composants : chaque bloc du wireframe devient un composant réutilisable.'],
+    'sl.dv3': ['States and edge cases: empty, long text, error, small screens, other languages.', 'Stări și cazuri-limită: gol, text lung, eroare, ecrane mici, alte limbi.', 'États et cas limites : vide, texte long, erreur, petits écrans, autres langues.'],
+    'sl.dv4': ['Accessibility: contrast, touch targets and text alternatives are requirements, not decoration.', 'Accesibilitate: contrastul, zonele de atingere și alternativele text sunt cerințe, nu decor.', 'Accessibilité : contraste, zones tactiles et alternatives textuelles sont des exigences, pas de la décoration.'],
+    'sl.tokens': ['Your design tokens right now (from the simulation)', 'Token-urile tale de design acum (din simulare)', 'Vos design tokens actuels (issus de la simulation)'],
+    'sl.ctatitle': ['Now simulate it, then reflect', 'Acum simulează, apoi reflectă', 'Maintenant simulez, puis réfléchissez'],
+    'sl.ctasub': ['Work through the seven stages on the metro-ticket case, then document your decisions as a developer.', 'Parcurge cele șapte etape pe cazul biletului de metrou, apoi documentează-ți deciziile ca dezvoltator.', 'Parcourez les sept étapes sur le cas du billet de métro, puis documentez vos décisions en développeur.'],
+    'sl.cta1': ['🧪 Open the simulation', '🧪 Deschide simularea', '🧪 Ouvrir la simulation'],
+    'sl.cta2': ['🧠 Go to the developer reflection', '🧠 Mergi la reflecția ca dezvoltator', '🧠 Aller à la réflexion en développeur'],
+    'sl.compare': ['See the car vs software comparison →', 'Vezi comparația auto vs software →', 'Voir la comparaison auto vs logiciel →'],
+
+    'rf.title': ['Reflect as a developer', 'Reflecție ca dezvoltator', 'Réfléchir en développeur'],
+    'rf.intro': ['Step out of the designer\'s seat. Review what you decided in the simulation, explain why, and think about what it takes to build it. Everything is saved automatically in this browser.', 'Ieși din rolul designerului. Revizuiește ce ai decis în simulare, explică de ce și gândește-te ce presupune construirea ei. Totul se salvează automat în acest browser.', 'Quittez la place du designer. Passez en revue vos décisions dans la simulation, expliquez pourquoi et pensez à ce qu\'il faut pour la construire. Tout est enregistré automatiquement dans ce navigateur.'],
+    'rf.name': ['Your name', 'Numele tău', 'Votre nom'],
+    'rf.sum': ['1 · Your simulation at a glance', '1 · Simularea ta pe scurt', '1 · Votre simulation en un coup d\'œil'],
+    'rf.log': ['2 · Decision log', '2 · Jurnal de decizii', '2 · Journal des décisions'],
+    'rf.logintro': ['A developer-style record: what was decided, and why. Write the reason in one sentence.', 'O înregistrare în stil de dezvoltator: ce s-a decis și de ce. Scrie motivul într-o propoziție.', 'Un registre à la manière d\'un développeur : ce qui a été décidé, et pourquoi. Écrivez la raison en une phrase.'],
+    'dl.palette': ['Colour palette', 'Paleta de culori', 'Palette de couleurs'], 'dl.shape': ['Shape language', 'Limbajul de forme', 'Langage de formes'], 'dl.font': ['Typography', 'Tipografia', 'Typographie'],
+    'dl.home': ['Opening screen', 'Ecranul de deschidere', 'Écran d\'ouverture'], 'dl.sketch': ['Concept sketch kept', 'Schița de concept păstrată', 'Esquisse de concept retenue'], 'dl.contrast': ['Header contrast', 'Contrastul antetului', 'Contraste de l\'en-tête'],
+    'dl.why': ['Why this choice?', 'De ce această alegere?', 'Pourquoi ce choix ?'],
+    'rf.kit': ['3 · Developer hand-off kit', '3 · Kit de predare pentru dezvoltator', '3 · Kit de passation pour développeur'],
+    'rf.kitintro': ['Generated live from your choices: tokens to paste into a stylesheet, the components to build, and an accessibility check.', 'Generat live din alegerile tale: token-uri de lipit într-un stylesheet, componentele de construit și o verificare de accesibilitate.', 'Généré en direct à partir de vos choix : tokens à coller dans une feuille de style, composants à construire et contrôle d\'accessibilité.'],
+    'kit.tokens': ['Design tokens (CSS)', 'Design tokens (CSS)', 'Design tokens (CSS)'],
+    'kit.copy': ['📋 Copy CSS', '📋 Copiază CSS', '📋 Copier le CSS'], 'kit.copied': ['Copied ✓', 'Copiat ✓', 'Copié ✓'], 'kit.json': ['⬇ tokens.json', '⬇ tokens.json', '⬇ tokens.json'],
+    'kit.components': ['Component inventory', 'Inventar de componente', 'Inventaire des composants'],
+    'kit.a11y': ['Accessibility check', 'Verificare de accesibilitate', 'Contrôle d\'accessibilité'],
+    'a.contrast': ['Header text contrast ≥ 4.5:1 (WCAG AA): {0}:1', 'Contrastul textului din antet ≥ 4,5:1 (WCAG AA): {0}:1', 'Contraste du texte d\'en-tête ≥ 4,5:1 (WCAG AA) : {0}:1'],
+    'a.target': ['Touch targets are at least 44 px (tab bar 76 px, buttons 52–56 px)', 'Zonele de atingere au cel puțin 44 px (bara de file 76 px, butoane 52–56 px)', 'Les zones tactiles font au moins 44 px (barre d\'onglets 76 px, boutons 52–56 px)'],
+    'a.lang': ['The layout survives longer text (RO and FR are longer than EN)', 'Layoutul rezistă la text mai lung (RO și FR sunt mai lungi decât EN)', 'La mise en page supporte des textes plus longs (RO et FR sont plus longs que EN)'],
+    'a.alt': ['Icons and images have text alternatives', 'Icoanele și imaginile au alternative text', 'Les icônes et images ont des alternatives textuelles'],
+    'comp.map': ['Map screen', 'Ecranul hărții', 'Écran carte'], 'comp.ticket': ['Ticket screen', 'Ecranul biletului', 'Écran billet'], 'comp.routes': ['Routes screen', 'Ecranul rutelor', 'Écran lignes'],
+    'comp.map.l': ['AppHeader · SearchBar · MapView · TripCard · PrimaryButton · TabBar', 'AppHeader · SearchBar · MapView · TripCard · PrimaryButton · TabBar', 'AppHeader · SearchBar · MapView · TripCard · PrimaryButton · TabBar'],
+    'comp.ticket.l': ['AppHeader · GreetingCard · QRCard · PrimaryButton · TabBar', 'AppHeader · GreetingCard · QRCard · PrimaryButton · TabBar', 'AppHeader · GreetingCard · QRCard · PrimaryButton · TabBar'],
+    'comp.routes.l': ['AppHeader · RouteCard × 3 · SelectedBadge · TabBar', 'AppHeader · RouteCard × 3 · SelectedBadge · TabBar', 'AppHeader · RouteCard × 3 · SelectedBadge · TabBar'],
+    'rf.qs': ['4 · Reflection questions', '4 · Întrebări de reflecție', '4 · Questions de réflexion'],
+    'rf.q1': ['Which design decision was easiest to translate into code, and which was hardest? Why?', 'Ce decizie de design a fost cea mai ușor de tradus în cod și care cea mai grea? De ce?', 'Quelle décision de design était la plus facile à traduire en code, et laquelle la plus difficile ? Pourquoi ?'],
+    'rf.q2': ['What would you ask the designer before you start coding?', 'Ce l-ai întreba pe designer înainte să începi să scrii cod?', 'Que demanderiez-vous au designer avant de commencer à coder ?'],
+    'rf.q3': ['Where could this interface break: long names, other languages, small screens, slow network?', 'Unde s-ar putea strica această interfață: nume lungi, alte limbi, ecrane mici, rețea lentă?', 'Où cette interface pourrait-elle casser : noms longs, autres langues, petits écrans, réseau lent ?'],
+    'rf.q4': ['How would you check that the implementation matches the mockup?', 'Cum ai verifica dacă implementarea corespunde mockup-ului?', 'Comment vérifieriez-vous que l\'implémentation correspond à la maquette ?'],
+    'rf.q5': ['What did the car-design analogy help you understand about software design?', 'Ce te-a ajutat să înțelegi analogia cu designul auto despre designul software?', 'Qu\'est-ce que l\'analogie avec le design automobile vous a aidé à comprendre du design logiciel ?'],
+    'rf.q6': ['What would you change if you repeated the process, and why?', 'Ce ai schimba dacă ai repeta procesul și de ce?', 'Que changeriez-vous si vous répétiez le processus, et pourquoi ?'],
+    'rf.q7': ['Under time pressure, which stage would you shorten, and what is the risk?', 'Sub presiunea timpului, ce etapă ai scurta și care este riscul?', 'Sous la pression du temps, quelle étape raccourciriez-vous, et quel est le risque ?'],
+    'rf.ph': ['Write a few sentences…', 'Scrie câteva propoziții…', 'Écrivez quelques phrases…'],
+    'rf.self': ['5 · Self-assessment (1 = not yet, 5 = confident)', '5 · Autoevaluare (1 = încă nu, 5 = sigur)', '5 · Auto-évaluation (1 = pas encore, 5 = à l\'aise)'],
+    'sa.1': ['Reading a wireframe', 'Citirea unui wireframe', 'Lire un wireframe'], 'sa.2': ['Turning a mockup into components', 'Transformarea unui mockup în componente', 'Transformer une maquette en composants'],
+    'sa.3': ['Checking accessibility', 'Verificarea accesibilității', 'Vérifier l\'accessibilité'], 'sa.4': ['Talking with designers', 'Dialogul cu designerii', 'Dialoguer avec les designers'], 'sa.5': ['Presenting a visual concept', 'Prezentarea unui concept vizual', 'Présenter un concept visuel'],
+    'rf.export': ['6 · Export', '6 · Export', '6 · Export'],
+    'rf.dl': ['⬇ Download my reflection (.md)', '⬇ Descarcă reflecția mea (.md)', '⬇ Télécharger ma réflexion (.md)'], 'rf.print': ['🖨 Print / save as PDF', '🖨 Tipărește / salvează ca PDF', '🖨 Imprimer / enregistrer en PDF'],
+    'rf.saved': ['Saved automatically in this browser.', 'Salvat automat în acest browser.', 'Enregistré automatiquement dans ce navigateur.'],
+    'rf.notyet': ['not chosen yet', 'încă nealeasă', 'pas encore choisie'], 'rf.gosim': ['🧪 Back to the simulation', '🧪 Înapoi la simulare', '🧪 Retour à la simulation']
   });
   function t(k) {
     const e = T[k]; let v = e ? e[LI[LANG]] : k;
@@ -1639,11 +1798,133 @@
     syncControls(); redrawAll();
     if (variantList.length) renderVariants();
     if (ENV.data) setStatus($('interp'), true, t('env.interp', ENV.label || ''));
-    updateHint(); updFocus();
+    updateHint(); updFocus(); refreshSections();
   }
   let envEdited = false;
   $('envPrompt').addEventListener('input', () => { envEdited = true; });
   document.querySelectorAll('#lang button').forEach((b) => b.onclick = () => setLang(b.dataset.lang));
+
+  /* =================== COURSE SECTIONS: PRESENTATION · SIMULATE · REFLECT =================== */
+  let SECTION = 'pres';
+  const esc = (x) => String(x).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  function showSection(sec) {
+    SECTION = sec; document.body.dataset.sec = sec;
+    document.querySelectorAll('#secs button').forEach((b) => b.classList.toggle('active', b.dataset.sec === sec));
+    if (sec === 'sim') { goStep(step); dispatchEvent(new Event('resize')); setTimeout(() => dispatchEvent(new Event('resize')), 80); }
+    if (sec === 'pres') renderSlide();
+    if (sec === 'ref') renderRef();
+    window.scrollTo(0, 0);
+  }
+  function goSim(n) { showSection('sim'); goStep(n); }
+  document.querySelectorAll('#secs button').forEach((b) => b.onclick = () => showSection(b.dataset.sec));
+  $('btnToRef').onclick = () => showSection('ref');
+  function refreshSections() { if (SECTION === 'pres') renderSlide(); if (SECTION === 'ref') renderRef(); }
+
+  /* ---- design tokens generated from the simulation ---- */
+  function tokens() {
+    const [c1, c2, bg, dark] = palette();
+    return { primary: c1, secondary: c2, surface: bg, ink: dark, rCard: Math.round(24 * RS), rBtn: Math.round(28 * RS), font: FONTS[S.font], ratio: contrast(c1, '#ffffff') };
+  }
+  function tokensCSS() {
+    const k = tokens();
+    return ':root {\n  --color-primary: ' + k.primary + ';\n  --color-secondary: ' + k.secondary + ';\n  --color-surface: ' + k.surface + ';\n  --color-ink: ' + k.ink + ';\n  --radius-card: ' + k.rCard + 'px;\n  --radius-button: ' + k.rBtn + 'px;\n  --font-family: ' + k.font + ';\n  --font-size-title: 28px;\n  --font-size-body: 15px;\n  --font-size-caption: 12px;\n  --space-1: 8px;\n  --space-2: 16px;\n  --space-3: 24px;\n  --tap-target: 44px;\n}';
+  }
+
+  /* ---- slide deck ---- */
+  const SLIDES = [{ k: 'title' }, { k: 'goals' }, { k: 'process' }].concat([1, 2, 3, 4, 5, 6, 7].map((n) => ({ k: 'stage', n })), [{ k: 'analogy' }, { k: 'distinct' }, { k: 'order' }, { k: 'dev' }, { k: 'cta' }]);
+  let slideIdx = 0;
+  const stageTitle = (n) => t('s' + n + '.title').replace(/\.$/, '');
+  function previewCanvas(n, w, h) {
+    const cv = mkCanvas(w, h), c = cv.getContext('2d'); c.fillStyle = '#e5e7eb'; c.fillRect(0, 0, w, h);
+    if (n === 6) drawComposite(c, 0, 0, w, h, 0.85);
+    else { const src = { 1: moodCv, 2: skCv, 3: iaCv, 4: wire, 5: mockView }[n]; if (n === 7) { drawBoard(); cover(c, boardCv, w, h); } else cover(c, src, w, h); }
+    return cv;
+  }
+  function slideInner(s) {
+    if (s.k === 'title') return '<div class="stitle"><div class="sicon">🎓</div><h1>' + t('sl.title') + '</h1><p>' + t('sl.subtitle') + '</p><div class="row ctr"><button class="primary big" data-next="1">' + t('sl.start') + '</button><button data-sec-go="sim">' + t('sl.skip') + '</button></div></div>';
+    if (s.k === 'goals') return '<h2>' + t('sl.goals') + '</h2><ul class="sgoals">' + [1, 2, 3, 4].map((i) => '<li><span>' + i + '</span>' + t('sl.g' + i) + '</li>').join('') + '</ul>';
+    if (s.k === 'process') return '<h2>' + t('sl.process') + '</h2><div class="sflow">' + [1, 2, 3, 4, 5, 6, 7].map((n) => '<button class="sstep" data-slide="' + (2 + n) + '"><b>0' + n + '</b>' + esc(t('tab.' + n)) + '</button>').join('<i>→</i>') + '</div><p class="snote">' + t('s2.iter') + '</p>';
+    if (s.k === 'stage') {
+      const n = s.n;
+      return '<div class="sgrid"><div class="stext"><div class="stag">0' + n + '</div><h2>' + esc(stageTitle(n)) + '</h2><blockquote>' + t('sl.q' + n) + '</blockquote><p><b>' + t('sl.what') + '</b><br>' + t('s' + n + '.desc') + '</p>' +
+        '<div class="mini"><div><b>' + t('sl.out') + '</b><br>' + t('sl.o' + n) + '</div><div><b>' + t('sl.dev') + '</b><br>' + t('sl.d' + n) + '</div></div><button class="primary" data-go="' + n + '">' + t('sl.try') + '</button></div>' +
+        '<div class="spv"><div class="sprev"></div><small>' + t('sl.preview') + '</small></div></div>';
+    }
+    if (s.k === 'analogy') return '<h2>' + t('cmp.title') + '</h2><table class="stable"><tr><th></th><th>' + t('cmp.car') + '</th><th>' + t('cmp.sw') + '</th></tr>' + [1, 2, 3, 4, 5].map((n) => '<tr><td><b>' + t('cmp.t' + n) + '</b></td><td>' + t('cmp.a' + n) + '</td><td>' + t('cmp.s' + n) + '</td></tr>').join('') + '</table><div class="row"><button data-go="8">' + t('sl.compare') + '</button></div>';
+    if (s.k === 'distinct') return '<h2>' + t('sl.dist') + '</h2><div class="scards">' + [['🎯', 1, 1], ['✍️', 2, 2], ['📐', 4, 4]].map(([e, n, q]) => '<div class="scard"><div class="semoji">' + e + '</div><h3>' + esc(t('cmp.t' + (n === 4 ? 3 : n))) + '</h3><p>' + t('sl.q' + q) + '</p></div>').join('') + '</div><div class="swarn">' + t('cmp.warn') + '</div>';
+    if (s.k === 'order') return '<h2>' + t('sl.order') + '</h2><div class="sflow">' + [1, 2, 3, 4, 5, 6, 7].map((n) => '<span class="sstep"><b>0' + n + '</b>' + esc(t('tab.' + n)) + '</span>').join('<i>→</i>') + '</div><p class="snote">' + t('cmp.order') + '</p>';
+    if (s.k === 'dev') return '<h2>' + t('sl.devtitle') + '</h2><div class="scards four">' + [1, 2, 3, 4].map((i) => '<div class="scard"><p>' + t('sl.dv' + i) + '</p></div>').join('') + '</div><h4>' + t('sl.tokens') + '</h4><pre class="scode">' + esc(tokensCSS()) + '</pre>';
+    if (s.k === 'cta') return '<div class="stitle"><div class="sicon">🧭</div><h1>' + t('sl.ctatitle') + '</h1><p>' + t('sl.ctasub') + '</p><div class="row ctr"><button class="primary big" data-sec-go="sim">' + t('sl.cta1') + '</button><button class="big" data-sec-go="ref">' + t('sl.cta2') + '</button></div></div>';
+    return '';
+  }
+  function renderSlide() {
+    const s = SLIDES[slideIdx], el = $('slide');
+    el.className = 'slide k-' + s.k; el.innerHTML = slideInner(s) + '<div class="snum">' + (slideIdx + 1) + ' / ' + SLIDES.length + '</div>';
+    if (s.k === 'stage') el.querySelector('.sprev').appendChild(previewCanvas(s.n, 720, 460));
+    el.querySelectorAll('[data-go]').forEach((b) => b.onclick = () => goSim(+b.dataset.go));
+    el.querySelectorAll('[data-sec-go]').forEach((b) => b.onclick = () => showSection(b.dataset.secGo));
+    el.querySelectorAll('[data-next]').forEach((b) => b.onclick = () => goSlide(slideIdx + 1));
+    el.querySelectorAll('[data-slide]').forEach((b) => b.onclick = () => goSlide(+b.dataset.slide));
+    $('dDots').innerHTML = SLIDES.map((_, i) => '<i class="' + (i === slideIdx ? 'cur' : '') + '" data-i="' + i + '"></i>').join('');
+    $('dDots').querySelectorAll('i').forEach((d) => d.onclick = () => goSlide(+d.dataset.i));
+    $('dPrev').disabled = slideIdx === 0; $('dNext').disabled = slideIdx === SLIDES.length - 1;
+  }
+  function goSlide(i) { slideIdx = Math.max(0, Math.min(SLIDES.length - 1, i)); renderSlide(); }
+  $('dPrev').onclick = () => goSlide(slideIdx - 1);
+  $('dNext').onclick = () => goSlide(slideIdx + 1);
+  addEventListener('keydown', (e) => {
+    if (SECTION !== 'pres' || /INPUT|TEXTAREA|SELECT/.test((e.target.tagName || ''))) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') goSlide(slideIdx + 1);
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') goSlide(slideIdx - 1);
+  });
+
+  /* ---- reflect as a developer ---- */
+  let REF = { name: '', why: {}, q: {}, rate: {}, a: {} };
+  try { REF = Object.assign(REF, JSON.parse(localStorage.getItem('lab-ref') || '{}')); } catch (e) { /* ignore */ }
+  const saveRef = () => { try { localStorage.setItem('lab-ref', JSON.stringify(REF)); } catch (e) { /* ignore */ } };
+  function decisionRows() {
+    const ratio = contrast(palette()[0], '#ffffff'), pass = ratio >= 4.5;
+    return [['palette', t('pal.' + S.palette)], ['shape', t('shape.' + S.shape)], ['font', t('font.' + S.font)], ['home', t('scr.' + S.home)],
+      ['sketch', S.sketchPick >= 0 ? t('sk.' + 'abcd'[S.sketchPick]) : t('rf.notyet')], ['contrast', ratio.toFixed(2) + ':1 · ' + (pass ? t('ui.pass') : t('ui.fail'))]];
+  }
+  function renderRef() {
+    const k = tokens(), pass = k.ratio >= 4.5, root = $('refBody');
+    const rows = decisionRows();
+    root.innerHTML = '<div class="rfhead"><h1>' + t('rf.title') + '</h1><p>' + t('rf.intro') + '</p><label>' + t('rf.name') + '<input id="rfName" type="text" maxlength="40" value="' + esc(REF.name) + '"></label><small>' + t('rf.saved') + '</small></div>' +
+      '<section class="rfsec"><h2>' + t('rf.sum') + '</h2><div class="rfsum"><div class="rfcv" id="rfCv1"></div><div class="rfcv" id="rfCv2"></div><div class="rfchips">' +
+        '<div><small>' + t('dl.palette') + '</small><div class="sw4">' + [k.primary, k.secondary, '#d4d4d8', k.ink].map((c) => '<i style="background:' + c + '"></i>').join('') + '</div></div>' +
+        '<div><small>' + t('dl.shape') + '</small><div class="shp" style="border-radius:' + k.rCard + 'px;background:' + k.primary + '"></div></div>' +
+        '<div><small>' + t('dl.font') + '</small><div class="fnt" style="font-family:' + esc(k.font) + '">Aa Bb 123</div></div></div></div></section>' +
+      '<section class="rfsec"><h2>' + t('rf.log') + '</h2><p class="rfp">' + t('rf.logintro') + '</p>' +
+        rows.map(([id, val]) => '<div class="rfrow"><div class="rfl"><b>' + t('dl.' + id) + '</b><span>' + esc(val) + '</span></div><textarea rows="2" data-why="' + id + '" placeholder="' + esc(t('dl.why')) + '">' + esc(REF.why[id] || '') + '</textarea></div>').join('') + '</section>' +
+      '<section class="rfsec"><h2>' + t('rf.kit') + '</h2><p class="rfp">' + t('rf.kitintro') + '</p><div class="rfkit"><div><h4>' + t('kit.tokens') + '</h4><pre class="scode" id="kitCss">' + esc(tokensCSS()) + '</pre>' +
+        '<div class="row"><button id="kitCopy">' + t('kit.copy') + '</button><button id="kitJson">' + t('kit.json') + '</button></div></div>' +
+        '<div><h4>' + t('kit.components') + '</h4><ul class="rfcomp">' + ['map', 'ticket', 'routes'].map((s) => '<li><b>' + t('comp.' + s) + '</b><br>' + esc(t('comp.' + s + '.l')) + '</li>').join('') + '</ul>' +
+        '<h4>' + t('kit.a11y') + '</h4><ul class="rfa11y"><li class="' + (pass ? 'ok' : 'no') + '">' + (pass ? '✔ ' : '✖ ') + t('a.contrast', k.ratio.toFixed(2)) + '</li><li class="ok">✔ ' + t('a.target') + '</li>' +
+        ['lang', 'alt'].map((id) => '<li><label class="check"><input type="checkbox" data-a="' + id + '"' + (REF.a[id] ? ' checked' : '') + '> ' + t('a.' + id) + '</label></li>').join('') + '</ul></div></div></section>' +
+      '<section class="rfsec"><h2>' + t('rf.qs') + '</h2>' + [1, 2, 3, 4, 5, 6, 7].map((i) => '<div class="rfq"><label>' + i + '. ' + t('rf.q' + i) + '</label><textarea rows="3" data-q="' + i + '" placeholder="' + esc(t('rf.ph')) + '">' + esc(REF.q[i] || '') + '</textarea></div>').join('') + '</section>' +
+      '<section class="rfsec"><h2>' + t('rf.self') + '</h2>' + [1, 2, 3, 4, 5].map((i) => '<div class="rfsa"><label>' + t('sa.' + i) + '</label><input type="range" min="1" max="5" step="1" data-rate="' + i + '" value="' + (REF.rate[i] || 3) + '"><b id="rt' + i + '">' + (REF.rate[i] || 3) + '</b></div>').join('') + '</section>' +
+      '<section class="rfsec"><h2>' + t('rf.export') + '</h2><div class="row"><button class="primary" id="rfDl">' + t('rf.dl') + '</button><button id="rfPrint">' + t('rf.print') + '</button><button id="rfSim">' + t('rf.gosim') + '</button></div></section>';
+    const put = (id, src) => { const cv = mkCanvas(560, 340); cover(cv.getContext('2d'), src, 560, 340); $(id).appendChild(cv); };
+    put('rfCv1', moodCv); put('rfCv2', mockView);
+    root.querySelectorAll('[data-why]').forEach((e) => e.oninput = () => { REF.why[e.dataset.why] = e.value; saveRef(); });
+    root.querySelectorAll('[data-q]').forEach((e) => e.oninput = () => { REF.q[e.dataset.q] = e.value; saveRef(); });
+    root.querySelectorAll('[data-rate]').forEach((e) => e.oninput = () => { REF.rate[e.dataset.rate] = +e.value; $('rt' + e.dataset.rate).textContent = e.value; saveRef(); });
+    root.querySelectorAll('[data-a]').forEach((e) => e.onchange = () => { REF.a[e.dataset.a] = e.checked; saveRef(); });
+    $('rfName').oninput = (e) => { REF.name = e.target.value; saveRef(); };
+    $('kitCopy').onclick = () => { try { navigator.clipboard.writeText(tokensCSS()); } catch (e) { /* ignore */ } $('kitCopy').textContent = t('kit.copied'); setTimeout(() => { $('kitCopy').textContent = t('kit.copy'); }, 1500); };
+    $('kitJson').onclick = () => { const k2 = tokens(); saveText(JSON.stringify({ color: { primary: k2.primary, secondary: k2.secondary, surface: k2.surface, ink: k2.ink }, radius: { card: k2.rCard + 'px', button: k2.rBtn + 'px' }, font: { family: k2.font, title: '28px', body: '15px', caption: '12px' }, space: { 1: '8px', 2: '16px', 3: '24px' }, tapTarget: '44px' }, null, 2), 'tokens.json', 'application/json'); };
+    $('rfDl').onclick = downloadReflection; $('rfPrint').onclick = () => window.print(); $('rfSim').onclick = () => showSection('sim');
+  }
+  function saveText(text, name, type) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: (type || 'text/plain') + ';charset=utf-8' })); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000); }
+  function downloadReflection() {
+    const L = ['# ' + t('rf.title'), REF.name ? '**' + REF.name + '**' : '', '_' + new Date().toLocaleDateString(LANG) + '_', '', '## ' + t('rf.log')];
+    decisionRows().forEach(([id, val]) => L.push('- **' + t('dl.' + id) + '**: ' + val + (REF.why[id] ? '\n  - ' + t('dl.why') + ' ' + REF.why[id] : '')));
+    L.push('', '## ' + t('rf.kit'), '```css', tokensCSS(), '```', '', '## ' + t('rf.qs'));
+    [1, 2, 3, 4, 5, 6, 7].forEach((i) => L.push('', '**' + i + '. ' + t('rf.q' + i) + '**', REF.q[i] || '—'));
+    L.push('', '## ' + t('rf.self')); [1, 2, 3, 4, 5].forEach((i) => L.push('- ' + t('sa.' + i) + ': ' + (REF.rate[i] || 3) + '/5'));
+    saveText(L.join('\n'), 'developer-reflection.md', 'text/markdown');
+  }
 
   /* ---- init ---- */
   applyI18n(); buildMoods(); buildPals(); buildRouteSelect(); buildEnvChips();
@@ -1654,6 +1935,7 @@
   genVariants();
   updFocus();
   goStep(1);
+  showSection('pres');
 })();
 </script>
 </body>
