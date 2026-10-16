@@ -100,9 +100,16 @@
   .cmp-img { border-radius: 10px; overflow: hidden; background: #e5e7eb; aspect-ratio: 3 / 2; }
   .cmp-img img, .cmp-img canvas { width: 100%; height: 100%; object-fit: cover; display: block; }
   .cmp-arrow { text-align: center; color: var(--muted); margin-top: 8px; font-size: 18px; }
+  .focusBtn { position: absolute; top: 12px; left: 12px; z-index: 6; flex: none; padding: 6px 12px; border-radius: 99px; font-size: 12px; background: rgba(15,23,42,.85); }
+  .app.focus { grid-template-columns: 1fr; }
+  .app.focus aside { display: none; }
   @media (max-width: 860px) {
-    .app { grid-template-columns: 1fr; grid-template-rows: auto 70vh; height: auto; }
-    aside { border-right: 0; border-bottom: 1px solid var(--border); }
+    html, body { overflow: hidden; }
+    .app { grid-template-columns: 1fr; grid-template-rows: 58vh 1fr; height: 100vh; }
+    main { order: -1; }
+    aside { border-right: 0; border-top: 1px solid var(--border); min-height: 0; }
+    .app.focus { grid-template-rows: 1fr; }
+    .cmp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
 </style>
 </head>
@@ -320,6 +327,7 @@
         <div class="cmp-order" data-i18n="cmp.order"></div>
       </div>
     </div>
+    <button class="focusBtn" id="btnFocus"></button>
     <div class="badge" id="badge"></div>
     <div class="hint" id="hint"></div>
   </main>
@@ -504,6 +512,7 @@
   };
 
   Object.assign(T, {
+    'focus.on': ['Full view', 'Vedere completă', 'Plein écran'], 'focus.off': ['Show panel', 'Arată panoul', 'Afficher le panneau'],
     'flow': ['Concept Moodboard → Concept Sketching → Information Architecture → Wireframing → Visual Design / High-Fidelity Mockup → AI-Based Design Simulation → Final Concept Visualization',
       'Concept Moodboard → Concept Sketching → Arhitectura informației → Wireframing → Visual Design / Mockup de înaltă fidelitate → Simulare de design bazată pe AI → Vizualizarea finală a conceptului',
       'Concept Moodboard → Concept Sketching → Architecture de l\'information → Wireframing → Visual Design / Maquette haute fidélité → Simulation de design par IA → Visualisation finale du concept'],
@@ -1613,6 +1622,15 @@
   $('btnVariants').onclick = genVariants;
   $('photoImg').addEventListener('load', scheduleDerived);
 
+  const appEl = document.querySelector('.app');
+  function updFocus() { $('btnFocus').textContent = '⤢ ' + t(appEl.classList.contains('focus') ? 'focus.off' : 'focus.on'); }
+  function toggleFocus() {
+    appEl.classList.toggle('focus'); updFocus();
+    dispatchEvent(new Event('resize')); setTimeout(() => dispatchEvent(new Event('resize')), 60);
+  }
+  $('btnFocus').onclick = toggleFocus;
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && appEl.classList.contains('focus')) toggleFocus(); });
+
   function setLang(l) {
     LANG = l; try { localStorage.setItem('lab-lang', l); } catch (e) { /* ignore */ }
     applyI18n(); buildMoods(); buildPals(); buildRouteSelect(); buildEnvChips();
@@ -1621,7 +1639,7 @@
     syncControls(); redrawAll();
     if (variantList.length) renderVariants();
     if (ENV.data) setStatus($('interp'), true, t('env.interp', ENV.label || ''));
-    updateHint();
+    updateHint(); updFocus();
   }
   let envEdited = false;
   $('envPrompt').addEventListener('input', () => { envEdited = true; });
@@ -1634,6 +1652,7 @@
   setScene('sit'); setMode('photo');
   applyEnv(interpret($('envPrompt').value).env);
   genVariants();
+  updFocus();
   goStep(1);
 })();
 </script>
