@@ -21,14 +21,15 @@
   .lang button.active { background: var(--accent); border-color: var(--accent); }
   .sub { color: var(--muted); font-size: 13px; margin-bottom: 14px; }
   h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 20px 0 8px; }
-  .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .tabs { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+  .tabs button { grid-column: span 2; }
+  .tabs button.half { grid-column: span 3; }
   .tabs button { padding: 7px 4px; font-size: 11.5px; line-height: 1.2; }
   .tabs button.active { background: var(--accent); border-color: var(--accent); font-weight: 600; }
   .tabs button.done { border-color: var(--ok); }
   .tabs .num { display: block; font-size: 11px; color: var(--accent2); font-weight: 700; letter-spacing: .06em; }
   .tabs button.active .num { color: #fff; }
   .tabs .ic { display: block; font-size: 17px; }
-  .tabs button.wide { grid-column: 1 / -1; }
   .flow { font-size: 11px; color: var(--muted); margin-top: 10px; line-height: 1.5; }
   .lesson { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 13px;
     line-height: 1.5; margin-top: 14px; }
@@ -63,7 +64,7 @@
   .view.on { display: flex; }
   .view canvas.flat { max-width: 100%; max-height: 100%; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,.5); }
   #stage { width: 100%; height: 100%; display: block; cursor: grab; touch-action: none; }
-  #view5 { padding: 0; }
+  #view6 { padding: 0; }
   #haze { position: absolute; inset: 0; pointer-events: none; opacity: 0; }
   .hint, .badge { position: absolute; font-size: 12px; background: rgba(15,23,42,.75); padding: 6px 12px;
     border-radius: 99px; pointer-events: none; z-index: 5; }
@@ -81,11 +82,14 @@
     border: 2px solid #fff; color: #fff; font: 700 9px/22px Inter, sans-serif; text-align: center; cursor: move; touch-action: none; }
   #credit { position: absolute; left: 12px; bottom: 10px; font-size: 11px; color: rgba(255,255,255,.7); text-shadow: 0 1px 3px rgba(0,0,0,.7); }
   #credit a { color: inherit; }
-  #view7 { align-items: flex-start; overflow: auto; }
+  #view8 { align-items: flex-start; overflow: auto; }
   #cmp { width: 100%; max-width: 1200px; margin: 0 auto; padding: 8px 8px 40px; }
   #cmp h3 { margin: 6px 0 4px; font-size: 22px; }
   #cmp .cmpsub { color: var(--muted); margin: 0 0 16px; font-size: 14px; }
-  .cmp-grid { display: grid; grid-template-columns: repeat(4, minmax(180px, 1fr)); gap: 14px; }
+  .cmp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+  .cmp-key, .cmp-warn, .cmp-order { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; font-size: 13.5px; line-height: 1.55; margin: 0 0 14px; }
+  .cmp-warn { border-color: var(--warn); color: var(--warn); margin-top: 16px; }
+  .cmp-order { color: var(--accent2); margin-top: 0; }
   .cmp-card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 12px; cursor: pointer; }
   .cmp-card:hover { border-color: var(--accent2); }
   .cmp-card h4 { margin: 10px 0 4px; font-size: 14px; }
@@ -96,7 +100,6 @@
   .cmp-img { border-radius: 10px; overflow: hidden; background: #e5e7eb; aspect-ratio: 3 / 2; }
   .cmp-img img, .cmp-img canvas { width: 100%; height: 100%; object-fit: cover; display: block; }
   .cmp-arrow { text-align: center; color: var(--muted); margin-top: 8px; font-size: 18px; }
-  @media (max-width: 1100px) { .cmp-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 860px) {
     .app { grid-template-columns: 1fr; grid-template-rows: auto 70vh; height: auto; }
     aside { border-right: 0; border-bottom: 1px solid var(--border); }
@@ -114,12 +117,13 @@
 
     <div class="tabs" id="tabs">
       <button data-step="1"><span class="num">01</span><span class="ic">🎯</span><span data-i18n="tab.1"></span></button>
-      <button data-step="2"><span class="num">02</span><span class="ic">🗂️</span><span data-i18n="tab.2"></span></button>
-      <button data-step="3"><span class="num">03</span><span class="ic">✏️</span><span data-i18n="tab.3"></span></button>
-      <button data-step="4"><span class="num">04</span><span class="ic">🎨</span><span data-i18n="tab.4"></span></button>
-      <button data-step="5"><span class="num">05</span><span class="ic">⚡</span><span data-i18n="tab.5"></span></button>
-      <button data-step="6"><span class="num">06</span><span class="ic">🖼️</span><span data-i18n="tab.6"></span></button>
-      <button data-step="7" class="wide"><span class="ic" style="display:inline;margin-right:6px">🚗</span><span data-i18n="tab.7"></span></button>
+      <button data-step="2"><span class="num">02</span><span class="ic">✍️</span><span data-i18n="tab.2"></span></button>
+      <button data-step="3"><span class="num">03</span><span class="ic">🗂️</span><span data-i18n="tab.3"></span></button>
+      <button data-step="4"><span class="num">04</span><span class="ic">📐</span><span data-i18n="tab.4"></span></button>
+      <button data-step="5"><span class="num">05</span><span class="ic">🎨</span><span data-i18n="tab.5"></span></button>
+      <button data-step="6"><span class="num">06</span><span class="ic">⚡</span><span data-i18n="tab.6"></span></button>
+      <button data-step="7" class="half"><span class="num">07</span><span class="ic">🖼️</span><span data-i18n="tab.7"></span></button>
+      <button data-step="8" class="half"><span class="num">🚗</span><span class="ic">⇄</span><span data-i18n="tab.8"></span></button>
     </div>
     <div class="flow" data-i18n="flow"></div>
 
@@ -138,11 +142,20 @@
       <select id="font"><option value="sans" data-i18n="font.sans"></option><option value="serif" data-i18n="font.serif"></option><option value="round" data-i18n="font.round"></option></select>
     </section>
 
-    <!-- STAGE 02 -->
+    <!-- STAGE 02 · CONCEPT SKETCHING -->
     <section class="panel" data-step="2">
       <div class="lesson"><b data-i18n="s2.title"></b> <span data-i18n="s2.desc"></span>
         <div class="metaphor" data-i18n="s2.note"></div></div>
-      <label for="homeScreen" data-i18n="s2.home"></label>
+      <div class="status note" data-i18n="s2.pick"></div>
+      <div class="status" id="skStatus"></div>
+      <div class="status note" data-i18n="s2.iter"></div>
+    </section>
+
+    <!-- STAGE 03 · INFORMATION ARCHITECTURE -->
+    <section class="panel" data-step="3">
+      <div class="lesson"><b data-i18n="s3.title"></b> <span data-i18n="s3.desc"></span>
+        <div class="metaphor" data-i18n="s3.note"></div></div>
+      <label for="homeScreen" data-i18n="s3.home"></label>
       <select id="homeScreen">
         <option value="map" data-i18n="scr.map"></option>
         <option value="ticket" data-i18n="scr.ticket"></option>
@@ -153,78 +166,78 @@
     </section>
 
     <!-- STAGE 03 -->
-    <section class="panel" data-step="3">
-      <div class="lesson"><b data-i18n="s3.title"></b> <span data-i18n="s3.desc"></span>
-        <div class="metaphor" data-i18n="s3.note"></div></div>
-      <div class="row"><button class="seg active" id="wfSketch" data-i18n="s3.sketch"></button><button class="seg" id="wfClean" data-i18n="s3.clean"></button></div>
-      <label class="check"><input type="checkbox" id="chkNotes" checked> <span data-i18n="s3.notes"></span></label>
+    <section class="panel" data-step="4">
+      <div class="lesson"><b data-i18n="s4.title"></b> <span data-i18n="s4.desc"></span>
+        <div class="metaphor" data-i18n="s4.note"></div></div>
+      <div class="row"><button class="seg" id="wfSketch" data-i18n="s4.sketch"></button><button class="seg active" id="wfClean" data-i18n="s4.clean"></button></div>
+      <label class="check"><input type="checkbox" id="chkNotes" checked> <span data-i18n="s4.notes"></span></label>
       <div class="status" id="wireStatus"></div>
     </section>
 
     <!-- STAGE 04 -->
-    <section class="panel" data-step="4">
-      <div class="lesson"><b data-i18n="s4.title"></b> <span data-i18n="s4.desc"></span></div>
-      <label for="pname" data-i18n="s4.name"></label>
+    <section class="panel" data-step="5">
+      <div class="lesson"><b data-i18n="s5.title"></b> <span data-i18n="s5.desc"></span></div>
+      <label for="pname" data-i18n="s5.name"></label>
       <input type="text" id="pname" maxlength="24">
-      <label for="route" data-i18n="s4.route"></label>
+      <label for="route" data-i18n="s5.route"></label>
       <select id="route"></select>
-      <div class="row"><button id="btnQR" data-i18n="s4.qr"></button></div>
+      <div class="row"><button id="btnQR" data-i18n="s5.qr"></button></div>
       <div class="status" id="uiStatus"></div>
-      <div class="status note" data-i18n="s4.tip"></div>
+      <div class="status note" data-i18n="s5.tip"></div>
     </section>
 
     <!-- STAGE 05 -->
-    <section class="panel" data-step="5">
-      <div class="lesson"><b data-i18n="s5.title"></b> <span data-i18n="s5.desc"></span></div>
+    <section class="panel" data-step="6">
+      <div class="lesson"><b data-i18n="s6.title"></b> <span data-i18n="s6.desc"></span></div>
 
-      <h2 data-i18n="s5.variants"></h2>
-      <label for="aiPrompt" data-i18n="s5.prompt"></label>
-      <input type="text" id="aiPrompt" data-i18n-ph="s5.promptph">
-      <div class="row"><button class="primary" id="btnVariants" data-i18n="s5.gen"></button></div>
+      <h2 data-i18n="s6.variants"></h2>
+      <label for="aiPrompt" data-i18n="s6.prompt"></label>
+      <input type="text" id="aiPrompt" data-i18n-ph="s6.promptph">
+      <div class="row"><button class="primary" id="btnVariants" data-i18n="s6.gen"></button></div>
       <div id="variants"></div>
-      <div class="status note" data-i18n="s5.simnote"></div>
+      <div class="status note" data-i18n="s6.simnote"></div>
 
-      <h2 data-i18n="s5.view"></h2>
-      <div class="row"><button class="seg active" id="modePhoto" data-i18n="s5.photo"></button><button class="seg" id="mode3d" data-i18n="s5.m3d"></button></div>
+      <h2 data-i18n="s6.view"></h2>
+      <div class="row"><button class="seg active" id="modePhoto" data-i18n="s6.photo"></button><button class="seg" id="mode3d" data-i18n="s6.m3d"></button></div>
       <div id="ctlPhoto">
-        <div class="row"><button class="seg" data-scene="sit" data-i18n="s5.sit"></button><button class="seg" data-scene="hand" data-i18n="s5.hand"></button></div>
-        <div class="row"><button id="btnUpload" data-i18n="s5.upload"></button><input type="file" id="fileIn" accept="image/*" hidden></div>
-        <label class="check"><input type="checkbox" id="adjust"> <span data-i18n="s5.adjust"></span></label>
-        <label for="bright" data-i18n="s5.bright"></label><input type="range" id="bright" min="0.6" max="1.3" step="0.02" value="0.95">
-        <label for="glare" data-i18n="s5.glare"></label><input type="range" id="glare" min="0" max="1" step="0.02" value="0.5">
+        <div class="row"><button class="seg" data-scene="sit" data-i18n="s6.sit"></button><button class="seg" data-scene="hand" data-i18n="s6.hand"></button></div>
+        <div class="row"><button id="btnUpload" data-i18n="s6.upload"></button><input type="file" id="fileIn" accept="image/*" hidden></div>
+        <label class="check"><input type="checkbox" id="adjust"> <span data-i18n="s6.adjust"></span></label>
+        <label for="bright" data-i18n="s6.bright"></label><input type="range" id="bright" min="0.6" max="1.3" step="0.02" value="0.95">
+        <label for="glare" data-i18n="s6.glare"></label><input type="range" id="glare" min="0" max="1" step="0.02" value="0.5">
       </div>
-      <h2 data-i18n="s5.proto"></h2>
-      <div class="status note" data-i18n="s5.protonote"></div>
+      <h2 data-i18n="s6.proto"></h2>
+      <div class="status note" data-i18n="s6.protonote"></div>
       <div class="row">
-        <button class="scr" data-screen="map" data-i18n="s5.bmap"></button>
-        <button class="scr" data-screen="ticket" data-i18n="s5.bticket"></button>
-        <button class="scr" data-screen="routes" data-i18n="s5.broutes"></button>
+        <button class="scr" data-screen="map" data-i18n="s6.bmap"></button>
+        <button class="scr" data-screen="ticket" data-i18n="s6.bticket"></button>
+        <button class="scr" data-screen="routes" data-i18n="s6.broutes"></button>
       </div>
-      <label for="envPrompt" data-i18n="s5.env"></label>
+      <label for="envPrompt" data-i18n="s6.env"></label>
       <textarea id="envPrompt" rows="2"></textarea>
-      <div class="row"><button class="primary" id="btnRender" data-i18n="s5.scene"></button></div>
+      <div class="row"><button class="primary" id="btnRender" data-i18n="s6.scene"></button></div>
       <div class="row" id="envChips"></div>
       <div class="status" id="interp"></div>
-      <div id="ctl3d" style="display:none"><label for="light" data-i18n="s5.light"></label>
+      <div id="ctl3d" style="display:none"><label for="light" data-i18n="s6.light"></label>
       <input type="range" id="light" min="0" max="2.5" step="0.05" value="1">
-      <label for="depth" data-i18n="s5.haze"></label>
+      <label for="depth" data-i18n="s6.haze"></label>
       <input type="range" id="depth" min="0" max="1" step="0.02" value="0.4">
-      <label class="check"><input type="checkbox" id="blurBg" checked> <span data-i18n="s5.blur"></span></label>
-      <label for="spin" data-i18n="s5.spin"></label>
+      <label class="check"><input type="checkbox" id="blurBg" checked> <span data-i18n="s6.blur"></span></label>
+      <label for="spin" data-i18n="s6.spin"></label>
       <input type="range" id="spin" min="0" max="2" step="0.05" value="0.4">
-      <label class="check"><input type="checkbox" id="auto" checked> <span data-i18n="s5.auto"></span></label>
-      <div class="row"><button id="btnReset" data-i18n="s5.reset"></button></div></div>
+      <label class="check"><input type="checkbox" id="auto" checked> <span data-i18n="s6.auto"></span></label>
+      <div class="row"><button id="btnReset" data-i18n="s6.reset"></button></div></div>
     </section>
 
     <!-- STAGE 06 -->
-    <section class="panel" data-step="6">
-      <div class="lesson"><b data-i18n="s6.title"></b> <span data-i18n="s6.desc"></span>
-        <div class="metaphor" data-i18n="s6.note"></div></div>
-      <div class="row"><button class="primary" id="btnBoard" data-i18n="s6.download"></button></div>
+    <section class="panel" data-step="7">
+      <div class="lesson"><b data-i18n="s7.title"></b> <span data-i18n="s7.desc"></span>
+        <div class="metaphor" data-i18n="s7.note"></div></div>
+      <div class="row"><button class="primary" id="btnBoard" data-i18n="s7.download"></button></div>
     </section>
 
     <!-- COMPARE -->
-    <section class="panel" data-step="7">
+    <section class="panel" data-step="8">
       <div class="lesson"><b data-i18n="cmp.title"></b> <span data-i18n="cmp.lesson"></span></div>
     </section>
 
@@ -236,57 +249,75 @@
 
   <main>
     <div class="view" id="view1"><canvas class="flat" id="moodCv" width="1000" height="600"></canvas></div>
-    <div class="view" id="view2"><canvas class="flat" id="iaCv" width="1000" height="600"></canvas></div>
-    <div class="view" id="view3"><canvas class="flat" id="wire" width="1000" height="600"></canvas></div>
-    <div class="view" id="view4"><canvas class="flat" id="mockView" width="1000" height="600" style="cursor:pointer"></canvas></div>
-    <div class="view" id="view5">
+    <div class="view" id="view2"><canvas class="flat" id="skCv" width="1000" height="600" style="cursor:pointer"></canvas></div>
+    <div class="view" id="view3"><canvas class="flat" id="iaCv" width="1000" height="600"></canvas></div>
+    <div class="view" id="view4"><canvas class="flat" id="wire" width="1000" height="600"></canvas></div>
+    <div class="view" id="view5"><canvas class="flat" id="mockView" width="1000" height="600" style="cursor:pointer"></canvas></div>
+    <div class="view" id="view6">
       <canvas id="stage"></canvas><div id="haze"></div>
       <div id="photoStage"><img id="photoImg" alt="" crossorigin="anonymous"><div id="shot"><canvas id="shotCv" width="400" height="800"></canvas><div id="cut"></div><div id="gloss"></div></div><div id="handles"></div></div>
       <div id="credit">Photos: <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a></div>
     </div>
-    <div class="view" id="view6"><canvas class="flat" id="boardCv" width="1000" height="600"></canvas></div>
-    <div class="view" id="view7">
+    <div class="view" id="view7"><canvas class="flat" id="boardCv" width="1000" height="600"></canvas></div>
+    <div class="view" id="view8">
       <div id="cmp">
         <h3 data-i18n="cmp.title"></h3>
         <p class="cmpsub" data-i18n="cmp.sub"></p>
+        <div class="cmp-key" data-i18n="cmp.key"></div>
         <div class="cmp-grid">
           <div class="cmp-card" data-go="1">
+            <h4 data-i18n="cmp.t1"></h4>
             <div class="cmp-tag" data-i18n="cmp.car"></div>
-            <div class="cmp-img"><img src="images/1.webp" alt=""></div>
-            <h4 data-i18n="cmp.c1"></h4><p data-i18n="cmp.c1d"></p>
+            <div class="cmp-img"><canvas id="autoMood" width="600" height="400"></canvas></div>
+            <p data-i18n="cmp.a1"></p>
             <div class="cmp-arrow">⇅</div>
             <div class="cmp-tag soft" data-i18n="cmp.sw"></div>
             <div class="cmp-img"><canvas id="cmpCv1" width="600" height="400"></canvas></div>
-            <h5 data-i18n="tab.1"></h5>
+            <p data-i18n="cmp.s1"></p>
           </div>
-          <div class="cmp-card" data-go="3">
+          <div class="cmp-card" data-go="2">
+            <h4 data-i18n="cmp.t2"></h4>
             <div class="cmp-tag" data-i18n="cmp.car"></div>
-            <div class="cmp-img"><canvas id="autoWire" width="600" height="400"></canvas></div>
-            <h4 data-i18n="cmp.c2"></h4><p data-i18n="cmp.c2d"></p>
+            <div class="cmp-img"><img src="images/1.webp" alt=""></div>
+            <p data-i18n="cmp.a2"></p>
             <div class="cmp-arrow">⇅</div>
             <div class="cmp-tag soft" data-i18n="cmp.sw"></div>
             <div class="cmp-img"><canvas id="cmpCv2" width="600" height="400"></canvas></div>
-            <h5 data-i18n="tab.3"></h5>
+            <p data-i18n="cmp.s2"></p>
           </div>
           <div class="cmp-card" data-go="4">
+            <h4 data-i18n="cmp.t3"></h4>
             <div class="cmp-tag" data-i18n="cmp.car"></div>
-            <div class="cmp-img"><img src="images/3.webp" alt=""></div>
-            <h4 data-i18n="cmp.c3"></h4><p data-i18n="cmp.c3d"></p>
+            <div class="cmp-img"><canvas id="autoWire" width="600" height="400"></canvas></div>
+            <p data-i18n="cmp.a3"></p>
             <div class="cmp-arrow">⇅</div>
             <div class="cmp-tag soft" data-i18n="cmp.sw"></div>
             <div class="cmp-img"><canvas id="cmpCv3" width="600" height="400"></canvas></div>
-            <h5 data-i18n="tab.4"></h5>
+            <p data-i18n="cmp.s3"></p>
           </div>
           <div class="cmp-card" data-go="5">
+            <h4 data-i18n="cmp.t4"></h4>
             <div class="cmp-tag" data-i18n="cmp.car"></div>
-            <div class="cmp-img"><img src="images/2.webp" alt=""></div>
-            <h4 data-i18n="cmp.c4"></h4><p data-i18n="cmp.c4d"></p>
+            <div class="cmp-img"><img src="images/3.webp" alt=""></div>
+            <p data-i18n="cmp.a4"></p>
             <div class="cmp-arrow">⇅</div>
             <div class="cmp-tag soft" data-i18n="cmp.sw"></div>
             <div class="cmp-img"><canvas id="cmpCv4" width="600" height="400"></canvas></div>
-            <h5 data-i18n="tab.5"></h5>
+            <p data-i18n="cmp.s4"></p>
+          </div>
+          <div class="cmp-card" data-go="6">
+            <h4 data-i18n="cmp.t5"></h4>
+            <div class="cmp-tag" data-i18n="cmp.car"></div>
+            <div class="cmp-img"><img src="images/2.webp" alt=""></div>
+            <p data-i18n="cmp.a5"></p>
+            <div class="cmp-arrow">⇅</div>
+            <div class="cmp-tag soft" data-i18n="cmp.sw"></div>
+            <div class="cmp-img"><canvas id="cmpCv5" width="600" height="400"></canvas></div>
+            <p data-i18n="cmp.s5"></p>
           </div>
         </div>
+        <div class="cmp-warn" data-i18n="cmp.warn"></div>
+        <div class="cmp-order" data-i18n="cmp.order"></div>
       </div>
     </div>
     <div class="badge" id="badge"></div>
@@ -313,12 +344,12 @@
       'Concept & Moodboard → Architecture de l\'information → Wireframe → Maquette visuelle → Simulation de design IA → Présentation visuelle du concept'],
     'excl': ['System architecture diagrams are left out of the aesthetic flow.', 'Diagrama arhitecturii sistemului este exclusă din fluxul estetic.', 'Le diagramme d\'architecture système est exclu du flux esthétique.'],
     'tab.1': ['Concept & Moodboard', 'Concept & Moodboard', 'Concept & Moodboard'],
-    'tab.2': ['Information Architecture', 'Arhitectura informației', 'Architecture de l\'information'],
-    'tab.3': ['Wireframe & Sketching', 'Wireframe & Schițe', 'Wireframe & Esquisses'],
-    'tab.4': ['Visual Mockup', 'Mockup vizual', 'Maquette visuelle'],
-    'tab.5': ['AI Simulation', 'Simulare AI', 'Simulation IA'],
-    'tab.6': ['Visual Concept', 'Concept vizual', 'Concept visuel'],
-    'tab.7': ['Automotive design analogy', 'Analogia cu designul auto', 'Analogie avec le design auto'],
+    '3': ['Information Architecture', 'Arhitectura informației', 'Architecture de l\'information'],
+    '4': ['Wireframe & Sketching', 'Wireframe & Schițe', 'Wireframe & Esquisses'],
+    '5': ['Visual Mockup', 'Mockup vizual', 'Maquette visuelle'],
+    '6': ['AI Simulation', 'Simulare AI', 'Simulation IA'],
+    '7': ['Visual Concept', 'Concept vizual', 'Concept visuel'],
+    '8': ['Automotive design analogy', 'Analogia cu designul auto', 'Analogie avec le design auto'],
     'nav.back': ['← Back', '← Înapoi', '← Retour'],
     'nav.next': ['Next stage →', 'Etapa următoare →', 'Étape suivante →'],
 
@@ -346,10 +377,10 @@
     'mb.shapes': ['Shapes', 'Forme', 'Formes'], 'mb.type': ['Typography', 'Tipografie', 'Typographie'], 'mb.icons': ['Iconography', 'Iconografie', 'Iconographie'],
     'mb.sample': ['Clear, calm, on time.', 'Clar, calm, la timp.', 'Clair, calme, à l\'heure.'],
 
-    's2.title': ['Information Architecture.', 'Arhitectura informației.', 'Architecture de l\'information.'],
-    's2.desc': ['Organizing screens, sections and navigation.', 'Organizarea ecranelor, secțiunilor și navigării.', 'Organisation des écrans, des sections et de la navigation.'],
-    's2.note': ['Where does the passenger land, and how many steps to the ticket?', 'Unde ajunge pasagerul și câți pași are până la bilet?', 'Où arrive le voyageur et combien d\'étapes jusqu\'au billet ?'],
-    's2.home': ['Which screen opens first?', 'Ce ecran se deschide primul?', 'Quel écran s\'ouvre en premier ?'],
+    's3.title': ['Information Architecture.', 'Arhitectura informației.', 'Architecture de l\'information.'],
+    's3.desc': ['Organizing screens, sections and navigation.', 'Organizarea ecranelor, secțiunilor și navigării.', 'Organisation des écrans, des sections et de la navigation.'],
+    's3.note': ['Where does the passenger land, and how many steps to the ticket?', 'Unde ajunge pasagerul și câți pași are până la bilet?', 'Où arrive le voyageur et combien d\'étapes jusqu\'au billet ?'],
+    's3.home': ['Which screen opens first?', 'Ce ecran se deschide primul?', 'Quel écran s\'ouvre en premier ?'],
     'ia.title': ['INFORMATION ARCHITECTURE · screens, sections, navigation', 'ARHITECTURA INFORMAȚIEI · ecrane, secțiuni, navigare', 'ARCHITECTURE DE L\'INFORMATION · écrans, sections, navigation'],
     'ia.launch': ['App launch', 'Lansare aplicație', 'Lancement de l\'appli'],
     'ia.home': ['HOME', 'ACASĂ', 'ACCUEIL'],
@@ -361,12 +392,12 @@
     'ia.taps1': ['The ticket is {0} tap away from the home screen.', 'Biletul este la {0} atingere de ecranul principal.', 'Le billet est à {0} appui de l\'écran d\'accueil.'],
     'scr.map': ['Map', 'Hartă', 'Carte'], 'scr.ticket': ['Ticket', 'Bilet', 'Billet'], 'scr.routes': ['Routes', 'Rute', 'Lignes'],
 
-    's3.title': ['Wireframing & Sketching.', 'Wireframe și schițe.', 'Wireframes et esquisses.'],
-    's3.desc': ['Initial sketches of the interface, without aesthetic detail.', 'Schițe inițiale ale interfeței, fără detalii estetice.', 'Premières esquisses de l\'interface, sans détails esthétiques.'],
-    's3.note': ['No colours, no style: only structure and placement of elements.', 'Fără culori, fără stil: doar structura și amplasarea elementelor.', 'Ni couleurs ni style : seulement la structure et la disposition des éléments.'],
-    's3.sketch': ['✏️ Hand sketch', '✏️ Schiță în creion', '✏️ Esquisse à la main'],
-    's3.clean': ['▭ Clean wireframe', '▭ Wireframe curat', '▭ Wireframe propre'],
-    's3.notes': ['Show annotations', 'Arată adnotările', 'Afficher les annotations'],
+    's4.title': ['Wireframing & Sketching.', 'Wireframe și schițe.', 'Wireframes et esquisses.'],
+    's4.desc': ['Initial sketches of the interface, without aesthetic detail.', 'Schițe inițiale ale interfeței, fără detalii estetice.', 'Premières esquisses de l\'interface, sans détails esthétiques.'],
+    's4.note': ['No colours, no style: only structure and placement of elements.', 'Fără culori, fără stil: doar structura și amplasarea elementelor.', 'Ni couleurs ni style : seulement la structure et la disposition des éléments.'],
+    's4.sketch': ['✏️ Hand sketch', '✏️ Schiță în creion', '✏️ Esquisse à la main'],
+    's4.clean': ['▭ Clean wireframe', '▭ Wireframe curat', '▭ Wireframe propre'],
+    's4.notes': ['Show annotations', 'Arată adnotările', 'Afficher les annotations'],
     'wf.title': ['WIREFRAMES · structure only, no aesthetics', 'WIREFRAME-URI · doar structură, fără estetică', 'WIREFRAMES · structure seulement, sans esthétique'],
     'wf.header': ['Header', 'Antet', 'En-tête'], 'wf.search': ['Search destination', 'Caută destinația', 'Rechercher une destination'], 'wf.map': ['MAP', 'HARTĂ', 'CARTE'],
     'wf.get': ['Get ticket ▸', 'Ia bilet ▸', 'Obtenir un billet ▸'], 'wf.passenger': ['Passenger', 'Pasager', 'Voyageur'], 'wf.zone': ['Route · Zone · Valid until', 'Rută · Zonă · Valabil până la', 'Ligne · Zone · Valable jusqu\'à'],
@@ -376,12 +407,12 @@
     'wf.status0': ['Ticket first: 0 taps to board.', 'Biletul primul: 0 atingeri până la îmbarcare.', 'Billet d\'abord : 0 appui pour embarquer.'],
     'wf.status1': ['{0} tap to reach the ticket: fine for planning, slower at a gate.', '{0} atingere până la bilet: bine pentru planificare, mai lent la poartă.', '{0} appui pour atteindre le billet : bien pour planifier, plus lent au portique.'],
 
-    's4.title': ['Visual Design / Mockup.', 'Design vizual / Mockup.', 'Design visuel / Maquette.'],
-    's4.desc': ['Typography, colors, shapes, iconography, composition and style.', 'Tipografie, culori, forme, iconografie, compoziție și stil.', 'Typographie, couleurs, formes, iconographie, composition et style.'],
-    's4.name': ['Passenger name', 'Numele pasagerului', 'Nom du voyageur'],
-    's4.route': ['Route', 'Ruta', 'Ligne'],
-    's4.qr': ['New QR code', 'Cod QR nou', 'Nouveau code QR'],
-    's4.tip': ['Click any screen or its buttons to try the flow. Change the style in stage 1, or explore variants in stage 5.', 'Apasă pe orice ecran sau buton pentru a încerca fluxul. Schimbă stilul în etapa 1 sau explorează variante în etapa 5.', 'Cliquez sur un écran ou ses boutons pour essayer le parcours. Changez le style à l\'étape 1 ou explorez des variantes à l\'étape 5.'],
+    's5.title': ['Visual Design / Mockup.', 'Design vizual / Mockup.', 'Design visuel / Maquette.'],
+    's5.desc': ['Typography, colors, shapes, iconography, composition and style.', 'Tipografie, culori, forme, iconografie, compoziție și stil.', 'Typographie, couleurs, formes, iconographie, composition et style.'],
+    's5.name': ['Passenger name', 'Numele pasagerului', 'Nom du voyageur'],
+    's5.route': ['Route', 'Ruta', 'Ligne'],
+    's5.qr': ['New QR code', 'Cod QR nou', 'Nouveau code QR'],
+    's5.tip': ['Click any screen or its buttons to try the flow. Change the style in stage 1, or explore variants in stage 5.', 'Apasă pe orice ecran sau buton pentru a încerca fluxul. Schimbă stilul în etapa 1 sau explorează variante în etapa 5.', 'Cliquez sur un écran ou ses boutons pour essayer le parcours. Changez le style à l\'étape 1 ou explorez des variantes à l\'étape 5.'],
     'mv.title': ['VISUAL MOCKUPS · high fidelity · click to interact', 'MOCKUP-URI VIZUALE · fidelitate înaltă · apasă pentru interacțiune', 'MAQUETTES VISUELLES · haute fidélité · cliquez pour interagir'],
     'mv.insim': ['shown in simulation', 'afișat în simulare', 'affiché dans la simulation'],
     'ui.contrast': ['White text on the header colour: contrast {0}:1 · {1}', 'Text alb pe culoarea antetului: contrast {0}:1 · {1}', 'Texte blanc sur la couleur d\'en-tête : contraste {0}:1 · {1}'],
@@ -402,33 +433,33 @@
     'ui.selected': ['Selected', 'Selectat', 'Sélectionné'],
     'ui.name': ['Student', 'Student', 'Étudiant'],
 
-    's5.title': ['AI-Assisted Visual Exploration & Simulation.', 'Explorare și simulare vizuală asistată de AI.', 'Exploration et simulation visuelles assistées par IA.'],
-    's5.desc': ['Generating and exploring visual variants, animations and usage scenarios.', 'Generarea și explorarea variantelor vizuale, animațiilor și scenariilor de utilizare.', 'Génération et exploration de variantes visuelles, d\'animations et de scénarios d\'usage.'],
-    's5.variants': ['Visual variants', 'Variante vizuale', 'Variantes visuelles'],
-    's5.prompt': ['Style brief', 'Brief de stil', 'Brief de style'],
-    's5.promptph': ['e.g. warm, bold, rounded', 'ex. cald, îndrăzneț, rotunjit', 'ex. chaud, audacieux, arrondi'],
-    's5.gen': ['✨ Generate variants', '✨ Generează variante', '✨ Générer des variantes'],
-    's5.simnote': ['Simulation: variants are produced by simple style rules, not by a real AI model. Click one to adopt it.', 'Simulare: variantele sunt produse prin reguli simple de stil, nu de un model AI real. Apasă pe una pentru a o adopta.', 'Simulation : les variantes sont produites par de simples règles de style, pas par un vrai modèle d\'IA. Cliquez pour en adopter une.'],
-    's5.view': ['Usage scenario', 'Scenariu de utilizare', 'Scénario d\'usage'],
-    's5.photo': ['📷 Real photo', '📷 Fotografie reală', '📷 Photo réelle'], 's5.m3d': ['🧊 3D model', '🧊 Model 3D', '🧊 Modèle 3D'],
-    's5.sit': ['🪑 Seated commuter', '🪑 Navetist așezat', '🪑 Voyageur assis'], 's5.hand': ['🧼 Clean hand shot', '🧼 Mână, fundal curat', '🧼 Main, fond épuré'],
-    's5.upload': ['⬆ Upload your own photo', '⬆ Încarcă propria fotografie', '⬆ Importer votre photo'],
-    's5.adjust': ['Adjust screen corners (drag the 4 dots)', 'Ajustează colțurile ecranului (trage cele 4 puncte)', 'Ajuster les coins de l\'écran (glissez les 4 points)'],
-    's5.bright': ['Screen brightness', 'Luminozitate ecran', 'Luminosité de l\'écran'], 's5.glare': ['Glass glare', 'Reflexie sticlă', 'Reflet du verre'],
-    's5.proto': ['Interactive prototype', 'Prototip interactiv', 'Prototype interactif'],
-    's5.protonote': ['Click the buttons and tabs on the phone screen itself.', 'Apasă butoanele și filele chiar pe ecranul telefonului.', 'Cliquez sur les boutons et onglets sur l\'écran du téléphone.'],
-    's5.bmap': ['🗺️ Map', '🗺️ Hartă', '🗺️ Carte'], 's5.bticket': ['🎫 Ticket', '🎫 Bilet', '🎫 Billet'], 's5.broutes': ['🚇 Routes', '🚇 Rute', '🚇 Lignes'],
-    's5.env': ['Environment prompt', 'Prompt pentru mediu', 'Prompt d\'environnement'],
-    's5.envdef': ['Phone held at a busy train station platform at night', 'Telefon ținut pe peronul aglomerat al unei gări, noaptea', 'Téléphone tenu sur le quai animé d\'une gare, la nuit'],
-    's5.scene': ['Generate scene', 'Generează scena', 'Générer la scène'],
+    's6.title': ['AI-Assisted Visual Exploration & Simulation.', 'Explorare și simulare vizuală asistată de AI.', 'Exploration et simulation visuelles assistées par IA.'],
+    's6.desc': ['Generating and exploring visual variants, animations and usage scenarios.', 'Generarea și explorarea variantelor vizuale, animațiilor și scenariilor de utilizare.', 'Génération et exploration de variantes visuelles, d\'animations et de scénarios d\'usage.'],
+    's6.variants': ['Visual variants', 'Variante vizuale', 'Variantes visuelles'],
+    's6.prompt': ['Style brief', 'Brief de stil', 'Brief de style'],
+    's6.promptph': ['e.g. warm, bold, rounded', 'ex. cald, îndrăzneț, rotunjit', 'ex. chaud, audacieux, arrondi'],
+    's6.gen': ['✨ Generate variants', '✨ Generează variante', '✨ Générer des variantes'],
+    's6.simnote': ['Simulation: variants are produced by simple style rules, not by a real AI model. Click one to adopt it.', 'Simulare: variantele sunt produse prin reguli simple de stil, nu de un model AI real. Apasă pe una pentru a o adopta.', 'Simulation : les variantes sont produites par de simples règles de style, pas par un vrai modèle d\'IA. Cliquez pour en adopter une.'],
+    's6.view': ['Usage scenario', 'Scenariu de utilizare', 'Scénario d\'usage'],
+    's6.photo': ['📷 Real photo', '📷 Fotografie reală', '📷 Photo réelle'], 's6.m3d': ['🧊 3D model', '🧊 Model 3D', '🧊 Modèle 3D'],
+    's6.sit': ['🪑 Seated commuter', '🪑 Navetist așezat', '🪑 Voyageur assis'], 's6.hand': ['🧼 Clean hand shot', '🧼 Mână, fundal curat', '🧼 Main, fond épuré'],
+    's6.upload': ['⬆ Upload your own photo', '⬆ Încarcă propria fotografie', '⬆ Importer votre photo'],
+    's6.adjust': ['Adjust screen corners (drag the 4 dots)', 'Ajustează colțurile ecranului (trage cele 4 puncte)', 'Ajuster les coins de l\'écran (glissez les 4 points)'],
+    's6.bright': ['Screen brightness', 'Luminozitate ecran', 'Luminosité de l\'écran'], 's6.glare': ['Glass glare', 'Reflexie sticlă', 'Reflet du verre'],
+    's6.proto': ['Interactive prototype', 'Prototip interactiv', 'Prototype interactif'],
+    's6.protonote': ['Click the buttons and tabs on the phone screen itself.', 'Apasă butoanele și filele chiar pe ecranul telefonului.', 'Cliquez sur les boutons et onglets sur l\'écran du téléphone.'],
+    's6.bmap': ['🗺️ Map', '🗺️ Hartă', '🗺️ Carte'], 's6.bticket': ['🎫 Ticket', '🎫 Bilet', '🎫 Billet'], 's6.broutes': ['🚇 Routes', '🚇 Rute', '🚇 Lignes'],
+    's6.env': ['Environment prompt', 'Prompt pentru mediu', 'Prompt d\'environnement'],
+    's6.envdef': ['Phone held at a busy train station platform at night', 'Telefon ținut pe peronul aglomerat al unei gări, noaptea', 'Téléphone tenu sur le quai animé d\'une gare, la nuit'],
+    's6.scene': ['Generate scene', 'Generează scena', 'Générer la scène'],
     'env.1': ['Metro, day', 'Metrou, zi', 'Métro, jour'], 'env.2': ['Street, sunset', 'Stradă, apus', 'Rue, coucher de soleil'], 'env.3': ['Station, rain', 'Gară, ploaie', 'Gare, pluie'], 'env.4': ['Studio', 'Studio', 'Studio'],
     'envp.1': ['Phone at a bright metro station in the daytime', 'Telefon într-o stație de metrou luminoasă, ziua', 'Téléphone dans une station de métro lumineuse, de jour'],
     'envp.2': ['Phone on a city street at sunset, warm golden light', 'Telefon pe o stradă a orașului la apus, lumină aurie caldă', 'Téléphone dans une rue de la ville au coucher du soleil, lumière dorée'],
     'envp.3': ['Phone at a train station at night, rainy and foggy', 'Telefon într-o gară noaptea, ploaie și ceață', 'Téléphone dans une gare la nuit, pluie et brouillard'],
     'envp.4': ['Clean studio shot, soft light', 'Fotografie de studio curată, lumină difuză', 'Prise de vue studio épurée, lumière douce'],
-    's5.light': ['Light intensity', 'Intensitatea luminii', 'Intensité lumineuse'], 's5.haze': ['Atmosphere haze', 'Ceață atmosferică', 'Brume atmosphérique'],
-    's5.blur': ['Blurred background (shallow depth of field)', 'Fundal estompat (profunzime mică)', 'Arrière-plan flou (faible profondeur de champ)'],
-    's5.spin': ['Rotation speed', 'Viteza de rotație', 'Vitesse de rotation'], 's5.auto': ['Auto-rotate', 'Rotire automată', 'Rotation automatique'], 's5.reset': ['Reset view', 'Resetează vederea', 'Réinitialiser la vue'],
+    's6.light': ['Light intensity', 'Intensitatea luminii', 'Intensité lumineuse'], 's6.haze': ['Atmosphere haze', 'Ceață atmosferică', 'Brume atmosphérique'],
+    's6.blur': ['Blurred background (shallow depth of field)', 'Fundal estompat (profunzime mică)', 'Arrière-plan flou (faible profondeur de champ)'],
+    's6.spin': ['Rotation speed', 'Viteza de rotație', 'Vitesse de rotation'], 's6.auto': ['Auto-rotate', 'Rotire automată', 'Rotation automatique'], 's6.reset': ['Reset view', 'Resetează vederea', 'Réinitialiser la vue'],
     'tag.studio': ['studio softboxes', 'softbox-uri de studio', 'softboxes de studio'], 'tag.city': ['city street', 'stradă urbană', 'rue de la ville'], 'tag.hub': ['transit hub', 'nod de transport', 'pôle de transport'],
     'tag.golden': ['golden hour', 'ora de aur', 'heure dorée'], 'tag.bright': ['bright daylight', 'lumină de zi', 'plein jour'], 'tag.night': ['night', 'noapte', 'nuit'], 'tag.fog': ['fog / rain', 'ceață / ploaie', 'brouillard / pluie'],
     'env.loading': ['Loading environment…', 'Se încarcă mediul…', 'Chargement de l\'environnement…'],
@@ -437,10 +468,10 @@
     'var.n': ['Variant {0}', 'Varianta {0}', 'Variante {0}'],
     'var.adopted': ['Adopted variant {0}: {1}', 'Varianta {0} adoptată: {1}', 'Variante {0} adoptée : {1}'],
 
-    's6.title': ['Visual Concept Demonstrator.', 'Demonstrator vizual de concept.', 'Démonstrateur visuel de concept.'],
-    's6.desc': ['Presenting the aesthetic concept through renders or demonstration screens, without a functional application.', 'Prezentarea conceptului estetic prin randări sau ecrane demonstrative, fără aplicație funcțională.', 'Présentation du concept esthétique par des rendus ou des écrans de démonstration, sans application fonctionnelle.'],
-    's6.note': ['The board updates with every choice you made in stages 1–5.', 'Panoul se actualizează cu fiecare alegere făcută în etapele 1–5.', 'Le tableau se met à jour avec chaque choix fait aux étapes 1 à 5.'],
-    's6.download': ['⬇ Download the presentation board (PNG)', '⬇ Descarcă panoul de prezentare (PNG)', '⬇ Télécharger le tableau de présentation (PNG)'],
+    's7.title': ['Visual Concept Demonstrator.', 'Demonstrator vizual de concept.', 'Démonstrateur visuel de concept.'],
+    's7.desc': ['Presenting the aesthetic concept through renders or demonstration screens, without a functional application.', 'Prezentarea conceptului estetic prin randări sau ecrane demonstrative, fără aplicație funcțională.', 'Présentation du concept esthétique par des rendus ou des écrans de démonstration, sans application fonctionnelle.'],
+    's7.note': ['The board updates with every choice you made in stages 1–5.', 'Panoul se actualizează cu fiecare alegere făcută în etapele 1–5.', 'Le tableau se met à jour avec chaque choix fait aux étapes 1 à 5.'],
+    's7.download': ['⬇ Download the presentation board (PNG)', '⬇ Descarcă panoul de prezentare (PNG)', '⬇ Télécharger le tableau de présentation (PNG)'],
     'bd.title': ['Visual Concept', 'Concept vizual', 'Concept visuel'],
     'bd.tag': ['Transit ticket app · aesthetic proof of concept', 'Aplicație de bilete · demonstrator estetic', 'Appli de billets · démonstrateur esthétique'],
     'bd.palette': ['Palette', 'Paletă', 'Palette'], 'bd.type': ['Typography', 'Tipografie', 'Typographie'], 'bd.shape': ['Shape language', 'Limbaj de forme', 'Langage de formes'],
@@ -456,21 +487,89 @@
     'cmp.c4': ['AI Design Visualization', 'Vizualizare de design cu AI', 'Visualisation de design par IA'], 'cmp.c4d': ['Renders and exploration of the aesthetic concept.', 'Randări și explorarea conceptului estetic.', 'Rendus et exploration du concept esthétique.'],
 
     'hint.1': ['Pick keywords, a palette and shapes: the concept map and moodboard update', 'Alege cuvinte-cheie, o paletă și forme: harta și moodboard-ul se actualizează', 'Choisissez mots-clés, palette et formes : la carte et le moodboard se mettent à jour'],
-    'hint.2': ['Change the home screen and watch the number of taps', 'Schimbă ecranul principal și urmărește numărul de atingeri', 'Changez l\'écran d\'accueil et observez le nombre d\'appuis'],
-    'hint.3': ['Switch between hand sketch and clean wireframe', 'Comută între schiță în creion și wireframe curat', 'Basculez entre esquisse à la main et wireframe propre'],
-    'hint.4': ['Click a screen to select it · click its buttons to navigate', 'Apasă pe un ecran pentru a-l selecta · apasă butoanele pentru a naviga', 'Cliquez sur un écran pour le choisir · cliquez sur ses boutons pour naviguer'],
-    'hint.5p': ['Click the buttons on the phone screen in the photo', 'Apasă butoanele de pe ecranul telefonului din fotografie', 'Cliquez sur les boutons de l\'écran du téléphone dans la photo'],
-    'hint.53': ['Click buttons on the phone · drag to rotate · scroll to zoom', 'Apasă butoanele telefonului · trage pentru a roti · derulează pentru zoom', 'Cliquez sur les boutons · glissez pour tourner · molette pour zoomer'],
-    'hint.6': ['Static presentation board built from your choices', 'Panou de prezentare static, construit din alegerile tale', 'Tableau de présentation statique construit à partir de vos choix'],
-    'hint.7': ['Click a card to jump to its stage', 'Apasă pe un card pentru a sări la etapă', 'Cliquez sur une carte pour accéder à l\'étape'],
+    'hint.3': ['Change the home screen and watch the number of taps', 'Schimbă ecranul principal și urmărește numărul de atingeri', 'Changez l\'écran d\'accueil et observez le nombre d\'appuis'],
+    'hint.4': ['Switch between hand sketch and clean wireframe', 'Comută între schiță în creion și wireframe curat', 'Basculez entre esquisse à la main et wireframe propre'],
+    'hint.5': ['Click a screen to select it · click its buttons to navigate', 'Apasă pe un ecran pentru a-l selecta · apasă butoanele pentru a naviga', 'Cliquez sur un écran pour le choisir · cliquez sur ses boutons pour naviguer'],
+    'hint.6p': ['Click the buttons on the phone screen in the photo', 'Apasă butoanele de pe ecranul telefonului din fotografie', 'Cliquez sur les boutons de l\'écran du téléphone dans la photo'],
+    'hint.63': ['Click buttons on the phone · drag to rotate · scroll to zoom', 'Apasă butoanele telefonului · trage pentru a roti · derulează pentru zoom', 'Cliquez sur les boutons · glissez pour tourner · molette pour zoomer'],
+    'hint.7': ['Static presentation board built from your choices', 'Panou de prezentare static, construit din alegerile tale', 'Tableau de présentation statique construit à partir de vos choix'],
+    'hint.8': ['Click a card to jump to its stage', 'Apasă pe un card pentru a sări la etapă', 'Cliquez sur une carte pour accéder à l\'étape'],
     'badge.1': ['Stage 01 · Concept Map + Moodboard', 'Etapa 01 · Hartă conceptuală + Moodboard', 'Étape 01 · Carte conceptuelle + Moodboard'],
-    'badge.2': ['Stage 02 · Information Architecture', 'Etapa 02 · Arhitectura informației', 'Étape 02 · Architecture de l\'information'],
-    'badge.3': ['Stage 03 · Wireframing & Sketching', 'Etapa 03 · Wireframe și schițe', 'Étape 03 · Wireframes et esquisses'],
-    'badge.4': ['Stage 04 · Visual Design / Mockup', 'Etapa 04 · Design vizual / Mockup', 'Étape 04 · Design visuel / Maquette'],
-    'badge.5': ['Stage 05 · AI-Assisted Exploration & Simulation', 'Etapa 05 · Explorare și simulare asistată de AI', 'Étape 05 · Exploration et simulation assistées par IA'],
-    'badge.6': ['Stage 06 · Visual Concept Demonstrator', 'Etapa 06 · Demonstrator vizual de concept', 'Étape 06 · Démonstrateur visuel de concept'],
-    'badge.7': ['Analogy · Automotive design', 'Analogie · Design automobil', 'Analogie · Design automobile']
+    '3': ['Stage 02 · Information Architecture', 'Etapa 02 · Arhitectura informației', 'Étape 02 · Architecture de l\'information'],
+    '4': ['Stage 03 · Wireframing & Sketching', 'Etapa 03 · Wireframe și schițe', 'Étape 03 · Wireframes et esquisses'],
+    '5': ['Stage 04 · Visual Design / Mockup', 'Etapa 04 · Design vizual / Mockup', 'Étape 04 · Design visuel / Maquette'],
+    '6': ['Stage 05 · AI-Assisted Exploration & Simulation', 'Etapa 05 · Explorare și simulare asistată de AI', 'Étape 05 · Exploration et simulation assistées par IA'],
+    '7': ['Stage 06 · Visual Concept Demonstrator', 'Etapa 06 · Demonstrator vizual de concept', 'Étape 06 · Démonstrateur visuel de concept'],
+    '8': ['Analogy · Automotive design', 'Analogie · Design automobil', 'Analogie · Design automobile']
   };
+
+  Object.assign(T, {
+    'flow': ['Concept Moodboard → Concept Sketching → Information Architecture → Wireframing → Visual Design / High-Fidelity Mockup → AI-Based Design Simulation → Final Concept Visualization',
+      'Concept Moodboard → Concept Sketching → Arhitectura informației → Wireframing → Visual Design / Mockup de înaltă fidelitate → Simulare de design bazată pe AI → Vizualizarea finală a conceptului',
+      'Concept Moodboard → Concept Sketching → Architecture de l\'information → Wireframing → Visual Design / Maquette haute fidélité → Simulation de design par IA → Visualisation finale du concept'],
+    'tab.1': ['Concept Moodboard', 'Concept Moodboard', 'Concept Moodboard'],
+    'tab.2': ['Concept Sketching', 'Schițe de concept', 'Esquisses de concept'],
+    'tab.3': ['Information Architecture', 'Arhitectura informației', 'Architecture de l\'information'],
+    'tab.4': ['Wireframing', 'Wireframing', 'Wireframing'],
+    'tab.5': ['Visual Mockup', 'Mockup vizual', 'Maquette visuelle'],
+    'tab.6': ['AI Simulation', 'Simulare AI', 'Simulation IA'],
+    'tab.7': ['Final Concept', 'Concept final', 'Concept final'],
+    'tab.8': ['Automotive analogy', 'Analogia auto', 'Analogie auto'],
+    's1.title': ['Concept Moodboard.', 'Concept Moodboard.', 'Concept Moodboard.'],
+    's1.note': ['What atmosphere, identity and style do we want? The moodboard sets the artistic direction; the concept map explains how the ideas relate.', 'Ce atmosferă, identitate și stil dorim? Moodboard-ul stabilește direcția artistică, pe când harta conceptuală explică relațiile dintre idei.', 'Quelle ambiance, identité et style voulons-nous ? Le moodboard fixe la direction artistique, tandis que la carte conceptuelle explique les relations entre les idées.'],
+    's2.title': ['Concept Sketching.', 'Concept Sketching (schițe de concept).', 'Concept Sketching (esquisses de concept).'],
+    's2.desc': ['Exploratory sketches of screens, navigation and composition.', 'Schițe exploratorii ale ecranelor, navigării și compoziției.', 'Esquisses exploratoires des écrans, de la navigation et de la composition.'],
+    's2.note': ['How could the product look? This stage is about creativity and aesthetic exploration, not structure.', 'Cum ar putea arăta produsul? Această etapă urmărește creativitatea și explorarea estetică, nu structura.', 'À quoi pourrait ressembler le produit ? Cette étape vise la créativité et l\'exploration esthétique, pas la structure.'],
+    's2.pick': ['Click the sketch you want to keep.', 'Apasă pe schița pe care vrei s-o păstrezi.', 'Cliquez sur l\'esquisse que vous voulez garder.'],
+    's2.iter': ['The moodboard and the sketches can be iterated: they do not have to follow each other strictly.', 'Moodboard-ul și schițele pot fi realizate și iterativ, nu obligatoriu unul după altul.', 'Le moodboard et les esquisses peuvent être itératifs : pas forcément l\'un après l\'autre.'],
+    'sk.title': ['CONCEPT SKETCHES · explore compositions, click one to keep', 'SCHIȚE DE CONCEPT · explorează compoziții, apasă pe una pentru a o păstra', 'ESQUISSES DE CONCEPT · explorez des compositions, cliquez pour en garder une'],
+    'sk.a': ['A · Map first', 'A · Harta întâi', 'A · Carte d\'abord'], 'sk.b': ['B · Ticket first', 'B · Biletul întâi', 'B · Billet d\'abord'],
+    'sk.c': ['C · Line list first', 'C · Lista de linii întâi', 'C · Liste des lignes d\'abord'], 'sk.d': ['D · Split view', 'D · Vedere împărțită', 'D · Vue partagée'],
+    'sk.kept': ['KEPT', 'PĂSTRAT', 'RETENU'],
+    'sk.keptmsg': ['Kept concept {0}: the app opens on the {1} screen.', 'Concept păstrat {0}: aplicația se deschide pe ecranul {1}.', 'Concept retenu {0} : l\'appli s\'ouvre sur l\'écran {1}.'],
+    's4.title': ['Wireframing.', 'Wireframing.', 'Wireframing.'],
+    's4.desc': ['Structure of the screens, placement of elements and navigation, without aesthetic detail.', 'Structura ecranelor, poziționarea elementelor și navigarea, fără detalii estetice.', 'Structure des écrans, placement des éléments et navigation, sans détails esthétiques.'],
+    's4.note': ['How are the elements organised and how does the user interact with them? A sketch explores form; a wireframe explores spatial and functional organisation.', 'Cum sunt organizate elementele și cum interacționează utilizatorul cu ele? Schița explorează forma; wireframe-ul explorează organizarea spațială și funcțională.', 'Comment les éléments sont-ils organisés et comment l\'utilisateur interagit-il avec eux ? L\'esquisse explore la forme ; le wireframe explore l\'organisation spatiale et fonctionnelle.'],
+    's5.title': ['Visual Design / High-Fidelity Mockup.', 'Design vizual / Mockup de înaltă fidelitate.', 'Design visuel / Maquette haute fidélité.'],
+    's6.title': ['AI-Based Design Simulation.', 'Simulare de design bazată pe AI.', 'Simulation de design par IA.'],
+    's7.title': ['Final Concept Visualization.', 'Vizualizarea finală a conceptului.', 'Visualisation finale du concept.'],
+    'hint.2': ['Click a sketch to keep it: it decides which screen opens first', 'Apasă pe o schiță pentru a o păstra: ea decide ce ecran se deschide primul', 'Cliquez sur une esquisse pour la garder : elle décide de l\'écran d\'ouverture'],
+    'hint.8': ['Click a card to jump to its stage', 'Apasă pe un card pentru a sări la etapă', 'Cliquez sur une carte pour accéder à l\'étape'],
+    'badge.1': ['Stage 01 · Concept Moodboard', 'Etapa 01 · Concept Moodboard', 'Étape 01 · Concept Moodboard'],
+    'badge.2': ['Stage 02 · Concept Sketching', 'Etapa 02 · Concept Sketching', 'Étape 02 · Concept Sketching'],
+    'badge.3': ['Stage 03 · Information Architecture', 'Etapa 03 · Arhitectura informației', 'Étape 03 · Architecture de l\'information'],
+    'badge.4': ['Stage 04 · Wireframing', 'Etapa 04 · Wireframing', 'Étape 04 · Wireframing'],
+    'badge.5': ['Stage 05 · Visual Design / High-Fidelity Mockup', 'Etapa 05 · Design vizual / Mockup de înaltă fidelitate', 'Étape 05 · Design visuel / Maquette haute fidélité'],
+    'badge.6': ['Stage 06 · AI-Based Design Simulation', 'Etapa 06 · Simulare de design bazată pe AI', 'Étape 06 · Simulation de design par IA'],
+    'badge.7': ['Stage 07 · Final Concept Visualization', 'Etapa 07 · Vizualizarea finală a conceptului', 'Étape 07 · Visualisation finale du concept'],
+    'badge.8': ['Analogy · Automotive design', 'Analogie · Design automobil', 'Analogie · Design automobile'],
+    'cmp.sub': ['The same moves a car goes through, next to our software process.', 'Aceleași mișcări prin care trece un automobil, alături de procesul nostru software.', 'Les mêmes étapes qu\'une automobile, à côté de notre processus logiciel.'],
+    'cmp.key': ['Concept Moodboard = what atmosphere, identity and style do we want?  ·  Concept Sketch = how could the product look?  ·  Wireframe = how are the elements organised and how does the user interact with them?',
+      'Concept Moodboard = ce atmosferă, identitate și stil dorim?  ·  Concept Sketch = cum ar putea arăta produsul?  ·  Wireframe = cum sunt organizate elementele și cum interacționează utilizatorul cu ele?',
+      'Concept Moodboard = quelle ambiance, identité et style voulons-nous ?  ·  Concept Sketch = à quoi pourrait ressembler le produit ?  ·  Wireframe = comment les éléments sont-ils organisés et comment l\'utilisateur interagit-il avec eux ?'],
+    'cmp.warn': ['Important: a wireframe is not the exact equivalent of a car concept sketch. The car sketch mainly explores form and proportions, while a software wireframe explores the spatial and functional organisation of the interface.',
+      'Important: wireframe-ul nu este echivalentul exact al unui car concept sketch. Schița automobilului explorează în principal forma și proporțiile, în timp ce wireframe-ul software explorează organizarea spațială și funcțională a interfeței.',
+      'Important : un wireframe n\'est pas l\'équivalent exact d\'une esquisse de concept automobile. L\'esquisse explore surtout la forme et les proportions, alors que le wireframe logiciel explore l\'organisation spatiale et fonctionnelle de l\'interface.'],
+    'cmp.order': ['Recommended order: Concept Moodboard → Concept Sketching → Information Architecture → Wireframing → Visual Design / High-Fidelity Mockup → AI-Based Design Simulation → Final Concept Visualization. Moodboard and sketches can also be iterated, not strictly one after the other.',
+      'Ordinea recomandată: Concept Moodboard → Concept Sketching → Information Architecture → Wireframing → Visual Design / High-Fidelity Mockup → AI-Based Design Simulation → Final Concept Visualization. Moodboard-ul și schițele pot fi realizate și iterativ, nu obligatoriu unul după altul.',
+      'Ordre recommandé : Concept Moodboard → Concept Sketching → Information Architecture → Wireframing → Visual Design / maquette haute fidélité → Simulation de design par IA → Visualisation finale du concept. Le moodboard et les esquisses peuvent aussi être itératifs, pas strictement l\'un après l\'autre.'],
+    'cmp.t1': ['Concept Moodboard', 'Concept Moodboard', 'Concept Moodboard'], 'cmp.t2': ['Concept Sketch', 'Concept Sketch', 'Concept Sketch'], 'cmp.t3': ['Wireframe', 'Wireframe', 'Wireframe'],
+    'cmp.t4': ['Visual Mockup', 'Visual Mockup', 'Visual Mockup'], 'cmp.t5': ['AI Design Simulation', 'AI Design Simulation', 'AI Design Simulation'],
+    'cmp.a1': ['Inspirations for bodywork, headlights, materials and visual identity.', 'Inspirații pentru caroserie, faruri, materiale, identitate vizuală.', 'Inspirations pour la carrosserie, les phares, les matériaux et l\'identité visuelle.'],
+    'cmp.s1': ['Colours, typography, graphic style, visual references.', 'Culori, tipografie, stil grafic, referințe vizuale.', 'Couleurs, typographie, style graphique, références visuelles.'],
+    'cmp.a2': ['Sketches of the car\'s silhouette, proportions and lines.', 'Schițe ale siluetei, proporțiilor și liniilor automobilului.', 'Esquisses de la silhouette, des proportions et des lignes de l\'automobile.'],
+    'cmp.s2': ['Exploratory sketches of screens, navigation and composition.', 'Schițe exploratorii ale ecranelor, navigării și compoziției.', 'Esquisses exploratoires des écrans, de la navigation et de la composition.'],
+    'cmp.a3': ['Functional layout of the cabin, dashboard and controls.', 'Layout funcțional al habitaclului, bordului și comenzilor.', 'Agencement fonctionnel de l\'habitacle, du tableau de bord et des commandes.'],
+    'cmp.s3': ['Screen structure, element placement and navigation.', 'Structura ecranelor, poziționarea elementelor și navigarea.', 'Structure des écrans, placement des éléments et navigation.'],
+    'cmp.a4': ['Detailed render of the exterior / interior.', 'Randare detaliată a exteriorului/interiorului.', 'Rendu détaillé de l\'extérieur / de l\'intérieur.'],
+    'cmp.s4': ['Detailed interface with colours, shapes and typography.', 'Interfață detaliată cu culori, forme și tipografie.', 'Interface détaillée avec couleurs, formes et typographie.'],
+    'cmp.a5': ['Visualising the car in different environments and configurations.', 'Vizualizarea automobilului în diferite medii și configurații.', 'Visualisation de l\'automobile dans différents environnements et configurations.'],
+    'cmp.s5': ['Simulating interfaces, visual variants and transitions.', 'Simularea interfețelor, variantelor vizuale și tranzițiilor.', 'Simulation des interfaces, des variantes visuelles et des transitions.'],
+    'mc.studio': ['Design studio', 'Studio de design', 'Studio de design'], 'mc.light': ['Light signature', 'Semnătură luminoasă', 'Signature lumineuse'],
+    'mc.mat': ['Materials', 'Materiale', 'Matériaux'], 'mc.form': ['Form study', 'Studiu de formă', 'Étude de forme'], 'mc.col': ['Colour', 'Culoare', 'Couleur'],
+    'aw.cluster': ['Instrument cluster', 'Panou de bord digital', 'Combiné d\'instruments'], 'aw.info': ['Infotainment display', 'Ecran infotainment', 'Écran d\'infodivertissement'],
+    'aw.wheel': ['Steering wheel', 'Volan', 'Volant'], 'aw.console': ['Centre console', 'Consolă centrală', 'Console centrale'], 'aw.door': ['Door controls', 'Comenzi portieră', 'Commandes de porte']
+  });
   function t(k) {
     const e = T[k]; let v = e ? e[LI[LANG]] : k;
     for (let i = 1; i < arguments.length; i++) v = v.split('{' + (i - 1) + '}').join(arguments[i]);
@@ -507,7 +606,7 @@
     ro: [['Gara Centrală', 'Aeroport'], ['Linia Portului', 'Orașul Vechi'], ['Poarta Nord', 'Universitate']],
     fr: [['Gare centrale', 'Aéroport'], ['Ligne du Port', 'Vieille ville'], ['Porte Nord', 'Université']]
   };
-  const S = { palette: 'indigo', shape: 'round', font: 'sans', home: 'map', moods: { calm: true, friendly: true }, name: '', nameEdited: false, route: 0, qrSeed: 7, sketch: true, notes: true };
+  const S = { palette: 'indigo', shape: 'round', font: 'sans', home: 'map', moods: { calm: true, friendly: true }, name: '', nameEdited: false, route: 0, qrSeed: 7, sketch: false, notes: true, sketchPick: 0 };
   let FF = FONTS.sans, RS = 1;
   function syncStyle() { FF = FONTS[S.font]; RS = S.shape === 'sharp' ? 0.15 : 1; }
   const palette = () => PAL[S.palette];
@@ -661,7 +760,7 @@
     setStatus($('wireStatus'), taps === 0, taps === 0 ? t('wf.status0') : t('wf.status1', taps));
   }
   /* sketch of a car dashboard for the automotive analogy */
-  function drawAutoWire() {
+  function drawAutoWireSketch() {
     const cv = $('autoWire'), c = cv.getContext('2d'); S.sketch = S.sketch; wseed = 5;
     const keep = S.sketch; S.sketch = true;
     c.fillStyle = '#fdfaf3'; c.fillRect(0, 0, 600, 400); c.strokeStyle = '#6b7280'; c.lineWidth = 2;
@@ -971,17 +1070,117 @@
     ctx.fillStyle = '#e5e7eb'; ctx.fillRect(0, 0, w, h); ctx.drawImage(src, (w - dw) / 2, (h - dh) / 2, dw, dh);
   }
   function renderCompare() {
-    const c1 = $('cmpCv1').getContext('2d'), c2 = $('cmpCv2').getContext('2d'), c3 = $('cmpCv3').getContext('2d'), c4 = $('cmpCv4').getContext('2d');
-    cover(c1, moodCv, 600, 400); cover(c2, wire, 600, 400); cover(c3, mockView, 600, 400);
-    c4.fillStyle = '#e5e7eb'; c4.fillRect(0, 0, 600, 400); drawComposite(c4, 0, 0, 600, 400, 0.85);
+    const g = (id) => $(id).getContext('2d');
+    cover(g('cmpCv1'), moodCv, 600, 400); cover(g('cmpCv2'), skCv, 600, 400); cover(g('cmpCv3'), wire, 600, 400); cover(g('cmpCv4'), mockView, 600, 400);
+    const c5 = g('cmpCv5'); c5.fillStyle = '#e5e7eb'; c5.fillRect(0, 0, 600, 400); drawComposite(c5, 0, 0, 600, 400, 0.85);
   }
   let derivedTimer = 0;
   function scheduleDerived() { clearTimeout(derivedTimer); derivedTimer = setTimeout(() => { drawBoard(); renderCompare(); }, 60); }
   document.querySelectorAll('.cmp-card').forEach((cd) => cd.addEventListener('click', () => goStep(+cd.dataset.go)));
 
+
+  /* =================== STAGE 02 · CONCEPT SKETCHING =================== */
+  const skCv = $('skCv'), skctx = skCv.getContext('2d');
+  const SK_HOME = ['map', 'ticket', 'routes', 'map'];
+  function drawSketch() {
+    const c = skctx, [c1, c2] = palette(), keep = S.sketch; S.sketch = true; wseed = 23;
+    c.fillStyle = '#fdfaf3'; c.fillRect(0, 0, 1000, 600);
+    c.strokeStyle = 'rgba(120,150,200,.16)'; c.lineWidth = 1;
+    for (let i = 0; i < 1000; i += 25) { c.beginPath(); c.moveTo(i, 0); c.lineTo(i, 600); c.stroke(); }
+    for (let i = 0; i < 600; i += 25) { c.beginPath(); c.moveTo(0, i); c.lineTo(1000, i); c.stroke(); }
+    c.fillStyle = '#6b7280'; c.font = '700 12px Inter, sans-serif'; c.textAlign = 'left'; c.fillText(t('sk.title'), 24, 32);
+    const F = '600 12px "Segoe Print", "Comic Sans MS", cursive';
+    for (let i = 0; i < 4; i++) {
+      const x = 40 + i * 235, y = 70, w = 200, h = 400, kept = i === S.sketchPick;
+      if (kept) { c.fillStyle = c1; c.globalAlpha = 0.1; c.fillRect(x - 8, y - 8, w + 16, h + 16); c.globalAlpha = 1; }
+      c.strokeStyle = kept ? c1 : '#4b5563'; c.lineWidth = kept ? 3 : 2; wrect(c, x, y, w, h);
+      c.strokeStyle = '#4b5563'; c.lineWidth = 1.7;
+      const blk = (bx, by, bw, bh, label) => { wrect(c, x + bx, y + by, bw, bh); if (label) { c.fillStyle = '#374151'; c.font = F; c.textAlign = 'center'; c.fillText(label, x + bx + bw / 2, y + by + bh / 2 + 4); c.textAlign = 'left'; } };
+      const cross = (bx, by, bw, bh) => { wline(c, x + bx, y + by, x + bx + bw, y + by + bh); wline(c, x + bx + bw, y + by, x + bx, y + by + bh); };
+      const route = (pts) => { c.strokeStyle = c1; c.lineWidth = 3.2; for (let k = 0; k < pts.length - 1; k++) wline(c, x + pts[k][0], y + pts[k][1], x + pts[k + 1][0], y + pts[k + 1][1]); c.strokeStyle = '#4b5563'; c.lineWidth = 1.7; };
+      if (i === 0) { blk(12, 12, w - 24, 26); blk(12, 48, w - 24, 250); route([[30, 260], [70, 200], [120, 190], [150, 120], [175, 100]]); blk(12, 310, w - 24, 38, t('ui.get')); blk(12, 358, w - 24, 30); }
+      if (i === 1) { blk(12, 12, w - 24, 30); blk(30, 56, w - 60, w - 60); cross(30, 56, w - 60, w - 60); blk(12, 56 + w - 50, w - 24, 34); blk(12, 56 + w - 4, w - 24, 22); blk(12, 358, w - 24, 30); }
+      if (i === 2) { for (let k = 0; k < 5; k++) { blk(12, 12 + k * 70, w - 24, 60); c.beginPath(); c.arc(x + 36, y + 42 + k * 70, 12, 0, 7); c.stroke(); } blk(12, 366, w - 24, 24); }
+      if (i === 3) { blk(12, 12, w - 24, 22); blk(12, 44, w - 24, 150); route([[30, 170], [70, 120], [120, 110], [170, 70]]); blk(12, 206, w - 24, 140); blk(24, 218, 80, 80); cross(24, 218, 80, 80); blk(116, 222, 60, 22); blk(116, 252, 60, 22); blk(12, 358, w - 24, 30); }
+      c.fillStyle = kept ? c1 : '#374151'; c.font = '700 14px "Segoe Print", "Comic Sans MS", cursive'; c.textAlign = 'center'; c.fillText(t('sk.' + 'abcd'[i]), x + w / 2, y + h + 38);
+      if (kept) { rrect(c, x + w / 2 - 36, y + h + 50, 72, 24, 12); c.fillStyle = c1; c.fill(); c.fillStyle = '#fff'; c.font = '700 11px Inter, sans-serif'; c.fillText(t('sk.kept'), x + w / 2, y + h + 66); }
+      c.textAlign = 'left';
+    }
+    S.sketch = keep;
+    setStatus($('skStatus'), true, t('sk.keptmsg', 'ABCD'[S.sketchPick], t('scr.' + SK_HOME[S.sketchPick])));
+  }
+  skCv.addEventListener('click', (e) => {
+    const r = skCv.getBoundingClientRect(), k = skCv.width / r.width, px = (e.clientX - r.left) * k, py = (e.clientY - r.top) * k;
+    const i = Math.floor((px - 40) / 235), lx = (px - 40) - i * 235;
+    if (i < 0 || i > 3 || lx > 200 || py < 62 || py > 520) return;
+    S.sketchPick = i; S.home = SK_HOME[i]; current = S.home; syncControls(); redrawAll();
+  });
+
+  /* =================== AUTOMOTIVE REFERENCE IMAGES (realistic) =================== */
+  const MB_URL = 'https://images.unsplash.com/';
+  const MB = [['photo-1762087577939-705379c7d869', 'mc.studio'], ['photo-1542282088-fe8426682b8f', 'mc.light'], ['photo-1605437241278-c1806d14a4d9', 'mc.mat'], ['photo-1763797833968-e9eb1835e33e', 'mc.form'], ['photo-1549064233-945d7063292f', 'mc.mat']];
+  const mbImgs = MB.map(([id]) => { const im = new Image(); im.onload = () => { drawAutoMood(); scheduleDerived(); }; im.src = MB_URL + id + '?w=700&q=75&fit=max'; return im; });
+  function drawAutoMood() {
+    const cv = $('autoMood'), c = cv.getContext('2d');
+    c.fillStyle = '#e5e7eb'; c.fillRect(0, 0, 600, 400);
+    const cells = [[0, 0, 250, 250], [254, 0, 166, 123], [254, 127, 166, 123], [424, 0, 176, 250], [0, 254, 200, 146]];
+    cells.forEach(([x, y, w, h], i) => {
+      const im = mbImgs[i]; c.save(); c.beginPath(); c.rect(x, y, w, h); c.clip();
+      if (im.complete && im.naturalWidth) { const k = Math.max(w / im.naturalWidth, h / im.naturalHeight), dw = im.naturalWidth * k, dh = im.naturalHeight * k; c.drawImage(im, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh); }
+      else { c.fillStyle = '#9ca3af'; c.fillRect(x, y, w, h); }
+      const g = c.createLinearGradient(0, y + h - 36, 0, y + h); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.65)'); c.fillStyle = g; c.fillRect(x, y + h - 36, w, 36);
+      c.fillStyle = '#fff'; c.font = '700 11px Inter, sans-serif'; c.fillText(t(MB[i][1]).toUpperCase(), x + 8, y + h - 10); c.restore();
+    });
+    // colour & material swatches
+    const sw = [['#cdbba0', 'champagne'], ['#1f2937', 'graphite'], ['#b91c1c', 'red'], ['#d4d4d8', 'silver'], ['#e0a81c', 'amber']];
+    c.fillStyle = '#fafaf9'; c.fillRect(204, 254, 396, 146);
+    sw.forEach(([col], i) => { c.fillStyle = col; rrect(c, 216 + i * 76, 270, 64, 64, 10); c.fill(); });
+    c.fillStyle = '#6b7280'; c.font = '700 11px Inter, sans-serif'; c.fillText(t('mc.col').toUpperCase(), 216, 360); c.font = '12px Inter, sans-serif'; c.fillText('Aa  Bb  Cc', 216, 382);
+  }
+  let autoEdge = null, autoImg = null;
+  function drawAutoWire() {
+    const cv = $('autoWire'), c = cv.getContext('2d');
+    const paint = () => {
+      c.fillStyle = '#0b2a4a'; c.fillRect(0, 0, 600, 400);
+      c.strokeStyle = 'rgba(147,197,253,.12)'; c.lineWidth = 1;
+      for (let i = 0; i < 600; i += 20) { c.beginPath(); c.moveTo(i, 0); c.lineTo(i, 400); c.stroke(); }
+      for (let i = 0; i < 400; i += 20) { c.beginPath(); c.moveTo(0, i); c.lineTo(600, i); c.stroke(); }
+      const ox = 0, oy = 42, W = 600, H = 316;
+      c.drawImage(autoEdge, ox, oy);
+      const zones = [['aw.cluster', 0.335, 0.31, 0.485, 0.42], ['aw.info', 0.49, 0.30, 0.83, 0.42], ['aw.wheel', 0.30, 0.25, 0.495, 0.58, 1], ['aw.console', 0.545, 0.55, 0.69, 0.66], ['aw.door', 0.13, 0.58, 0.28, 0.74]];
+      c.font = '700 10px Inter, sans-serif'; c.lineWidth = 1.5;
+      zones.forEach(([k, x0, y0, x1, y1, below]) => {
+        const x = ox + x0 * W, y = oy + y0 * H, w = (x1 - x0) * W, h = (y1 - y0) * H;
+        c.setLineDash([5, 4]); c.strokeStyle = '#fbbf24'; c.strokeRect(x, y, w, h); c.setLineDash([]);
+        c.fillStyle = 'rgba(251,191,36,.12)'; c.fillRect(x, y, w, h);
+        c.fillStyle = '#fbbf24'; const lbl = t(k); c.fillText(lbl, x + 2, below ? y + h + 12 : y - 4);
+      });
+    };
+    const build = () => {
+      try {
+        const w = 600, h = 316, tmp = mkCanvas(w, h), tc = tmp.getContext('2d'); tc.drawImage(autoImg, 0, 0, w, h);
+        const d = tc.getImageData(0, 0, w, h).data, gry = new Float32Array(w * h);
+        for (let i = 0; i < w * h; i++) gry[i] = 0.299 * d[i * 4] + 0.587 * d[i * 4 + 1] + 0.114 * d[i * 4 + 2];
+        const out = tc.createImageData(w, h);
+        for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) {
+          const p = y * w + x;
+          const gx = -gry[p - w - 1] - 2 * gry[p - 1] - gry[p + w - 1] + gry[p - w + 1] + 2 * gry[p + 1] + gry[p + w + 1];
+          const gy = -gry[p - w - 1] - 2 * gry[p - w] - gry[p - w + 1] + gry[p + w - 1] + 2 * gry[p + w] + gry[p + w + 1];
+          const m = Math.hypot(gx, gy), a = m > 70 ? Math.min(255, (m - 70) * 2.2) : 0, o = p * 4;
+          out.data[o] = 190; out.data[o + 1] = 225; out.data[o + 2] = 255; out.data[o + 3] = a;
+        }
+        tc.clearRect(0, 0, w, h); tc.putImageData(out, 0, 0); autoEdge = tmp; paint();
+      } catch (e) { drawAutoWireSketch(); }
+    };
+    if (autoEdge) { paint(); return; }
+    if (!autoImg) { autoImg = new Image(); autoImg.onload = () => { build(); scheduleDerived(); }; autoImg.onerror = () => drawAutoWireSketch(); autoImg.src = 'images/3.webp'; }
+    else if (autoImg.complete && autoImg.naturalWidth) build();
+    else drawAutoWireSketch();
+  }
+
   /* =================== CONTROLS & REFRESH =================== */
   function refreshContent() { drawMock(); }
-  function redrawAll() { syncStyle(); drawMood(); drawIA(); drawWire(); drawAutoWire(); drawMock(); }
+  function redrawAll() { syncStyle(); drawMood(); drawSketch(); drawIA(); drawWire(); drawAutoWire(); drawAutoMood(); drawMock(); }
   function buildMoods() {
     const box = $('moods'); box.innerHTML = '';
     MOODS.forEach((m) => { const b = document.createElement('button'); b.className = 'mood' + (S.moods[m] ? ' active' : ''); b.textContent = t('mood.' + m);
@@ -1248,7 +1447,7 @@
   (function loop() {
     requestAnimationFrame(loop);
     const dt = clock.getDelta(), t = clock.elapsedTime;
-    if (step !== 5 || mode !== '3d') return;
+    if (step !== 6 || mode !== '3d') return;
     if (lastTexVersion !== mockVersion) { screenTex.needsUpdate = true; lastTexVersion = mockVersion; }
     if ($('auto').checked && !dragging) rotY += dt * +$('spin').value;
     phone.rotation.y = rotY + Math.sin(t * 0.5) * 0.04; phone.rotation.x = rotX + Math.sin(t * 0.7) * 0.02;
@@ -1291,7 +1490,7 @@
   function apply(H, x, y) { const w = H[6] * x + H[7] * y + H[8]; return [(H[0] * x + H[1] * y + H[2]) / w, (H[3] * x + H[4] * y + H[5]) / w]; }
 
   function layoutPhoto() {
-    const host = $('view5'), W = host.clientWidth, H = host.clientHeight;
+    const host = $('view6'), W = host.clientWidth, H = host.clientHeight;
     const iw = photoImg.naturalWidth || 1000, ih = photoImg.naturalHeight || 667, ar = iw / ih;
     sw = W / H > ar ? H * ar : W; sh = W / H > ar ? H : W / ar;
     photoStage.style.width = sw + 'px'; photoStage.style.height = sh + 'px';
@@ -1376,24 +1575,24 @@
   const done = new Set();
   function updateHint() {
     const s = step;
-    $('hint').textContent = s === 5 ? (mode === 'photo' ? t('hint.5p') : t('hint.53')) : t('hint.' + s);
+    $('hint').textContent = s === 6 ? (mode === 'photo' ? t('hint.6p') : t('hint.63')) : t('hint.' + s);
     $('badge').textContent = t('badge.' + s);
   }
   function goStep(n) {
-    step = Math.max(1, Math.min(7, n));
+    step = Math.max(1, Math.min(8, n));
     document.querySelectorAll('.panel').forEach((p) => p.classList.toggle('on', +p.dataset.step === step));
     document.querySelectorAll('.view').forEach((v) => v.classList.toggle('on', v.id === 'view' + step));
-    if (step <= 6) for (let i = 1; i < step; i++) done.add(i);
+    if (step <= 7) for (let i = 1; i < step; i++) done.add(i);
     document.querySelectorAll('#tabs button').forEach((b) => {
       const s = +b.dataset.step;
       b.classList.toggle('active', s === step);
       b.classList.toggle('done', s !== step && done.has(s));
     });
-    $('btnPrev').disabled = step === 1 || step === 7;
-    $('btnNext').disabled = step >= 6;
-    if (step === 5) { resize(); lastTexVersion = -1; if (mode === 'photo') layoutPhoto(); }
-    if (step === 6) drawBoard();
-    if (step === 7) renderCompare();
+    $('btnPrev').disabled = step === 1 || step === 8;
+    $('btnNext').disabled = step >= 7;
+    if (step === 6) { resize(); lastTexVersion = -1; if (mode === 'photo') layoutPhoto(); }
+    if (step === 7) drawBoard();
+    if (step === 8) renderCompare();
     updateHint();
   }
   document.querySelectorAll('#tabs button').forEach((b) => b.onclick = () => goStep(+b.dataset.step));
@@ -1418,7 +1617,7 @@
     LANG = l; try { localStorage.setItem('lab-lang', l); } catch (e) { /* ignore */ }
     applyI18n(); buildMoods(); buildPals(); buildRouteSelect(); buildEnvChips();
     $('pname').placeholder = t('ui.name');
-    if (!envEdited) $('envPrompt').value = t('s5.envdef');
+    if (!envEdited) $('envPrompt').value = t('s6.envdef');
     syncControls(); redrawAll();
     if (variantList.length) renderVariants();
     if (ENV.data) setStatus($('interp'), true, t('env.interp', ENV.label || ''));
@@ -1430,7 +1629,7 @@
 
   /* ---- init ---- */
   applyI18n(); buildMoods(); buildPals(); buildRouteSelect(); buildEnvChips();
-  $('pname').placeholder = t('ui.name'); $('envPrompt').value = t('s5.envdef');
+  $('pname').placeholder = t('ui.name'); $('envPrompt').value = t('s6.envdef');
   syncStyle(); syncControls(); redrawAll();
   setScene('sit'); setMode('photo');
   applyEnv(interpret($('envPrompt').value).env);
