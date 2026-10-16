@@ -12,16 +12,24 @@
   * { box-sizing: border-box; }
   html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
     font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
-  .app { display: grid; grid-template-columns: 360px 1fr; height: 100vh; }
-  aside { background: var(--panel); border-right: 1px solid var(--border); padding: 20px; overflow-y: auto; }
+  .app { display: grid; grid-template-columns: 380px 1fr; height: 100vh; }
+  aside { background: var(--panel); border-right: 1px solid var(--border); padding: 18px 20px; overflow-y: auto; }
+  .top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
   h1 { font-size: 18px; margin: 0 0 4px; }
-  .sub { color: var(--muted); font-size: 13px; margin-bottom: 16px; }
+  .lang { display: flex; gap: 4px; flex: none; }
+  .lang button { flex: none; padding: 4px 8px; font-size: 11px; font-weight: 700; border-radius: 6px; }
+  .lang button.active { background: var(--accent); border-color: var(--accent); }
+  .sub { color: var(--muted); font-size: 13px; margin-bottom: 14px; }
   h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 20px 0 8px; }
-  .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-  .tabs button { padding: 8px 4px; font-size: 12px; line-height: 1.25; }
+  .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .tabs button { padding: 7px 4px; font-size: 11.5px; line-height: 1.2; }
   .tabs button.active { background: var(--accent); border-color: var(--accent); font-weight: 600; }
   .tabs button.done { border-color: var(--ok); }
-  .tabs .ic { display: block; font-size: 18px; }
+  .tabs .num { display: block; font-size: 11px; color: var(--accent2); font-weight: 700; letter-spacing: .06em; }
+  .tabs button.active .num { color: #fff; }
+  .tabs .ic { display: block; font-size: 17px; }
+  .tabs button.wide { grid-column: 1 / -1; }
+  .flow { font-size: 11px; color: var(--muted); margin-top: 10px; line-height: 1.5; }
   .lesson { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 13px;
     line-height: 1.5; margin-top: 14px; }
   .lesson b { color: var(--accent2); }
@@ -36,27 +44,30 @@
   button.primary { background: var(--accent); border-color: var(--accent); font-weight: 600; }
   button:hover { filter: brightness(1.15); }
   button:disabled { opacity: .4; cursor: not-allowed; }
-  .chip, .scr, .seg { flex: none; padding: 5px 10px; border-radius: 99px; font-size: 12px; }
-  .scr.active, .seg.active { background: var(--accent); border-color: var(--accent); }
+  .chip, .scr, .seg, .mood, .pal { flex: none; padding: 5px 10px; border-radius: 99px; font-size: 12px; }
+  .scr.active, .seg.active, .mood.active, .pal.active { background: var(--accent); border-color: var(--accent); }
+  .pal { display: inline-flex; align-items: center; gap: 6px; }
+  .pal i { width: 14px; height: 14px; border-radius: 50%; display: inline-block; border: 1px solid rgba(255,255,255,.4); }
   .check { display: flex; align-items: center; gap: 8px; font-size: 13px; margin-top: 10px; color: var(--text); }
   .status { margin-top: 10px; padding: 8px 10px; border-radius: 8px; font-size: 13px; border: 1px solid var(--border); }
   .status.ok { border-color: var(--ok); color: var(--ok); }
   .status.bad { border-color: var(--warn); color: var(--warn); }
-  .log { font: 12px/1.5 ui-monospace, Consolas, monospace; background: var(--bg); border: 1px solid var(--border);
-    border-radius: 8px; padding: 8px; height: 100px; overflow-y: auto; color: var(--muted); }
-  .log b { color: var(--accent2); font-weight: 600; }
+  .status.note { color: var(--muted); }
   .panel { display: none; }
   .panel.on { display: block; }
+  #variants { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+  #variants canvas { width: 100%; border-radius: 10px; border: 2px solid var(--border); cursor: pointer; background: #fff; display: block; }
+  #variants canvas:hover { border-color: var(--accent2); }
   main { position: relative; background: #0b1220; overflow: hidden; }
   .view { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; padding: 16px; }
   .view.on { display: flex; }
   .view canvas.flat { max-width: 100%; max-height: 100%; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,.5); }
   #stage { width: 100%; height: 100%; display: block; cursor: grab; touch-action: none; }
-  #view4 { padding: 0; }
+  #view5 { padding: 0; }
   #haze { position: absolute; inset: 0; pointer-events: none; opacity: 0; }
   .hint, .badge { position: absolute; font-size: 12px; background: rgba(15,23,42,.75); padding: 6px 12px;
-    border-radius: 99px; pointer-events: none; }
-  .hint { left: 50%; bottom: 16px; transform: translateX(-50%); color: var(--muted); }
+    border-radius: 99px; pointer-events: none; z-index: 5; }
+  .hint { left: 50%; bottom: 16px; transform: translateX(-50%); color: var(--muted); max-width: 90%; text-align: center; }
   .badge { top: 16px; right: 16px; color: var(--accent2); }
   #photoStage { position: relative; display: block; user-select: none; }
   #photoImg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
@@ -70,6 +81,22 @@
     border: 2px solid #fff; color: #fff; font: 700 9px/22px Inter, sans-serif; text-align: center; cursor: move; touch-action: none; }
   #credit { position: absolute; left: 12px; bottom: 10px; font-size: 11px; color: rgba(255,255,255,.7); text-shadow: 0 1px 3px rgba(0,0,0,.7); }
   #credit a { color: inherit; }
+  #view7 { align-items: flex-start; overflow: auto; }
+  #cmp { width: 100%; max-width: 1200px; margin: 0 auto; padding: 8px 8px 40px; }
+  #cmp h3 { margin: 6px 0 4px; font-size: 22px; }
+  #cmp .cmpsub { color: var(--muted); margin: 0 0 16px; font-size: 14px; }
+  .cmp-grid { display: grid; grid-template-columns: repeat(4, minmax(180px, 1fr)); gap: 14px; }
+  .cmp-card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 12px; cursor: pointer; }
+  .cmp-card:hover { border-color: var(--accent2); }
+  .cmp-card h4 { margin: 10px 0 4px; font-size: 14px; }
+  .cmp-card h5 { margin: 8px 0 0; font-size: 13px; color: var(--accent2); }
+  .cmp-card p { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.45; }
+  .cmp-tag { font-size: 10.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--warn); margin-bottom: 6px; font-weight: 700; }
+  .cmp-tag.soft { color: var(--accent2); margin-top: 12px; }
+  .cmp-img { border-radius: 10px; overflow: hidden; background: #e5e7eb; aspect-ratio: 3 / 2; }
+  .cmp-img img, .cmp-img canvas { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cmp-arrow { text-align: center; color: var(--muted); margin-top: 8px; font-size: 18px; }
+  @media (max-width: 1100px) { .cmp-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 860px) {
     .app { grid-template-columns: 1fr; grid-template-rows: auto 70vh; height: auto; }
     aside { border-right: 0; border-bottom: 1px solid var(--border); }
@@ -79,132 +106,188 @@
 <body>
 <div class="app">
   <aside>
-    <h1>AI Design Simulation Lab</h1>
-    <div class="sub">Transit ticket app · from raw code to a real-world 3D demo.</div>
+    <div class="top">
+      <h1 data-i18n="app.title"></h1>
+      <div class="lang" id="lang"><button data-lang="en">EN</button><button data-lang="ro">RO</button><button data-lang="fr">FR</button></div>
+    </div>
+    <div class="sub" data-i18n="app.sub"></div>
 
     <div class="tabs" id="tabs">
-      <button data-step="1"><span class="ic">🛠️</span>1 · Architecture</button>
-      <button data-step="2"><span class="ic">✏️</span>2 · Wireframes</button>
-      <button data-step="3"><span class="ic">🎨</span>3 · UI Mockup</button>
-      <button data-step="4"><span class="ic">⚡</span>4 · AI Sim</button>
+      <button data-step="1"><span class="num">01</span><span class="ic">🎯</span><span data-i18n="tab.1"></span></button>
+      <button data-step="2"><span class="num">02</span><span class="ic">🗂️</span><span data-i18n="tab.2"></span></button>
+      <button data-step="3"><span class="num">03</span><span class="ic">✏️</span><span data-i18n="tab.3"></span></button>
+      <button data-step="4"><span class="num">04</span><span class="ic">🎨</span><span data-i18n="tab.4"></span></button>
+      <button data-step="5"><span class="num">05</span><span class="ic">⚡</span><span data-i18n="tab.5"></span></button>
+      <button data-step="6"><span class="num">06</span><span class="ic">🖼️</span><span data-i18n="tab.6"></span></button>
+      <button data-step="7" class="wide"><span class="ic" style="display:inline;margin-right:6px">🚗</span><span data-i18n="tab.7"></span></button>
     </div>
+    <div class="flow" data-i18n="flow"></div>
 
-    <!-- STEP 1 -->
+    <!-- STAGE 01 -->
     <section class="panel" data-step="1">
-      <div class="lesson">
-        <b>The Plumbing.</b> A raw map of servers, passenger routes and API endpoints. Without mapping where ticket data is
-        stored, we can't create the digital ticket.
-        <div class="metaphor">Like drawing plumbing lines before deciding where the bathroom goes.</div>
-      </div>
-      <label class="check"><input type="checkbox" id="chkTicketDb" checked> Tickets database mapped</label>
-      <label class="check"><input type="checkbox" id="chkRouteDb" checked> Routes database mapped</label>
-      <div class="status" id="archStatus"></div>
+      <div class="lesson"><b data-i18n="s1.title"></b> <span data-i18n="s1.desc"></span>
+        <div class="metaphor" data-i18n="s1.note"></div></div>
+      <h2 data-i18n="s1.moods"></h2>
+      <div class="row" id="moods"></div>
+      <div class="row"><button class="primary" id="btnSuggest" data-i18n="s1.suggest"></button></div>
+      <h2 data-i18n="s1.palette"></h2>
+      <div class="row" id="pals"></div>
+      <label for="shape" data-i18n="s1.shape"></label>
+      <select id="shape"><option value="round" data-i18n="shape.round"></option><option value="sharp" data-i18n="shape.sharp"></option></select>
+      <label for="font" data-i18n="s1.font"></label>
+      <select id="font"><option value="sans" data-i18n="font.sans"></option><option value="serif" data-i18n="font.serif"></option><option value="round" data-i18n="font.round"></option></select>
     </section>
 
-    <!-- STEP 2 -->
+    <!-- STAGE 02 -->
     <section class="panel" data-step="2">
-      <div class="lesson">
-        <b>The Blueprint.</b> Low-fidelity grayscale layouts focused on clicking, navigating and logic. No logos, no colours.
-        <div class="metaphor">Where is the map? Where is the ticket? Find the simplest way to travel.</div>
-      </div>
-      <label for="homeScreen">Which screen opens first?</label>
+      <div class="lesson"><b data-i18n="s2.title"></b> <span data-i18n="s2.desc"></span>
+        <div class="metaphor" data-i18n="s2.note"></div></div>
+      <label for="homeScreen" data-i18n="s2.home"></label>
       <select id="homeScreen">
-        <option value="map">Map</option>
-        <option value="ticket">Ticket</option>
-        <option value="routes">Routes list</option>
+        <option value="map" data-i18n="scr.map"></option>
+        <option value="ticket" data-i18n="scr.ticket"></option>
+        <option value="routes" data-i18n="scr.routes"></option>
       </select>
-      <label class="check"><input type="checkbox" id="chkNotes" checked> Show annotations</label>
+      <div class="status" id="iaStatus"></div>
+      <div class="status note" data-i18n="excl"></div>
+    </section>
+
+    <!-- STAGE 03 -->
+    <section class="panel" data-step="3">
+      <div class="lesson"><b data-i18n="s3.title"></b> <span data-i18n="s3.desc"></span>
+        <div class="metaphor" data-i18n="s3.note"></div></div>
+      <div class="row"><button class="seg active" id="wfSketch" data-i18n="s3.sketch"></button><button class="seg" id="wfClean" data-i18n="s3.clean"></button></div>
+      <label class="check"><input type="checkbox" id="chkNotes" checked> <span data-i18n="s3.notes"></span></label>
       <div class="status" id="wireStatus"></div>
     </section>
 
-    <!-- STEP 3 -->
-    <section class="panel" data-step="3">
-      <div class="lesson">
-        <b>The Interior Design.</b> Pixel-perfect style: brand colours, user cards and scan-ready QR codes. This is the
-        high-fidelity skin that makes the app feel user-ready.
-      </div>
-      <label for="pname">Passenger name</label>
-      <input type="text" id="pname" value="SE Student" maxlength="24">
-      <label for="route">Route</label>
-      <select id="route">
-        <option>Central Station → Airport</option>
-        <option>Harbor Line → Old Town</option>
-        <option>North Gate → University</option>
-      </select>
-      <label for="theme">Brand palette</label>
-      <select id="theme">
-        <option value="indigo">Indigo Gradient</option>
-        <option value="sunset">Sunset Orange</option>
-        <option value="forest">Forest Green</option>
-        <option value="pale">Pale Yellow (poor contrast)</option>
-      </select>
-      <div class="row"><button id="btnQR">New QR code</button></div>
-      <div class="status" id="uiStatus"></div>
-      <div class="status" style="color:var(--muted)">Click any screen or its buttons (Get ticket, tabs, route cards) to try the flow. The highlighted screen is the one shown in the 3D simulation.</div>
-    </section>
-
-    <!-- STEP 4 -->
+    <!-- STAGE 04 -->
     <section class="panel" data-step="4">
-      <div class="lesson">
-        <b>The Cinematic Reveal.</b> High-fidelity mockup + text prompt = a simulated real-world device presentation. Compare
-        how lighting, depth and environment sell a digital product.
-      </div>
-      <h2>View</h2>
-      <div class="row"><button class="seg active" id="modePhoto">📷 Real photo</button><button class="seg" id="mode3d">🧊 3D model</button></div>
-      <div id="ctlPhoto">
-        <div class="row"><button class="seg" data-scene="sit">🪑 Seated commuter</button><button class="seg" data-scene="hand">🧼 Clean hand shot</button></div>
-        <div class="row"><button id="btnUpload">⬆ Upload your own photo</button><input type="file" id="fileIn" accept="image/*" hidden></div>
-        <label class="check"><input type="checkbox" id="adjust"> Adjust screen corners (drag the 4 dots)</label>
-        <label for="bright">Screen brightness</label><input type="range" id="bright" min="0.6" max="1.3" step="0.02" value="0.95">
-        <label for="glare">Glass glare</label><input type="range" id="glare" min="0" max="1" step="0.02" value="0.5">
-      </div>
-      <h2>Interactive prototype</h2>
-      <div class="status" style="color:var(--muted)">Click the buttons and tabs on the phone screen itself. The prototype responds like the real app.</div>
-      <div class="row">
-        <button class="scr" data-screen="map">🗺️ Map</button>
-        <button class="scr" data-screen="ticket">🎫 Ticket</button>
-        <button class="scr" data-screen="routes">🚇 Routes</button>
-      </div>
-      <label for="envPrompt">Environment prompt</label>
-      <textarea id="envPrompt" rows="2">Phone held at a busy train station platform at night</textarea>
-      <div class="row">
-        <button class="primary" id="btnRender">Generate scene</button>
-      </div>
-      <div class="row">
-        <button class="chip" data-p="Phone at a bright metro station platform in the daytime">Metro, day</button>
-        <button class="chip" data-p="Phone inside a bus at sunset, warm golden light">Bus, sunset</button>
-        <button class="chip" data-p="Phone at a train station platform at night, rainy and foggy">Station, rain</button>
-        <button class="chip" data-p="Clean studio shot, soft light">Studio</button>
-      </div>
-      <div class="status" id="interp"></div>
-      <div id="ctl3d" style="display:none"><label for="light">Light intensity</label>
-      <input type="range" id="light" min="0" max="2.5" step="0.05" value="1">
-      <label for="depth">Atmosphere haze</label>
-      <input type="range" id="depth" min="0" max="1" step="0.02" value="0.4">
-      <label class="check"><input type="checkbox" id="blurBg" checked> Blurred background (shallow depth of field)</label>
-      <label for="spin">Rotation speed</label>
-      <input type="range" id="spin" min="0" max="2" step="0.05" value="0.4">
-      <label class="check"><input type="checkbox" id="auto" checked> Auto-rotate</label>
-      <div class="row"><button id="btnReset">Reset view</button></div></div>
+      <div class="lesson"><b data-i18n="s4.title"></b> <span data-i18n="s4.desc"></span></div>
+      <label for="pname" data-i18n="s4.name"></label>
+      <input type="text" id="pname" maxlength="24">
+      <label for="route" data-i18n="s4.route"></label>
+      <select id="route"></select>
+      <div class="row"><button id="btnQR" data-i18n="s4.qr"></button></div>
+      <div class="status" id="uiStatus"></div>
+      <div class="status note" data-i18n="s4.tip"></div>
     </section>
 
-    <div class="row">
-      <button id="btnPrev">← Back</button>
-      <button class="primary" id="btnNext">Next step →</button>
-    </div>
+    <!-- STAGE 05 -->
+    <section class="panel" data-step="5">
+      <div class="lesson"><b data-i18n="s5.title"></b> <span data-i18n="s5.desc"></span></div>
 
-    <h2>Log</h2>
-    <div class="log" id="log"></div>
+      <h2 data-i18n="s5.variants"></h2>
+      <label for="aiPrompt" data-i18n="s5.prompt"></label>
+      <input type="text" id="aiPrompt" data-i18n-ph="s5.promptph">
+      <div class="row"><button class="primary" id="btnVariants" data-i18n="s5.gen"></button></div>
+      <div id="variants"></div>
+      <div class="status note" data-i18n="s5.simnote"></div>
+
+      <h2 data-i18n="s5.view"></h2>
+      <div class="row"><button class="seg active" id="modePhoto" data-i18n="s5.photo"></button><button class="seg" id="mode3d" data-i18n="s5.m3d"></button></div>
+      <div id="ctlPhoto">
+        <div class="row"><button class="seg" data-scene="sit" data-i18n="s5.sit"></button><button class="seg" data-scene="hand" data-i18n="s5.hand"></button></div>
+        <div class="row"><button id="btnUpload" data-i18n="s5.upload"></button><input type="file" id="fileIn" accept="image/*" hidden></div>
+        <label class="check"><input type="checkbox" id="adjust"> <span data-i18n="s5.adjust"></span></label>
+        <label for="bright" data-i18n="s5.bright"></label><input type="range" id="bright" min="0.6" max="1.3" step="0.02" value="0.95">
+        <label for="glare" data-i18n="s5.glare"></label><input type="range" id="glare" min="0" max="1" step="0.02" value="0.5">
+      </div>
+      <h2 data-i18n="s5.proto"></h2>
+      <div class="status note" data-i18n="s5.protonote"></div>
+      <div class="row">
+        <button class="scr" data-screen="map" data-i18n="s5.bmap"></button>
+        <button class="scr" data-screen="ticket" data-i18n="s5.bticket"></button>
+        <button class="scr" data-screen="routes" data-i18n="s5.broutes"></button>
+      </div>
+      <label for="envPrompt" data-i18n="s5.env"></label>
+      <textarea id="envPrompt" rows="2"></textarea>
+      <div class="row"><button class="primary" id="btnRender" data-i18n="s5.scene"></button></div>
+      <div class="row" id="envChips"></div>
+      <div class="status" id="interp"></div>
+      <div id="ctl3d" style="display:none"><label for="light" data-i18n="s5.light"></label>
+      <input type="range" id="light" min="0" max="2.5" step="0.05" value="1">
+      <label for="depth" data-i18n="s5.haze"></label>
+      <input type="range" id="depth" min="0" max="1" step="0.02" value="0.4">
+      <label class="check"><input type="checkbox" id="blurBg" checked> <span data-i18n="s5.blur"></span></label>
+      <label for="spin" data-i18n="s5.spin"></label>
+      <input type="range" id="spin" min="0" max="2" step="0.05" value="0.4">
+      <label class="check"><input type="checkbox" id="auto" checked> <span data-i18n="s5.auto"></span></label>
+      <div class="row"><button id="btnReset" data-i18n="s5.reset"></button></div></div>
+    </section>
+
+    <!-- STAGE 06 -->
+    <section class="panel" data-step="6">
+      <div class="lesson"><b data-i18n="s6.title"></b> <span data-i18n="s6.desc"></span>
+        <div class="metaphor" data-i18n="s6.note"></div></div>
+      <div class="row"><button class="primary" id="btnBoard" data-i18n="s6.download"></button></div>
+    </section>
+
+    <!-- COMPARE -->
+    <section class="panel" data-step="7">
+      <div class="lesson"><b data-i18n="cmp.title"></b> <span data-i18n="cmp.lesson"></span></div>
+    </section>
+
+    <div class="row" id="navRow">
+      <button id="btnPrev" data-i18n="nav.back"></button>
+      <button class="primary" id="btnNext" data-i18n="nav.next"></button>
+    </div>
   </aside>
 
   <main>
-    <div class="view" id="view1"><canvas class="flat" id="arch" width="1000" height="600"></canvas></div>
-    <div class="view" id="view2"><canvas class="flat" id="wire" width="1000" height="600"></canvas></div>
-    <div class="view" id="view3"><canvas class="flat" id="mockView" width="1000" height="600" style="cursor:pointer"></canvas></div>
-    <div class="view" id="view4">
+    <div class="view" id="view1"><canvas class="flat" id="moodCv" width="1000" height="600"></canvas></div>
+    <div class="view" id="view2"><canvas class="flat" id="iaCv" width="1000" height="600"></canvas></div>
+    <div class="view" id="view3"><canvas class="flat" id="wire" width="1000" height="600"></canvas></div>
+    <div class="view" id="view4"><canvas class="flat" id="mockView" width="1000" height="600" style="cursor:pointer"></canvas></div>
+    <div class="view" id="view5">
       <canvas id="stage"></canvas><div id="haze"></div>
-      <div id="photoStage"><img id="photoImg" alt="Person holding a phone"><div id="shot"><canvas id="shotCv" width="400" height="800"></canvas><div id="cut"></div><div id="gloss"></div></div><div id="handles"></div></div>
+      <div id="photoStage"><img id="photoImg" alt="" crossorigin="anonymous"><div id="shot"><canvas id="shotCv" width="400" height="800"></canvas><div id="cut"></div><div id="gloss"></div></div><div id="handles"></div></div>
       <div id="credit">Photos: <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a></div>
+    </div>
+    <div class="view" id="view6"><canvas class="flat" id="boardCv" width="1000" height="600"></canvas></div>
+    <div class="view" id="view7">
+      <div id="cmp">
+        <h3 data-i18n="cmp.title"></h3>
+        <p class="cmpsub" data-i18n="cmp.sub"></p>
+        <div class="cmp-grid">
+          <div class="cmp-card" data-go="1">
+            <div class="cmp-tag" data-i18n="cmp.car"></div>
+            <div class="cmp-img"><img src="images/1.webp" alt=""></div>
+            <h4 data-i18n="cmp.c1"></h4><p data-i18n="cmp.c1d"></p>
+            <div class="cmp-arrow">⇅</div>
+            <div class="cmp-tag soft" data-i18n="cmp.sw"></div>
+            <div class="cmp-img"><canvas id="cmpCv1" width="600" height="400"></canvas></div>
+            <h5 data-i18n="tab.1"></h5>
+          </div>
+          <div class="cmp-card" data-go="3">
+            <div class="cmp-tag" data-i18n="cmp.car"></div>
+            <div class="cmp-img"><canvas id="autoWire" width="600" height="400"></canvas></div>
+            <h4 data-i18n="cmp.c2"></h4><p data-i18n="cmp.c2d"></p>
+            <div class="cmp-arrow">⇅</div>
+            <div class="cmp-tag soft" data-i18n="cmp.sw"></div>
+            <div class="cmp-img"><canvas id="cmpCv2" width="600" height="400"></canvas></div>
+            <h5 data-i18n="tab.3"></h5>
+          </div>
+          <div class="cmp-card" data-go="4">
+            <div class="cmp-tag" data-i18n="cmp.car"></div>
+            <div class="cmp-img"><img src="images/3.webp" alt=""></div>
+            <h4 data-i18n="cmp.c3"></h4><p data-i18n="cmp.c3d"></p>
+            <div class="cmp-arrow">⇅</div>
+            <div class="cmp-tag soft" data-i18n="cmp.sw"></div>
+            <div class="cmp-img"><canvas id="cmpCv3" width="600" height="400"></canvas></div>
+            <h5 data-i18n="tab.4"></h5>
+          </div>
+          <div class="cmp-card" data-go="5">
+            <div class="cmp-tag" data-i18n="cmp.car"></div>
+            <div class="cmp-img"><img src="images/2.webp" alt=""></div>
+            <h4 data-i18n="cmp.c4"></h4><p data-i18n="cmp.c4d"></p>
+            <div class="cmp-arrow">⇅</div>
+            <div class="cmp-tag soft" data-i18n="cmp.sw"></div>
+            <div class="cmp-img"><canvas id="cmpCv4" width="600" height="400"></canvas></div>
+            <h5 data-i18n="tab.5"></h5>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="badge" id="badge"></div>
     <div class="hint" id="hint"></div>
@@ -215,153 +298,224 @@
 <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/js/loaders/RGBELoader.js"></script>
 <script>
 (function () {
+  /* =================== I18N (EN · RO · FR) =================== */
   const $ = (id) => document.getElementById(id);
-  const logEl = $('log');
-  function log(msg) { logEl.innerHTML += '<div>' + msg + '</div>'; logEl.scrollTop = logEl.scrollHeight; }
+  function log() { /* log panel removed */ }
+  let LANG = 'en';
+  try { LANG = localStorage.getItem('lab-lang') || (navigator.language || 'en').slice(0, 2); } catch (e) { LANG = (navigator.language || 'en').slice(0, 2); }
+  if (['en', 'ro', 'fr'].indexOf(LANG) < 0) LANG = 'en';
+  const LI = { en: 0, ro: 1, fr: 2 };
+  const T = {
+    'app.title': ['AI Design Simulation Lab', 'AI Design Simulation Lab', 'AI Design Simulation Lab'],
+    'app.sub': ['Software visual design process · transit ticket app', 'Procesul de design vizual software · aplicație de bilete de transport', 'Processus de design visuel logiciel · appli de billets de transport'],
+    'flow': ['Concept & Moodboard → Information Architecture → Wireframe → Visual Mockup → AI Design Simulation → Visual Concept Presentation',
+      'Concept & Moodboard → Arhitectura informației → Wireframe → Mockup vizual → Simulare de design AI → Prezentare conceptuală vizuală',
+      'Concept & Moodboard → Architecture de l\'information → Wireframe → Maquette visuelle → Simulation de design IA → Présentation visuelle du concept'],
+    'excl': ['System architecture diagrams are left out of the aesthetic flow.', 'Diagrama arhitecturii sistemului este exclusă din fluxul estetic.', 'Le diagramme d\'architecture système est exclu du flux esthétique.'],
+    'tab.1': ['Concept & Moodboard', 'Concept & Moodboard', 'Concept & Moodboard'],
+    'tab.2': ['Information Architecture', 'Arhitectura informației', 'Architecture de l\'information'],
+    'tab.3': ['Wireframe & Sketching', 'Wireframe & Schițe', 'Wireframe & Esquisses'],
+    'tab.4': ['Visual Mockup', 'Mockup vizual', 'Maquette visuelle'],
+    'tab.5': ['AI Simulation', 'Simulare AI', 'Simulation IA'],
+    'tab.6': ['Visual Concept', 'Concept vizual', 'Concept visuel'],
+    'tab.7': ['Automotive design analogy', 'Analogia cu designul auto', 'Analogie avec le design auto'],
+    'nav.back': ['← Back', '← Înapoi', '← Retour'],
+    'nav.next': ['Next stage →', 'Etapa următoare →', 'Étape suivante →'],
+
+    's1.title': ['Concept Map + Moodboard.', 'Hartă conceptuală + Moodboard.', 'Carte conceptuelle + Moodboard.'],
+    's1.desc': ['Creative direction: style, inspirations, shapes, colors and visual identity.', 'Direcția creativă: stil, inspirații, forme, culori și identitate vizuală.', 'Direction créative : style, inspirations, formes, couleurs et identité visuelle.'],
+    's1.note': ['The moodboard sets the artistic direction; the concept map explains how the ideas relate to each other.', 'Moodboard-ul stabilește direcția artistică, pe când harta conceptuală explică relațiile dintre idei.', 'Le moodboard fixe la direction artistique, tandis que la carte conceptuelle explique les relations entre les idées.'],
+    's1.moods': ['Mood keywords', 'Cuvinte-cheie de atmosferă', 'Mots-clés d\'ambiance'],
+    's1.suggest': ['✨ Suggest a style from the keywords', '✨ Sugerează un stil din cuvintele-cheie', '✨ Suggérer un style depuis les mots-clés'],
+    's1.palette': ['Colour palette', 'Paletă de culori', 'Palette de couleurs'],
+    's1.shape': ['Shape language', 'Limbaj de forme', 'Langage de formes'],
+    's1.font': ['Typography', 'Tipografie', 'Typographie'],
+    'shape.round': ['Rounded & soft', 'Rotunjit și blând', 'Arrondi et doux'],
+    'shape.sharp': ['Sharp & precise', 'Angular și precis', 'Anguleux et précis'],
+    'font.sans': ['Modern sans-serif', 'Sans-serif modern', 'Sans-serif moderne'],
+    'font.serif': ['Elegant serif', 'Serif elegant', 'Serif élégant'],
+    'font.round': ['Friendly rounded', 'Rotunjit prietenos', 'Arrondi convivial'],
+    'mood.calm': ['Calm', 'Calm', 'Calme'], 'mood.bold': ['Bold', 'Îndrăzneț', 'Audacieux'], 'mood.futuristic': ['Futuristic', 'Futurist', 'Futuriste'],
+    'mood.friendly': ['Friendly', 'Prietenos', 'Convivial'], 'mood.premium': ['Premium', 'Premium', 'Premium'], 'mood.playful': ['Playful', 'Jucăuș', 'Ludique'],
+    'pal.indigo': ['Indigo', 'Indigo', 'Indigo'], 'pal.sunset': ['Sunset', 'Apus', 'Coucher de soleil'], 'pal.forest': ['Forest', 'Pădure', 'Forêt'],
+    'pal.graphite': ['Graphite & amber', 'Grafit și chihlimbar', 'Graphite et ambre'], 'pal.pale': ['Pale (low contrast)', 'Pal (contrast slab)', 'Pâle (faible contraste)'],
+    'cm.title': ['CONCEPT MAP · how the ideas relate', 'HARTĂ CONCEPTUALĂ · relațiile dintre idei', 'CARTE CONCEPTUELLE · relations entre les idées'],
+    'mb.title': ['MOODBOARD · artistic direction', 'MOODBOARD · direcția artistică', 'MOODBOARD · direction artistique'],
+    'cm.passenger': ['Passenger', 'Pasager', 'Voyageur'], 'cm.city': ['City', 'Oraș', 'Ville'], 'cm.time': ['Time', 'Timp', 'Temps'],
+    'brand': ['Metro Pass', 'Abonament Metro', 'Pass Metro'],
+    'mb.shapes': ['Shapes', 'Forme', 'Formes'], 'mb.type': ['Typography', 'Tipografie', 'Typographie'], 'mb.icons': ['Iconography', 'Iconografie', 'Iconographie'],
+    'mb.sample': ['Clear, calm, on time.', 'Clar, calm, la timp.', 'Clair, calme, à l\'heure.'],
+
+    's2.title': ['Information Architecture.', 'Arhitectura informației.', 'Architecture de l\'information.'],
+    's2.desc': ['Organizing screens, sections and navigation.', 'Organizarea ecranelor, secțiunilor și navigării.', 'Organisation des écrans, des sections et de la navigation.'],
+    's2.note': ['Where does the passenger land, and how many steps to the ticket?', 'Unde ajunge pasagerul și câți pași are până la bilet?', 'Où arrive le voyageur et combien d\'étapes jusqu\'au billet ?'],
+    's2.home': ['Which screen opens first?', 'Ce ecran se deschide primul?', 'Quel écran s\'ouvre en premier ?'],
+    'ia.title': ['INFORMATION ARCHITECTURE · screens, sections, navigation', 'ARHITECTURA INFORMAȚIEI · ecrane, secțiuni, navigare', 'ARCHITECTURE DE L\'INFORMATION · écrans, sections, navigation'],
+    'ia.launch': ['App launch', 'Lansare aplicație', 'Lancement de l\'appli'],
+    'ia.home': ['HOME', 'ACASĂ', 'ACCUEIL'],
+    'ia.nav': ['Bottom navigation bar', 'Bară de navigare inferioară', 'Barre de navigation inférieure'],
+    'ia.map': ['Search · Map · Next train · Get ticket', 'Căutare · Hartă · Următorul tren · Ia bilet', 'Recherche · Carte · Prochain train · Billet'],
+    'ia.ticket': ['QR code · Route · Validity', 'Cod QR · Rută · Valabilitate', 'Code QR · Ligne · Validité'],
+    'ia.routes': ['Line list · Frequency · Duration', 'Listă de linii · Frecvență · Durată', 'Liste des lignes · Fréquence · Durée'],
+    'ia.taps0': ['Ticket is the home screen: 0 taps to board. The map is still one tap away.', 'Biletul este ecranul principal: 0 atingeri până la îmbarcare. Harta rămâne la o atingere distanță.', 'Le billet est l\'écran d\'accueil : 0 appui pour embarquer. La carte reste à un appui.'],
+    'ia.taps1': ['The ticket is {0} tap away from the home screen.', 'Biletul este la {0} atingere de ecranul principal.', 'Le billet est à {0} appui de l\'écran d\'accueil.'],
+    'scr.map': ['Map', 'Hartă', 'Carte'], 'scr.ticket': ['Ticket', 'Bilet', 'Billet'], 'scr.routes': ['Routes', 'Rute', 'Lignes'],
+
+    's3.title': ['Wireframing & Sketching.', 'Wireframe și schițe.', 'Wireframes et esquisses.'],
+    's3.desc': ['Initial sketches of the interface, without aesthetic detail.', 'Schițe inițiale ale interfeței, fără detalii estetice.', 'Premières esquisses de l\'interface, sans détails esthétiques.'],
+    's3.note': ['No colours, no style: only structure and placement of elements.', 'Fără culori, fără stil: doar structura și amplasarea elementelor.', 'Ni couleurs ni style : seulement la structure et la disposition des éléments.'],
+    's3.sketch': ['✏️ Hand sketch', '✏️ Schiță în creion', '✏️ Esquisse à la main'],
+    's3.clean': ['▭ Clean wireframe', '▭ Wireframe curat', '▭ Wireframe propre'],
+    's3.notes': ['Show annotations', 'Arată adnotările', 'Afficher les annotations'],
+    'wf.title': ['WIREFRAMES · structure only, no aesthetics', 'WIREFRAME-URI · doar structură, fără estetică', 'WIREFRAMES · structure seulement, sans esthétique'],
+    'wf.header': ['Header', 'Antet', 'En-tête'], 'wf.search': ['Search destination', 'Caută destinația', 'Rechercher une destination'], 'wf.map': ['MAP', 'HARTĂ', 'CARTE'],
+    'wf.get': ['Get ticket ▸', 'Ia bilet ▸', 'Obtenir un billet ▸'], 'wf.passenger': ['Passenger', 'Pasager', 'Voyageur'], 'wf.zone': ['Route · Zone · Valid until', 'Rută · Zonă · Valabil până la', 'Ligne · Zone · Valable jusqu\'à'],
+    'wf.back': ['Back to map', 'Înapoi la hartă', 'Retour à la carte'], 'wf.route': ['Route {0}', 'Ruta {0}', 'Ligne {0}'],
+    'wf.homelbl': ['▶ HOME', '▶ ACASĂ', '▶ ACCUEIL'],
+    'wf.taps': ['Taps from launch to a ticket: {0}', 'Atingeri de la lansare până la bilet: {0}', 'Appuis du lancement jusqu\'au billet : {0}'],
+    'wf.status0': ['Ticket first: 0 taps to board.', 'Biletul primul: 0 atingeri până la îmbarcare.', 'Billet d\'abord : 0 appui pour embarquer.'],
+    'wf.status1': ['{0} tap to reach the ticket: fine for planning, slower at a gate.', '{0} atingere până la bilet: bine pentru planificare, mai lent la poartă.', '{0} appui pour atteindre le billet : bien pour planifier, plus lent au portique.'],
+
+    's4.title': ['Visual Design / Mockup.', 'Design vizual / Mockup.', 'Design visuel / Maquette.'],
+    's4.desc': ['Typography, colors, shapes, iconography, composition and style.', 'Tipografie, culori, forme, iconografie, compoziție și stil.', 'Typographie, couleurs, formes, iconographie, composition et style.'],
+    's4.name': ['Passenger name', 'Numele pasagerului', 'Nom du voyageur'],
+    's4.route': ['Route', 'Ruta', 'Ligne'],
+    's4.qr': ['New QR code', 'Cod QR nou', 'Nouveau code QR'],
+    's4.tip': ['Click any screen or its buttons to try the flow. Change the style in stage 1, or explore variants in stage 5.', 'Apasă pe orice ecran sau buton pentru a încerca fluxul. Schimbă stilul în etapa 1 sau explorează variante în etapa 5.', 'Cliquez sur un écran ou ses boutons pour essayer le parcours. Changez le style à l\'étape 1 ou explorez des variantes à l\'étape 5.'],
+    'mv.title': ['VISUAL MOCKUPS · high fidelity · click to interact', 'MOCKUP-URI VIZUALE · fidelitate înaltă · apasă pentru interacțiune', 'MAQUETTES VISUELLES · haute fidélité · cliquez pour interagir'],
+    'mv.insim': ['shown in simulation', 'afișat în simulare', 'affiché dans la simulation'],
+    'ui.contrast': ['White text on the header colour: contrast {0}:1 · {1}', 'Text alb pe culoarea antetului: contrast {0}:1 · {1}', 'Texte blanc sur la couleur d\'en-tête : contraste {0}:1 · {1}'],
+    'ui.pass': ['passes WCAG AA (4.5:1)', 'respectă WCAG AA (4,5:1)', 'conforme WCAG AA (4,5:1)'],
+    'ui.fail': ['FAILS WCAG AA: not accessible', 'NU respectă WCAG AA: neaccesibil', 'NON conforme WCAG AA : inaccessible'],
+    'ui.plan': ['Plan your trip', 'Planifică-ți călătoria', 'Planifiez votre trajet'], 'ui.where': ['Where to today?', 'Încotro astăzi?', 'Où allez-vous ?'],
+    'ui.next': ['Next train in 3 min', 'Următorul tren în 3 min', 'Prochain train dans 3 min'],
+    'ui.stops': ['24 min · 8 stops · Zone 1–3', '24 min · 8 stații · Zonele 1–3', '24 min · 8 arrêts · Zones 1–3'],
+    'ui.get': ['Get ticket', 'Ia bilet', 'Obtenir un billet'],
+    'ui.tapget': ['Tap "Get ticket" to continue', 'Atinge „Ia bilet” pentru a continua', 'Touchez « Obtenir un billet » pour continuer'],
+    'ui.single': ['Single journey · Zone 1–3', 'Călătorie simplă · Zonele 1–3', 'Trajet simple · Zones 1–3'],
+    'ui.hello': ['Hello, {0}!', 'Salut, {0}!', 'Bonjour, {0} !'],
+    'ui.scan': ['Scan at the gate', 'Scanează la poartă', 'Scannez au portique'],
+    'ui.wallet': ['Add to wallet', 'Adaugă în portofel', 'Ajouter au portefeuille'],
+    'ui.walletok': ['Added to wallet ✓', 'Adăugat în portofel ✓', 'Ajouté au portefeuille ✓'],
+    'ui.pick': ['Pick a line to ride', 'Alege o linie', 'Choisissez une ligne'],
+    'ui.every': ['Every {0} min · {1} min trip', 'La fiecare {0} min · {1} min călătorie', 'Toutes les {0} min · {1} min de trajet'],
+    'ui.selected': ['Selected', 'Selectat', 'Sélectionné'],
+    'ui.name': ['Student', 'Student', 'Étudiant'],
+
+    's5.title': ['AI-Assisted Visual Exploration & Simulation.', 'Explorare și simulare vizuală asistată de AI.', 'Exploration et simulation visuelles assistées par IA.'],
+    's5.desc': ['Generating and exploring visual variants, animations and usage scenarios.', 'Generarea și explorarea variantelor vizuale, animațiilor și scenariilor de utilizare.', 'Génération et exploration de variantes visuelles, d\'animations et de scénarios d\'usage.'],
+    's5.variants': ['Visual variants', 'Variante vizuale', 'Variantes visuelles'],
+    's5.prompt': ['Style brief', 'Brief de stil', 'Brief de style'],
+    's5.promptph': ['e.g. warm, bold, rounded', 'ex. cald, îndrăzneț, rotunjit', 'ex. chaud, audacieux, arrondi'],
+    's5.gen': ['✨ Generate variants', '✨ Generează variante', '✨ Générer des variantes'],
+    's5.simnote': ['Simulation: variants are produced by simple style rules, not by a real AI model. Click one to adopt it.', 'Simulare: variantele sunt produse prin reguli simple de stil, nu de un model AI real. Apasă pe una pentru a o adopta.', 'Simulation : les variantes sont produites par de simples règles de style, pas par un vrai modèle d\'IA. Cliquez pour en adopter une.'],
+    's5.view': ['Usage scenario', 'Scenariu de utilizare', 'Scénario d\'usage'],
+    's5.photo': ['📷 Real photo', '📷 Fotografie reală', '📷 Photo réelle'], 's5.m3d': ['🧊 3D model', '🧊 Model 3D', '🧊 Modèle 3D'],
+    's5.sit': ['🪑 Seated commuter', '🪑 Navetist așezat', '🪑 Voyageur assis'], 's5.hand': ['🧼 Clean hand shot', '🧼 Mână, fundal curat', '🧼 Main, fond épuré'],
+    's5.upload': ['⬆ Upload your own photo', '⬆ Încarcă propria fotografie', '⬆ Importer votre photo'],
+    's5.adjust': ['Adjust screen corners (drag the 4 dots)', 'Ajustează colțurile ecranului (trage cele 4 puncte)', 'Ajuster les coins de l\'écran (glissez les 4 points)'],
+    's5.bright': ['Screen brightness', 'Luminozitate ecran', 'Luminosité de l\'écran'], 's5.glare': ['Glass glare', 'Reflexie sticlă', 'Reflet du verre'],
+    's5.proto': ['Interactive prototype', 'Prototip interactiv', 'Prototype interactif'],
+    's5.protonote': ['Click the buttons and tabs on the phone screen itself.', 'Apasă butoanele și filele chiar pe ecranul telefonului.', 'Cliquez sur les boutons et onglets sur l\'écran du téléphone.'],
+    's5.bmap': ['🗺️ Map', '🗺️ Hartă', '🗺️ Carte'], 's5.bticket': ['🎫 Ticket', '🎫 Bilet', '🎫 Billet'], 's5.broutes': ['🚇 Routes', '🚇 Rute', '🚇 Lignes'],
+    's5.env': ['Environment prompt', 'Prompt pentru mediu', 'Prompt d\'environnement'],
+    's5.envdef': ['Phone held at a busy train station platform at night', 'Telefon ținut pe peronul aglomerat al unei gări, noaptea', 'Téléphone tenu sur le quai animé d\'une gare, la nuit'],
+    's5.scene': ['Generate scene', 'Generează scena', 'Générer la scène'],
+    'env.1': ['Metro, day', 'Metrou, zi', 'Métro, jour'], 'env.2': ['Street, sunset', 'Stradă, apus', 'Rue, coucher de soleil'], 'env.3': ['Station, rain', 'Gară, ploaie', 'Gare, pluie'], 'env.4': ['Studio', 'Studio', 'Studio'],
+    'envp.1': ['Phone at a bright metro station in the daytime', 'Telefon într-o stație de metrou luminoasă, ziua', 'Téléphone dans une station de métro lumineuse, de jour'],
+    'envp.2': ['Phone on a city street at sunset, warm golden light', 'Telefon pe o stradă a orașului la apus, lumină aurie caldă', 'Téléphone dans une rue de la ville au coucher du soleil, lumière dorée'],
+    'envp.3': ['Phone at a train station at night, rainy and foggy', 'Telefon într-o gară noaptea, ploaie și ceață', 'Téléphone dans une gare la nuit, pluie et brouillard'],
+    'envp.4': ['Clean studio shot, soft light', 'Fotografie de studio curată, lumină difuză', 'Prise de vue studio épurée, lumière douce'],
+    's5.light': ['Light intensity', 'Intensitatea luminii', 'Intensité lumineuse'], 's5.haze': ['Atmosphere haze', 'Ceață atmosferică', 'Brume atmosphérique'],
+    's5.blur': ['Blurred background (shallow depth of field)', 'Fundal estompat (profunzime mică)', 'Arrière-plan flou (faible profondeur de champ)'],
+    's5.spin': ['Rotation speed', 'Viteza de rotație', 'Vitesse de rotation'], 's5.auto': ['Auto-rotate', 'Rotire automată', 'Rotation automatique'], 's5.reset': ['Reset view', 'Resetează vederea', 'Réinitialiser la vue'],
+    'tag.studio': ['studio softboxes', 'softbox-uri de studio', 'softboxes de studio'], 'tag.city': ['city street', 'stradă urbană', 'rue de la ville'], 'tag.hub': ['transit hub', 'nod de transport', 'pôle de transport'],
+    'tag.golden': ['golden hour', 'ora de aur', 'heure dorée'], 'tag.bright': ['bright daylight', 'lumină de zi', 'plein jour'], 'tag.night': ['night', 'noapte', 'nuit'], 'tag.fog': ['fog / rain', 'ceață / ploaie', 'brouillard / pluie'],
+    'env.loading': ['Loading environment…', 'Se încarcă mediul…', 'Chargement de l\'environnement…'],
+    'env.interp': ['Interpreted as: {0}', 'Interpretat ca: {0}', 'Interprété comme : {0}'],
+    'env.err': ['Could not load the environment image (needs internet).', 'Imaginea mediului nu a putut fi încărcată (necesită internet).', 'Impossible de charger l\'image d\'environnement (internet requis).'],
+    'var.n': ['Variant {0}', 'Varianta {0}', 'Variante {0}'],
+    'var.adopted': ['Adopted variant {0}: {1}', 'Varianta {0} adoptată: {1}', 'Variante {0} adoptée : {1}'],
+
+    's6.title': ['Visual Concept Demonstrator.', 'Demonstrator vizual de concept.', 'Démonstrateur visuel de concept.'],
+    's6.desc': ['Presenting the aesthetic concept through renders or demonstration screens, without a functional application.', 'Prezentarea conceptului estetic prin randări sau ecrane demonstrative, fără aplicație funcțională.', 'Présentation du concept esthétique par des rendus ou des écrans de démonstration, sans application fonctionnelle.'],
+    's6.note': ['The board updates with every choice you made in stages 1–5.', 'Panoul se actualizează cu fiecare alegere făcută în etapele 1–5.', 'Le tableau se met à jour avec chaque choix fait aux étapes 1 à 5.'],
+    's6.download': ['⬇ Download the presentation board (PNG)', '⬇ Descarcă panoul de prezentare (PNG)', '⬇ Télécharger le tableau de présentation (PNG)'],
+    'bd.title': ['Visual Concept', 'Concept vizual', 'Concept visuel'],
+    'bd.tag': ['Transit ticket app · aesthetic proof of concept', 'Aplicație de bilete · demonstrator estetic', 'Appli de billets · démonstrateur esthétique'],
+    'bd.palette': ['Palette', 'Paletă', 'Palette'], 'bd.type': ['Typography', 'Tipografie', 'Typographie'], 'bd.shape': ['Shape language', 'Limbaj de forme', 'Langage de formes'],
+    'bd.footer': ['Static demonstration · no functional application', 'Demonstrație statică · fără aplicație funcțională', 'Démonstration statique · aucune application fonctionnelle'],
+
+    'cmp.title': ['Automotive design analogy', 'Analogia cu designul automobilelor', 'L\'analogie avec le design automobile'],
+    'cmp.sub': ['The same four moves a car interior goes through, next to our software process.', 'Aceleași patru mișcări prin care trece interiorul unei mașini, alături de procesul nostru software.', 'Les mêmes quatre étapes que l\'intérieur d\'une voiture, à côté de notre processus logiciel.'],
+    'cmp.lesson': ['Compare each software stage with its counterpart in car design. Click a card to jump to the stage.', 'Compară fiecare etapă software cu corespondentul ei din designul auto. Apasă pe un card pentru a sări la etapă.', 'Comparez chaque étape logicielle à son équivalent en design automobile. Cliquez sur une carte pour y accéder.'],
+    'cmp.car': ['Automotive', 'Automobile', 'Automobile'], 'cmp.sw': ['Software', 'Software', 'Logiciel'],
+    'cmp.c1': ['Automotive Concept Sketch', 'Schiță de concept auto', 'Esquisse de concept automobile'], 'cmp.c1d': ['Inspiration, proportions and visual language.', 'Inspirație, proporții și limbaj vizual.', 'Inspiration, proportions et langage visuel.'],
+    'cmp.c2': ['UI Wireframe', 'Wireframe UI', 'Wireframe d\'interface'], 'cmp.c2d': ['Structure and placement of elements.', 'Structura și amplasarea elementelor.', 'Structure et disposition des éléments.'],
+    'cmp.c3': ['Visual Mockup', 'Mockup vizual', 'Maquette visuelle'], 'cmp.c3d': ['Materials, colors and final look.', 'Materiale, culori și aspect final.', 'Matériaux, couleurs et aspect final.'],
+    'cmp.c4': ['AI Design Visualization', 'Vizualizare de design cu AI', 'Visualisation de design par IA'], 'cmp.c4d': ['Renders and exploration of the aesthetic concept.', 'Randări și explorarea conceptului estetic.', 'Rendus et exploration du concept esthétique.'],
+
+    'hint.1': ['Pick keywords, a palette and shapes: the concept map and moodboard update', 'Alege cuvinte-cheie, o paletă și forme: harta și moodboard-ul se actualizează', 'Choisissez mots-clés, palette et formes : la carte et le moodboard se mettent à jour'],
+    'hint.2': ['Change the home screen and watch the number of taps', 'Schimbă ecranul principal și urmărește numărul de atingeri', 'Changez l\'écran d\'accueil et observez le nombre d\'appuis'],
+    'hint.3': ['Switch between hand sketch and clean wireframe', 'Comută între schiță în creion și wireframe curat', 'Basculez entre esquisse à la main et wireframe propre'],
+    'hint.4': ['Click a screen to select it · click its buttons to navigate', 'Apasă pe un ecran pentru a-l selecta · apasă butoanele pentru a naviga', 'Cliquez sur un écran pour le choisir · cliquez sur ses boutons pour naviguer'],
+    'hint.5p': ['Click the buttons on the phone screen in the photo', 'Apasă butoanele de pe ecranul telefonului din fotografie', 'Cliquez sur les boutons de l\'écran du téléphone dans la photo'],
+    'hint.53': ['Click buttons on the phone · drag to rotate · scroll to zoom', 'Apasă butoanele telefonului · trage pentru a roti · derulează pentru zoom', 'Cliquez sur les boutons · glissez pour tourner · molette pour zoomer'],
+    'hint.6': ['Static presentation board built from your choices', 'Panou de prezentare static, construit din alegerile tale', 'Tableau de présentation statique construit à partir de vos choix'],
+    'hint.7': ['Click a card to jump to its stage', 'Apasă pe un card pentru a sări la etapă', 'Cliquez sur une carte pour accéder à l\'étape'],
+    'badge.1': ['Stage 01 · Concept Map + Moodboard', 'Etapa 01 · Hartă conceptuală + Moodboard', 'Étape 01 · Carte conceptuelle + Moodboard'],
+    'badge.2': ['Stage 02 · Information Architecture', 'Etapa 02 · Arhitectura informației', 'Étape 02 · Architecture de l\'information'],
+    'badge.3': ['Stage 03 · Wireframing & Sketching', 'Etapa 03 · Wireframe și schițe', 'Étape 03 · Wireframes et esquisses'],
+    'badge.4': ['Stage 04 · Visual Design / Mockup', 'Etapa 04 · Design vizual / Mockup', 'Étape 04 · Design visuel / Maquette'],
+    'badge.5': ['Stage 05 · AI-Assisted Exploration & Simulation', 'Etapa 05 · Explorare și simulare asistată de AI', 'Étape 05 · Exploration et simulation assistées par IA'],
+    'badge.6': ['Stage 06 · Visual Concept Demonstrator', 'Etapa 06 · Demonstrator vizual de concept', 'Étape 06 · Démonstrateur visuel de concept'],
+    'badge.7': ['Analogy · Automotive design', 'Analogie · Design automobil', 'Analogie · Design automobile']
+  };
+  function t(k) {
+    const e = T[k]; let v = e ? e[LI[LANG]] : k;
+    for (let i = 1; i < arguments.length; i++) v = v.split('{' + (i - 1) + '}').join(arguments[i]);
+    return v;
+  }
+  function applyI18n() {
+    document.documentElement.lang = LANG;
+    document.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = t(el.dataset.i18n); });
+    document.querySelectorAll('[data-i18n-ph]').forEach((el) => { el.placeholder = t(el.dataset.i18nPh); });
+    document.querySelectorAll('#lang button').forEach((b) => b.classList.toggle('active', b.dataset.lang === LANG));
+  }
+  function setStatus(el, ok, text) { el.className = 'status ' + (ok ? 'ok' : 'bad'); el.textContent = text; }
   function rrect(ctx, x, y, w, h, r) {
     ctx.beginPath();
+    r = Math.max(0, Math.min(r, w / 2, h / 2));
     if (ctx.roundRect) { ctx.roundRect(x, y, w, h, r); return; }
     ctx.moveTo(x + r, y);
     ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
     ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
   }
-  function setStatus(el, ok, text) { el.className = 'status ' + (ok ? 'ok' : 'bad'); el.textContent = text; }
 
-  /* =================== STEP 1 · ARCHITECTURE =================== */
-  const arch = $('arch'), actx = arch.getContext('2d');
-  const NODES = {
-    app:    { x: 60,  y: 260, label: 'Passenger App',  sub: 'iOS / Android', c: '#6366f1' },
-    gw:     { x: 300, y: 260, label: 'API Gateway',    sub: 'REST /v1', c: '#22d3ee' },
-    auth:   { x: 560, y: 90,  label: 'Auth Service',   sub: 'POST /login', c: '#a78bfa' },
-    routes: { x: 560, y: 260, label: 'Routes Service', sub: 'GET /routes', c: '#a78bfa' },
-    ticket: { x: 560, y: 430, label: 'Ticket Service', sub: 'POST /tickets', c: '#a78bfa' },
-    rdb:    { x: 800, y: 260, label: 'Routes DB',      sub: 'stops, timetables', c: '#34d399', db: 'route' },
-    tdb:    { x: 800, y: 430, label: 'Tickets DB',     sub: 'passes, QR payloads', c: '#34d399', db: 'ticket' }
+  /* =================== SHARED STATE =================== */
+  const PAL = {
+    indigo:   ['#4f46e5', '#7c3aed', '#f1f5f9', '#1e1b4b'],
+    sunset:   ['#c2410c', '#be185d', '#fff7ed', '#431407'],
+    forest:   ['#047857', '#0e7490', '#ecfdf5', '#064e3b'],
+    graphite: ['#374151', '#d99a0b', '#f4f4f5', '#111827'],
+    pale:     ['#fde68a', '#fef08a', '#ffffff', '#78716c']
   };
-  const EDGES = [['app', 'gw'], ['gw', 'auth'], ['gw', 'routes'], ['gw', 'ticket'], ['routes', 'rdb'], ['ticket', 'tdb']];
-  const NW = 170, NH = 70;
-  const state = { ticketDb: true, routeDb: true };
-  const dbOn = (n) => (n.db === 'ticket' ? state.ticketDb : n.db === 'route' ? state.routeDb : true);
-
-  function drawArch() {
-    const c = actx;
-    c.fillStyle = '#0f172a'; c.fillRect(0, 0, 1000, 600);
-    c.strokeStyle = 'rgba(148,163,184,.08)'; c.lineWidth = 1;
-    for (let i = 0; i < 1000; i += 40) { c.beginPath(); c.moveTo(i, 0); c.lineTo(i, 600); c.stroke(); }
-    for (let i = 0; i < 600; i += 40) { c.beginPath(); c.moveTo(0, i); c.lineTo(1000, i); c.stroke(); }
-    c.fillStyle = '#94a3b8'; c.font = '600 14px Inter, sans-serif'; c.textAlign = 'left';
-    c.fillText('SYSTEM ARCHITECTURE · transit ticketing', 24, 34);
-
-    EDGES.forEach(([a, b]) => {
-      const A = NODES[a], B = NODES[b], broken = !dbOn(B);
-      c.strokeStyle = broken ? '#fbbf24' : '#64748b'; c.lineWidth = 4;
-      c.setLineDash(broken ? [8, 8] : []);
-      c.beginPath();
-      const x1 = A.x + NW, y1 = A.y + NH / 2, x2 = B.x, y2 = B.y + NH / 2, mx = (x1 + x2) / 2;
-      c.moveTo(x1, y1); c.lineTo(mx, y1); c.lineTo(mx, y2); c.lineTo(x2, y2); c.stroke();
-      c.setLineDash([]);
-    });
-    Object.values(NODES).forEach((n) => {
-      const on = dbOn(n);
-      c.globalAlpha = on ? 1 : 0.35;
-      c.fillStyle = '#1e293b'; rrect(c, n.x, n.y, NW, NH, 12); c.fill();
-      c.strokeStyle = n.c; c.lineWidth = 3; rrect(c, n.x, n.y, NW, NH, 12); c.stroke();
-      c.fillStyle = '#e2e8f0'; c.font = '700 15px Inter, sans-serif'; c.textAlign = 'center';
-      c.fillText(n.label, n.x + NW / 2, n.y + 30);
-      c.fillStyle = '#94a3b8'; c.font = '12px Inter, sans-serif';
-      c.fillText(n.sub, n.x + NW / 2, n.y + 52);
-      c.globalAlpha = 1;
-    });
-    if (!state.ticketDb) {
-      c.fillStyle = '#fbbf24'; c.font = '700 15px Inter, sans-serif'; c.textAlign = 'center';
-      c.fillText('⚠ Ticket data has nowhere to live', 885, 535);
-    }
-    c.textAlign = 'left';
-  }
-  function updateArch() {
-    state.ticketDb = $('chkTicketDb').checked;
-    state.routeDb = $('chkRouteDb').checked;
-    drawArch();
-    if (!state.ticketDb) setStatus($('archStatus'), false, 'No Tickets DB → the Ticket Service has nowhere to store passes, so no digital ticket can be created.');
-    else if (!state.routeDb) setStatus($('archStatus'), false, 'Tickets can be stored, but there is no route data to sell tickets for.');
-    else setStatus($('archStatus'), true, 'Data flow complete: app → gateway → services → databases.');
-    drawMock(); drawWire();
-  }
-  $('chkTicketDb').onchange = $('chkRouteDb').onchange = () => { updateArch(); log('<b>architecture</b> ticketDb=' + state.ticketDb + ' routeDb=' + state.routeDb); };
-
-  /* =================== STEP 2 · WIREFRAMES =================== */
-  const wire = $('wire'), wctx = wire.getContext('2d');
-  function wireScreen(c, x, y, kind, highlight) {
-    const w = 240, h = 460;
-    c.fillStyle = '#e5e7eb'; rrect(c, x, y, w, h, 22); c.fill();
-    c.strokeStyle = highlight ? '#6366f1' : '#9ca3af'; c.lineWidth = highlight ? 5 : 2; rrect(c, x, y, w, h, 22); c.stroke();
-    c.fillStyle = '#9ca3af'; c.font = '600 12px Inter, sans-serif'; c.textAlign = 'center';
-    const box = (bx, by, bw, bh, t, fill) => {
-      c.fillStyle = fill || '#d1d5db'; c.fillRect(x + bx, y + by, bw, bh);
-      c.strokeStyle = '#9ca3af'; c.lineWidth = 1.5; c.strokeRect(x + bx, y + by, bw, bh);
-      if (t) { c.fillStyle = '#4b5563'; c.fillText(t, x + bx + bw / 2, y + by + bh / 2 + 4); }
-    };
-    box(16, 20, w - 32, 28, 'Header · ' + kind.toUpperCase());
-    if (kind === 'map') {
-      box(16, 60, w - 32, 36, 'Search destination');
-      box(16, 106, w - 32, 240, 'MAP');
-      box(16, 356, w - 32, 44, 'Get ticket  ▸');
-      box(16, 410, (w - 40) / 2, 34, 'Routes'); box(24 + (w - 40) / 2, 410, (w - 40) / 2, 34, 'Ticket');
-    } else if (kind === 'ticket') {
-      box(16, 60, w - 32, 40, 'Passenger');
-      box(40, 112, w - 80, w - 80, '✕  QR');
-      box(16, 112 + w - 70, w - 32, 36, 'Route · Zone · Valid until');
-      box(16, 410, w - 32, 34, 'Back to map');
-    } else {
-      for (let i = 0; i < 6; i++) box(16, 60 + i * 56, w - 32, 46, 'Route ' + (i + 1));
-      box(16, 410, w - 32, 34, 'Back to map');
-    }
-    c.textAlign = 'left';
-  }
-  function drawWire() {
-    const c = wctx, home = $('homeScreen').value, notes = $('chkNotes').checked;
-    c.fillStyle = '#f3f4f6'; c.fillRect(0, 0, 1000, 600);
-    c.fillStyle = '#6b7280'; c.font = '600 14px Inter, sans-serif'; c.fillText('WIREFRAMES · grayscale, low fidelity', 24, 34);
-    const order = [home].concat(['map', 'ticket', 'routes'].filter((k) => k !== home));
-    order.forEach((k, i) => {
-      const x = 40 + i * 320;
-      wireScreen(c, x, 70, k, i === 0);
-      c.fillStyle = i === 0 ? '#4f46e5' : '#6b7280'; c.font = '700 13px Inter, sans-serif'; c.textAlign = 'center';
-      c.fillText(i === 0 ? '▶ HOME: ' + k.toUpperCase() : k.toUpperCase(), x + 120, 560);
-      if (i < 2) {
-        c.strokeStyle = '#9ca3af'; c.lineWidth = 3; c.beginPath(); c.moveTo(x + 250, 300); c.lineTo(x + 310, 300); c.stroke();
-        c.beginPath(); c.moveTo(x + 310, 300); c.lineTo(x + 300, 292); c.lineTo(x + 300, 308); c.closePath(); c.fillStyle = '#9ca3af'; c.fill();
-      }
-      c.textAlign = 'left';
-    });
-    if (notes) {
-      c.fillStyle = '#b45309'; c.font = '12px Inter, sans-serif';
-      const taps = home === 'ticket' ? 0 : 1;
-      c.fillText('Taps from launch to a scannable ticket: ' + taps, 24, 585);
-    }
-    const taps = home === 'ticket' ? 0 : 1;
-    setStatus($('wireStatus'), taps === 0,
-      taps === 0 ? 'Ticket is the home screen: 0 taps to board. Is the map still reachable? (yes, via nav)'
-                 : 'Passenger needs ' + taps + ' tap to reach the ticket. Fine for planning, slow at a gate.');
-  }
-  $('homeScreen').onchange = () => { drawWire(); log('<b>wireframe</b> home = ' + $('homeScreen').value); };
-  $('chkNotes').onchange = drawWire;
-
-  /* =================== STEP 3 · UI MOCKUP =================== */
+  const FONTS = { sans: 'Inter, system-ui, "Segoe UI", sans-serif', serif: 'Georgia, "Times New Roman", serif', round: '"Trebuchet MS", "Segoe UI", sans-serif' };
+  const MOODS = ['calm', 'bold', 'futuristic', 'friendly', 'premium', 'playful'];
+  const ROUTES = {
+    en: [['Central Station', 'Airport'], ['Harbor Line', 'Old Town'], ['North Gate', 'University']],
+    ro: [['Gara Centrală', 'Aeroport'], ['Linia Portului', 'Orașul Vechi'], ['Poarta Nord', 'Universitate']],
+    fr: [['Gare centrale', 'Aéroport'], ['Ligne du Port', 'Vieille ville'], ['Porte Nord', 'Université']]
+  };
+  const S = { palette: 'indigo', shape: 'round', font: 'sans', home: 'map', moods: { calm: true, friendly: true }, name: '', nameEdited: false, route: 0, qrSeed: 7, sketch: true, notes: true };
+  let FF = FONTS.sans, RS = 1;
+  function syncStyle() { FF = FONTS[S.font]; RS = S.shape === 'sharp' ? 0.15 : 1; }
+  const palette = () => PAL[S.palette];
+  const RAD = (r) => r * RS;
+  const routes = () => ROUTES[LANG];
+  const userName = () => (S.name.trim() || t('ui.name'));
   const mkCanvas = (w, h) => { const cv = document.createElement('canvas'); cv.width = w; cv.height = h; return cv; };
-  const mock = mkCanvas(400, 800), mctx = mock.getContext('2d');          // ticket screen
-  const mapCv = mkCanvas(400, 800), routesCv = mkCanvas(400, 800);
-  const phoneCv = mkCanvas(400, 800), pctx = phoneCv.getContext('2d');     // what the 3D phone shows
-  const mockView = $('mockView'), vctx = mockView.getContext('2d');
-  let current = 'map';
-  const ROUTES = ['Central Station → Airport', 'Harbor Line → Old Town', 'North Gate → University'];
-  const THEMES = {
-    indigo: ['#4f46e5', '#7c3aed', '#f1f5f9'],
-    sunset: ['#c2410c', '#be185d', '#fff7ed'],
-    forest: ['#047857', '#0e7490', '#ecfdf5'],
-    pale:   ['#fde68a', '#fef08a', '#ffffff']
-  };
-  let qrSeed = 7, seed = 7;
+  let seed = 7;
   function rand() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
   function lum(hex) {
     const n = parseInt(hex.slice(1), 16);
@@ -369,84 +523,177 @@
       .reduce((s, v, i) => s + v * [0.2126, 0.7152, 0.0722][i], 0);
   }
   function contrast(a, b) { const l1 = lum(a), l2 = lum(b); return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05); }
-
-  let mockVersion = 0;
-  function drawMock() {
-    const c = mctx, W = 400, H = 800;
-    const [c1, c2, bg] = THEMES[$('theme').value];
-    const name = $('pname').value.trim() || 'Passenger';
-    const [from, to] = $('route').value.split(' → ');
-    seed = qrSeed;
-
-    c.clearRect(0, 0, W, H); c.fillStyle = bg; c.fillRect(0, 0, W, H);
-    const g = c.createLinearGradient(0, 0, W, 230); g.addColorStop(0, c1); g.addColorStop(1, c2);
-    c.fillStyle = g; c.fillRect(0, 0, W, 230);
-
-    c.fillStyle = 'rgba(255,255,255,.95)'; c.font = '600 15px Inter, sans-serif';
-    c.textAlign = 'left'; c.fillText('9:41', 24, 32); c.textAlign = 'right'; c.fillText('5G ▮▮▮', W - 24, 32);
-    c.textAlign = 'left'; c.font = '700 28px Inter, sans-serif'; c.fillText('Metro Pass', 28, 100);
-    c.font = '400 15px Inter, sans-serif'; c.fillText('Single journey · Zone 1–3', 28, 128);
-
-    c.shadowColor = 'rgba(15,23,42,.2)'; c.shadowBlur = 18; c.shadowOffsetY = 8;
-    c.fillStyle = '#fff'; rrect(c, 24, 170, W - 48, 100, 16); c.fill();
-    c.shadowColor = 'transparent';
-    c.fillStyle = '#334155'; c.font = '700 21px Inter, sans-serif'; c.fillText('Hello, ' + name + '!', 44, 212);
-    c.fillStyle = '#64748b'; c.font = '500 14px Inter, sans-serif'; c.fillText(from + '  →  ' + to, 44, 244);
-
-    c.shadowColor = 'rgba(15,23,42,.2)'; c.shadowBlur = 18; c.shadowOffsetY = 8;
-    c.fillStyle = '#fff'; rrect(c, 24, 296, W - 48, 340, 20); c.fill();
-    c.shadowColor = 'transparent';
-
-    const cells = 13, qr = 260, cs = qr / cells, qx = (W - qr) / 2, qy = 326;
-    if (state.ticketDb) {
-      c.fillStyle = '#0f172a';
-      const fin = (i, j) => (i < 4 && j < 4) || (i > cells - 5 && j < 4) || (i < 4 && j > cells - 5);
-      for (let i = 0; i < cells; i++) for (let j = 0; j < cells; j++) {
-        if (fin(i, j)) continue;
-        if (rand() > 0.5) c.fillRect(qx + i * cs, qy + j * cs, cs - 1, cs - 1);
-      }
-      [[0, 0], [cells - 3, 0], [0, cells - 3]].forEach(([i, j]) => {
-        const x = qx + i * cs, y = qy + j * cs;
-        c.fillStyle = '#0f172a'; c.fillRect(x, y, cs * 3, cs * 3);
-        c.fillStyle = '#fff'; c.fillRect(x + cs * .5, y + cs * .5, cs * 2, cs * 2);
-        c.fillStyle = '#0f172a'; c.fillRect(x + cs, y + cs, cs, cs);
-      });
-      c.fillStyle = '#64748b'; c.font = '500 14px Inter, sans-serif'; c.textAlign = 'center';
-      c.fillText('Scan at the gate', W / 2, 622);
-    } else {
-      c.fillStyle = '#fef3c7'; rrect(c, qx, qy, qr, qr, 12); c.fill();
-      c.fillStyle = '#b45309'; c.textAlign = 'center'; c.font = '700 18px Inter, sans-serif';
-      c.fillText('NO TICKET DATA', W / 2, qy + 120);
-      c.font = '13px Inter, sans-serif'; c.fillText('Tickets DB missing in Step 1', W / 2, qy + 148);
-    }
-
-    const bgd = c.createLinearGradient(0, 0, W, 0); bgd.addColorStop(0, c1); bgd.addColorStop(1, c2);
-    c.fillStyle = bgd; rrect(c, 24, 650, W - 48, 52, 26); c.fill();
-    c.fillStyle = '#ffffff'; c.textAlign = 'center'; c.font = '700 17px Inter, sans-serif'; c.fillText('Add to wallet', W / 2, 683);
-    drawTabBar(c, 'ticket');
-    c.textAlign = 'left';
-
-    const ratio = contrast(c1, '#ffffff');
-    setStatus($('uiStatus'), ratio >= 4.5, 'White text on header colour: contrast ' + ratio.toFixed(2) + ':1 · ' +
-      (ratio >= 4.5 ? 'passes WCAG AA (4.5:1)' : 'FAILS WCAG AA, not accessible'));
-    composeAll();
+  function pill(c, text, x, y, fill, stroke, color, font) {
+    c.font = font; const w = c.measureText(text).width + 28, h = 30;
+    rrect(c, x - w / 2, y - h / 2, w, h, 15); c.fillStyle = fill; c.fill(); c.strokeStyle = stroke; c.lineWidth = 2; c.stroke();
+    c.fillStyle = color; c.textAlign = 'center'; c.fillText(text, x, y + 5); c.textAlign = 'left';
   }
 
-  /* ---- shared pieces for the other screens ---- */
-  function palette() { return THEMES[$('theme').value]; }
-  const TABS = [['map', '🗺️', 'Map'], ['ticket', '🎫', 'Ticket'], ['routes', '🚇', 'Routes']];
+  /* =================== STAGE 01 · CONCEPT MAP + MOODBOARD =================== */
+  const moodCv = $('moodCv'), mctx0 = moodCv.getContext('2d');
+  function drawMood() {
+    const c = mctx0, [c1, c2, bg, dark] = palette();
+    c.clearRect(0, 0, 1000, 600);
+    c.fillStyle = '#eef0f6'; c.fillRect(0, 0, 1000, 600);
+    // --- concept map (left) ---
+    c.fillStyle = '#64748b'; c.font = '700 12px Inter, sans-serif'; c.textAlign = 'left'; c.fillText(t('cm.title'), 24, 32);
+    const cx = 250, cy = 320;
+    const items = [t('cm.passenger'), t('cm.city'), t('cm.time')].concat(MOODS.filter((m) => S.moods[m]).map((m) => t('mood.' + m)));
+    const pos = items.map((_, i) => { const a = -Math.PI / 2 + i * 2 * Math.PI / items.length; return [cx + Math.cos(a) * 175, cy + Math.sin(a) * 215]; });
+    c.lineWidth = 2.5;
+    pos.forEach(([x, y], i) => { c.strokeStyle = i < 3 ? '#94a3b8' : c1; c.setLineDash(i < 3 ? [6, 6] : []); c.beginPath(); c.moveTo(cx, cy); c.lineTo(x, y); c.stroke(); });
+    c.setLineDash([]);
+    pos.forEach(([x, y], i) => pill(c, items[i], x, y, '#fff', i < 3 ? '#94a3b8' : c1, '#334155', '600 13px ' + FF));
+    const g0 = c.createLinearGradient(cx - 60, cy - 60, cx + 60, cy + 60); g0.addColorStop(0, c1); g0.addColorStop(1, c2);
+    c.fillStyle = g0; c.beginPath(); c.arc(cx, cy, 62, 0, 7); c.fill();
+    c.fillStyle = '#fff'; c.font = '700 16px ' + FF; c.textAlign = 'center';
+    const words = t('brand').split(' '); words.forEach((w, i) => c.fillText(w, cx, cy + 5 + (i - (words.length - 1) / 2) * 20));
+    c.textAlign = 'left';
+    // --- moodboard (right) ---
+    c.shadowColor = 'rgba(15,23,42,.15)'; c.shadowBlur = 20; c.shadowOffsetY = 8;
+    c.fillStyle = '#fff'; rrect(c, 520, 20, 460, 560, 18); c.fill(); c.shadowColor = 'transparent';
+    c.fillStyle = '#64748b'; c.font = '700 12px Inter, sans-serif'; c.fillText(t('mb.title'), 544, 50);
+    [c1, c2, '#d4d4d8', dark].forEach((col, i) => { c.fillStyle = col; c.beginPath(); c.ellipse(572 + i * 64, 100, 25, 33, -0.15, 0, 7); c.fill(); });
+    const g = c.createLinearGradient(544, 150, 956, 320); g.addColorStop(0, c1); g.addColorStop(1, c2);
+    c.fillStyle = g; rrect(c, 544, 150, 412, 170, RAD(24)); c.fill();
+    c.fillStyle = '#fff'; c.font = '700 64px ' + FF; c.fillText('Aa', 568, 235);
+    c.font = '700 20px ' + FF; c.fillText(t('brand'), 568, 275); c.font = '400 14px ' + FF; c.fillText(t('mb.sample'), 568, 300);
+    c.fillStyle = '#94a3b8'; c.font = '700 11px Inter, sans-serif'; c.fillText(t('mb.shapes').toUpperCase(), 544, 352);
+    c.fillStyle = c1; c.beginPath(); c.arc(578, 396, 28, 0, 7); c.fill();
+    rrect(c, 622, 372, 90, 48, 24); c.fillStyle = c2; c.fill();
+    rrect(c, 728, 368, 56, 56, RAD(14)); c.fillStyle = dark; c.fill();
+    rrect(c, 800, 368, 80, 56, RAD(28)); c.strokeStyle = c1; c.lineWidth = 3; c.stroke();
+    c.fillStyle = '#94a3b8'; c.font = '700 11px Inter, sans-serif'; c.fillText(t('mb.type').toUpperCase(), 544, 462);
+    c.fillStyle = '#1f2937'; c.font = '700 34px ' + FF; c.fillText('Aa Bb Cc 123', 544, 504);
+    c.fillStyle = '#94a3b8'; c.font = '700 11px Inter, sans-serif'; c.fillText(t('mb.icons').toUpperCase(), 760, 462);
+    c.font = '32px sans-serif'; c.fillStyle = '#000'; ['🚇', '🎫', '🗺️', '📍'].forEach((e, i) => c.fillText(e, 760 + i * 48, 506));
+  }
+
+  /* =================== STAGE 02 · INFORMATION ARCHITECTURE =================== */
+  const iaCv = $('iaCv'), ictx = iaCv.getContext('2d');
+  function drawIA() {
+    const c = ictx, [c1] = palette(), home = S.home;
+    c.fillStyle = '#f8fafc'; c.fillRect(0, 0, 1000, 600);
+    c.fillStyle = '#64748b'; c.font = '700 12px Inter, sans-serif'; c.textAlign = 'left'; c.fillText(t('ia.title'), 24, 32);
+    const box = (x, y, w, h, label, fill, stroke, color) => {
+      rrect(c, x - w / 2, y - h / 2, w, h, 12); c.fillStyle = fill; c.fill(); c.strokeStyle = stroke; c.lineWidth = 2.5; c.stroke();
+      c.fillStyle = color; c.textAlign = 'center'; c.font = '700 15px Inter, sans-serif'; c.fillText(label, x, y + 5); c.textAlign = 'left';
+    };
+    const line = (x1, y1, x2, y2) => { c.strokeStyle = '#94a3b8'; c.lineWidth = 3; c.beginPath(); c.moveTo(x1, y1); c.lineTo(x1, (y1 + y2) / 2); c.lineTo(x2, (y1 + y2) / 2); c.lineTo(x2, y2); c.stroke(); };
+    const others = ['map', 'ticket', 'routes'].filter((k) => k !== home);
+    const xs = [500, 230, 770];
+    line(500, 100, 500, 175);
+    others.forEach((k, i) => line(500, 235, xs[i + 1], 330));
+    box(500, 75, 190, 50, t('ia.launch'), '#e2e8f0', '#94a3b8', '#334155');
+    box(500, 205, 250, 60, t('ia.home') + ' · ' + t('scr.' + home), c1, c1, '#fff');
+    [home].concat(others).forEach((k, i) => {
+      const x = i === 0 ? 500 : xs[i], y = i === 0 ? 205 : 360;
+      if (i > 0) box(x, y, 210, 56, t('scr.' + k), '#fff', '#64748b', '#1f2937');
+      const yy = i === 0 ? 250 : 405;
+      c.fillStyle = '#64748b'; c.font = '13px Inter, sans-serif'; c.textAlign = 'center'; c.fillText(t('ia.' + k), x, yy); c.textAlign = 'left';
+    });
+    // bottom navigation
+    c.fillStyle = '#94a3b8'; c.font = '700 11px Inter, sans-serif'; c.fillText(t('ia.nav').toUpperCase(), 270, 478);
+    rrect(c, 270, 490, 460, 60, 30); c.fillStyle = '#fff'; c.fill(); c.strokeStyle = '#cbd5e1'; c.lineWidth = 2; c.stroke();
+    ['map', 'ticket', 'routes'].forEach((k, i) => {
+      const x = 345 + i * 155; rrect(c, x - 55, 500, 110, 40, 20);
+      c.fillStyle = k === home ? c1 : '#f1f5f9'; c.fill();
+      c.fillStyle = k === home ? '#fff' : '#475569'; c.font = '600 14px Inter, sans-serif'; c.textAlign = 'center'; c.fillText(t('scr.' + k), x, 525); c.textAlign = 'left';
+    });
+    const taps = home === 'ticket' ? 0 : 1;
+    setStatus($('iaStatus'), taps === 0, taps === 0 ? t('ia.taps0') : t('ia.taps1', taps));
+  }
+
+  /* =================== STAGE 03 · WIREFRAMING & SKETCHING =================== */
+  const wire = $('wire'), wctx = wire.getContext('2d');
+  let wseed = 11;
+  const wr = (j) => { wseed = (wseed * 16807) % 2147483647; return ((wseed - 1) / 2147483646 - 0.5) * 2 * j; };
+  function wline(c, x1, y1, x2, y2) {
+    const j = S.sketch ? 2.2 : 0; c.beginPath(); c.moveTo(x1 + wr(j), y1 + wr(j));
+    if (S.sketch) c.quadraticCurveTo((x1 + x2) / 2 + wr(j * 1.5), (y1 + y2) / 2 + wr(j * 1.5), x2 + wr(j), y2 + wr(j)); else c.lineTo(x2, y2);
+    c.stroke();
+  }
+  function wrect(c, x, y, w, h, fill) {
+    if (fill) { c.fillStyle = fill; c.fillRect(x, y, w, h); }
+    const passes = S.sketch ? 2 : 1;
+    for (let p = 0; p < passes; p++) { wline(c, x, y, x + w, y); wline(c, x + w, y, x + w, y + h); wline(c, x + w, y + h, x, y + h); wline(c, x, y + h, x, y); }
+  }
+  const WFONT = () => (S.sketch ? '"Segoe Print", "Comic Sans MS", "Bradley Hand", cursive' : 'Inter, sans-serif');
+  function wireScreen(c, x, y, kind, hl) {
+    const w = 240, h = 460;
+    c.fillStyle = '#fafaf9'; rrect(c, x, y, w, h, 20); c.fill();
+    c.strokeStyle = hl ? '#4f46e5' : '#6b7280'; c.lineWidth = hl ? 3.5 : 2; wrect(c, x, y, w, h);
+    c.strokeStyle = '#6b7280'; c.lineWidth = 1.6;
+    const box = (bx, by, bw, bh, label, cross) => {
+      wrect(c, x + bx, y + by, bw, bh);
+      if (cross) { wline(c, x + bx, y + by, x + bx + bw, y + by + bh); wline(c, x + bx + bw, y + by, x + bx, y + by + bh); }
+      if (label) { c.fillStyle = '#374151'; c.font = '600 12px ' + WFONT(); c.textAlign = 'center'; c.fillText(label, x + bx + bw / 2, y + by + bh / 2 + 4); c.textAlign = 'left'; }
+    };
+    box(14, 14, w - 28, 30, t('wf.header') + ' · ' + t('scr.' + kind).toUpperCase());
+    if (kind === 'map') {
+      box(14, 56, w - 28, 34, t('wf.search')); box(14, 100, w - 28, 240, t('wf.map'), true);
+      box(14, 352, w - 28, 42, t('wf.get')); box(14, 404, (w - 36) / 2, 40, t('scr.routes')); box(22 + (w - 36) / 2, 404, (w - 36) / 2, 40, t('scr.ticket'));
+    } else if (kind === 'ticket') {
+      box(14, 56, w - 28, 40, t('wf.passenger')); box(40, 108, w - 80, w - 80, 'QR', true);
+      box(14, 108 + w - 68, w - 28, 36, t('wf.zone')); box(14, 404, w - 28, 40, t('wf.back'));
+    } else {
+      for (let i = 0; i < 5; i++) box(14, 56 + i * 64, w - 28, 54, t('wf.route', i + 1));
+      box(14, 404, w - 28, 40, t('wf.back'));
+    }
+  }
+  function drawWire() {
+    const c = wctx, home = S.home;
+    wseed = 11;
+    c.fillStyle = S.sketch ? '#fdfaf3' : '#f3f4f6'; c.fillRect(0, 0, 1000, 600);
+    if (S.sketch) { c.strokeStyle = 'rgba(120,150,200,.18)'; c.lineWidth = 1; for (let i = 0; i < 1000; i += 25) { c.beginPath(); c.moveTo(i, 0); c.lineTo(i, 600); c.stroke(); } for (let i = 0; i < 600; i += 25) { c.beginPath(); c.moveTo(0, i); c.lineTo(1000, i); c.stroke(); } }
+    c.fillStyle = '#6b7280'; c.font = '700 12px Inter, sans-serif'; c.fillText(t('wf.title'), 24, 32);
+    const order = [home].concat(['map', 'ticket', 'routes'].filter((k) => k !== home));
+    order.forEach((k, i) => {
+      const x = 40 + i * 320;
+      wireScreen(c, x, 60, k, i === 0);
+      c.fillStyle = i === 0 ? '#4f46e5' : '#6b7280'; c.font = '700 13px ' + WFONT(); c.textAlign = 'center';
+      c.fillText(i === 0 ? t('wf.homelbl') + ': ' + t('scr.' + k).toUpperCase() : t('scr.' + k).toUpperCase(), x + 120, 548);
+      if (i < 2) { c.strokeStyle = '#6b7280'; c.lineWidth = 2.5; wline(c, x + 252, 290, x + 306, 290); wline(c, x + 306, 290, x + 297, 283); wline(c, x + 306, 290, x + 297, 297); }
+      c.textAlign = 'left';
+    });
+    const taps = home === 'ticket' ? 0 : 1;
+    if (S.notes) { c.fillStyle = '#b45309'; c.font = '13px ' + WFONT(); c.fillText(t('wf.taps', taps), 24, 585); }
+    setStatus($('wireStatus'), taps === 0, taps === 0 ? t('wf.status0') : t('wf.status1', taps));
+  }
+  /* sketch of a car dashboard for the automotive analogy */
+  function drawAutoWire() {
+    const cv = $('autoWire'), c = cv.getContext('2d'); S.sketch = S.sketch; wseed = 5;
+    const keep = S.sketch; S.sketch = true;
+    c.fillStyle = '#fdfaf3'; c.fillRect(0, 0, 600, 400); c.strokeStyle = '#6b7280'; c.lineWidth = 2;
+    const poly = (pts) => { for (let i = 0; i < pts.length; i++) { const a = pts[i], b = pts[(i + 1) % pts.length]; wline(c, a[0], a[1], b[0], b[1]); wline(c, a[0], a[1], b[0], b[1]); } };
+    poly([[40, 300], [90, 70], [510, 70], [560, 300]]);               // windscreen
+    poly([[20, 300], [580, 300], [590, 340], [10, 340]]);              // dash top
+    wrect(c, 120, 255, 100, 38); wrect(c, 250, 245, 230, 48);          // cluster + wide screen
+    c.beginPath(); c.ellipse(170, 330, 70, 40, 0, 0, 7); c.stroke(); c.beginPath(); c.ellipse(170, 330, 62, 33, 0, 0, 7); c.stroke();
+    wrect(c, 270, 305, 110, 85); wrect(c, 390, 305, 40, 85);           // console
+    poly([[60, 345], [150, 345], [140, 400], [40, 400]]); poly([[450, 345], [560, 345], [575, 400], [460, 400]]);
+    c.fillStyle = '#6b7280'; c.font = '600 12px "Segoe Print","Comic Sans MS",cursive'; c.fillText('cluster', 130, 278); c.fillText('infotainment', 320, 274);
+    S.sketch = keep;
+  }
+
+  /* =================== STAGE 04 · VISUAL MOCKUP =================== */
+  const mock = mkCanvas(400, 800), mctx = mock.getContext('2d');          // ticket screen
+  const mapCv = mkCanvas(400, 800), routesCv = mkCanvas(400, 800);
+  const phoneCv = mkCanvas(400, 800), pctx = phoneCv.getContext('2d');     // what the phone / photo shows
+  const mockView = $('mockView'), vctx = mockView.getContext('2d');
+  let current = 'map', mockVersion = 0;
+  const rr = (c, x, y, w, h, r) => rrect(c, x, y, w, h, RAD(r));
+  const TABS = [['map', '🗺️'], ['ticket', '🎫'], ['routes', '🚇']];
   function drawTabBar(c, active) {
     const [c1] = palette();
     c.fillStyle = '#ffffff'; c.fillRect(0, 724, 400, 76);
     c.fillStyle = '#e2e8f0'; c.fillRect(0, 724, 400, 1.5);
-    TABS.forEach(([k, ic, label], i) => {
+    TABS.forEach(([k, ic], i) => {
       const cx = 400 / 6 + i * (400 / 3);
-      c.textAlign = 'center';
-      c.globalAlpha = k === active ? 1 : 0.5;
+      c.textAlign = 'center'; c.globalAlpha = k === active ? 1 : 0.5;
       c.font = '22px sans-serif'; c.fillStyle = '#000'; c.fillText(ic, cx, 756);
-      c.font = (k === active ? '700 ' : '500 ') + '12px Inter, sans-serif';
-      c.fillStyle = k === active ? c1 : '#64748b'; c.fillText(label, cx, 776);
-      c.globalAlpha = 1;
+      c.font = (k === active ? '700 ' : '500 ') + '12px ' + FF;
+      c.fillStyle = k === active ? c1 : '#64748b'; c.fillText(t('scr.' + k), cx, 776); c.globalAlpha = 1;
     });
     c.textAlign = 'left';
   }
@@ -455,99 +702,120 @@
     c.fillStyle = bg; c.fillRect(0, 0, 400, 800);
     const g = c.createLinearGradient(0, 0, 400, h); g.addColorStop(0, c1); g.addColorStop(1, c2);
     c.fillStyle = g; c.fillRect(0, 0, 400, h);
-    c.fillStyle = 'rgba(255,255,255,.95)'; c.font = '600 15px Inter, sans-serif';
+    c.fillStyle = 'rgba(255,255,255,.95)'; c.font = '600 15px ' + FF;
     c.textAlign = 'left'; c.fillText('9:41', 24, 32); c.textAlign = 'right'; c.fillText('5G ▮▮▮', 376, 32);
-    c.textAlign = 'left'; c.font = '700 28px Inter, sans-serif'; c.fillText(title, 28, 84);
-    c.font = '400 15px Inter, sans-serif'; c.fillText(sub, 28, 110);
+    c.textAlign = 'left'; c.font = '700 28px ' + FF; c.fillText(title, 28, 84);
+    c.font = '400 15px ' + FF; c.fillText(sub, 28, 110);
   }
   function ctaButton(c, y, text) {
     const [c1, c2] = palette();
     const g = c.createLinearGradient(0, 0, 400, 0); g.addColorStop(0, c1); g.addColorStop(1, c2);
-    c.fillStyle = g; rrect(c, 24, y, 352, 56, 28); c.fill();
-    c.fillStyle = '#fff'; c.textAlign = 'center'; c.font = '700 17px Inter, sans-serif'; c.fillText(text, 200, y + 35);
-    c.textAlign = 'left';
+    c.fillStyle = g; rr(c, 24, y, 352, 56, 28); c.fill();
+    c.fillStyle = '#fff'; c.textAlign = 'center'; c.font = '700 17px ' + FF; c.fillText(text, 200, y + 35); c.textAlign = 'left';
   }
-  function drawMap() {
-    const c = mapCv.getContext('2d'), [c1] = palette();
-    const [from, to] = $('route').value.split(' → ');
-    drawHeader(c, 'Plan your trip', 'Where to today?', 200);
+  function drawMapOn(c) {
+    const [c1] = palette(), [from, to] = routes()[S.route];
+    drawHeader(c, t('ui.plan'), t('ui.where'), 200);
     c.shadowColor = 'rgba(15,23,42,.2)'; c.shadowBlur = 14; c.shadowOffsetY = 6;
-    c.fillStyle = '#fff'; rrect(c, 24, 140, 352, 52, 26); c.fill(); c.shadowColor = 'transparent';
-    c.fillStyle = '#64748b'; c.font = '500 15px Inter, sans-serif'; c.fillText('🔍  ' + to, 48, 172);
-    // map
+    c.fillStyle = '#fff'; rr(c, 24, 140, 352, 52, 26); c.fill(); c.shadowColor = 'transparent';
+    c.fillStyle = '#64748b'; c.font = '500 15px ' + FF; c.fillText('🔍  ' + to, 48, 172);
     c.fillStyle = '#e2e8f0'; c.fillRect(0, 214, 400, 330);
     c.fillStyle = '#bfdbfe'; c.beginPath(); c.moveTo(0, 470); c.bezierCurveTo(120, 420, 240, 520, 400, 440); c.lineTo(400, 544); c.lineTo(0, 544); c.fill();
     c.strokeStyle = '#fff'; c.lineWidth = 10;
     [[0, 280, 400, 300], [0, 380, 400, 360], [90, 214, 120, 544], [270, 214, 250, 544]].forEach(([a, b, d, e]) => { c.beginPath(); c.moveTo(a, b); c.lineTo(d, e); c.stroke(); });
-    c.fillStyle = '#bbf7d0'; rrect(c, 290, 300, 80, 50, 10); c.fill();
+    c.fillStyle = '#bbf7d0'; rr(c, 290, 300, 80, 50, 10); c.fill();
     c.strokeStyle = c1; c.lineWidth = 7; c.lineJoin = 'round'; c.beginPath();
     c.moveTo(60, 400); c.lineTo(110, 340); c.lineTo(200, 330); c.lineTo(250, 270); c.lineTo(340, 255); c.stroke();
-    [[60, 400], [110, 340], [200, 330], [250, 270], [340, 255]].forEach(([x, y], i, a) => {
-      c.fillStyle = '#fff'; c.beginPath(); c.arc(x, y, 9, 0, 7); c.fill();
-      c.strokeStyle = c1; c.lineWidth = 4; c.stroke();
-    });
-    c.fillStyle = '#0f172a'; c.font = '700 12px Inter, sans-serif'; c.fillText(from, 34, 428); c.fillText(to, 282, 242);
+    [[60, 400], [110, 340], [200, 330], [250, 270], [340, 255]].forEach(([x, y]) => { c.fillStyle = '#fff'; c.beginPath(); c.arc(x, y, 9, 0, 7); c.fill(); c.strokeStyle = c1; c.lineWidth = 4; c.stroke(); });
+    c.fillStyle = '#0f172a'; c.font = '700 12px ' + FF; c.fillText(from, 34, 428); c.textAlign = 'right'; c.fillText(to, 372, 242); c.textAlign = 'left';
     c.shadowColor = 'rgba(15,23,42,.25)'; c.shadowBlur = 14; c.shadowOffsetY = 4;
-    c.fillStyle = '#fff'; rrect(c, 24, 470, 352, 62, 14); c.fill(); c.shadowColor = 'transparent';
-    c.fillStyle = '#334155'; c.font = '700 15px Inter, sans-serif'; c.fillText('Next train in 3 min', 44, 497);
-    c.fillStyle = '#64748b'; c.font = '13px Inter, sans-serif'; c.fillText('24 min · 8 stops · Zone 1–3', 44, 518);
-    ctaButton(c, 566, 'Get ticket');
-    c.fillStyle = '#64748b'; c.font = '13px Inter, sans-serif'; c.textAlign = 'center';
-    c.fillText('Tap "Get ticket" to continue', 200, 648); c.textAlign = 'left';
+    c.fillStyle = '#fff'; rr(c, 24, 470, 352, 62, 14); c.fill(); c.shadowColor = 'transparent';
+    c.fillStyle = '#334155'; c.font = '700 15px ' + FF; c.fillText(t('ui.next'), 44, 497);
+    c.fillStyle = '#64748b'; c.font = '13px ' + FF; c.fillText(t('ui.stops'), 44, 518);
+    ctaButton(c, 566, t('ui.get'));
+    c.fillStyle = '#64748b'; c.font = '13px ' + FF; c.textAlign = 'center'; c.fillText(t('ui.tapget'), 200, 648); c.textAlign = 'left';
     drawTabBar(c, 'map');
   }
-  function drawRoutes() {
-    const c = routesCv.getContext('2d'), [c1, c2] = palette(), sel = $('route').selectedIndex;
-    drawHeader(c, 'Routes', 'Pick a line to ride', 150);
-    ROUTES.forEach((r, i) => {
-      const y = 176 + i * 150, [a, b] = r.split(' → ');
+  function drawTicketOn(c) {
+    const [c1, c2, bg] = palette(), [from, to] = routes()[S.route], W = 400, H = 800;
+    seed = S.qrSeed;
+    c.clearRect(0, 0, W, H); c.fillStyle = bg; c.fillRect(0, 0, W, H);
+    const g = c.createLinearGradient(0, 0, W, 230); g.addColorStop(0, c1); g.addColorStop(1, c2);
+    c.fillStyle = g; c.fillRect(0, 0, W, 230);
+    c.fillStyle = 'rgba(255,255,255,.95)'; c.font = '600 15px ' + FF;
+    c.textAlign = 'left'; c.fillText('9:41', 24, 32); c.textAlign = 'right'; c.fillText('5G ▮▮▮', W - 24, 32);
+    c.textAlign = 'left'; c.font = '700 28px ' + FF; c.fillText(t('brand'), 28, 100);
+    c.font = '400 15px ' + FF; c.fillText(t('ui.single'), 28, 128);
+    c.shadowColor = 'rgba(15,23,42,.2)'; c.shadowBlur = 18; c.shadowOffsetY = 8;
+    c.fillStyle = '#fff'; rr(c, 24, 170, W - 48, 100, 16); c.fill(); c.shadowColor = 'transparent';
+    c.fillStyle = '#334155'; c.font = '700 21px ' + FF; c.fillText(t('ui.hello', userName()), 44, 212);
+    c.fillStyle = '#64748b'; c.font = '500 14px ' + FF; c.fillText(from + '  →  ' + to, 44, 244);
+    c.shadowColor = 'rgba(15,23,42,.2)'; c.shadowBlur = 18; c.shadowOffsetY = 8;
+    c.fillStyle = '#fff'; rr(c, 24, 296, W - 48, 340, 20); c.fill(); c.shadowColor = 'transparent';
+    const cells = 13, qr = 260, cs = qr / cells, qx = (W - qr) / 2, qy = 326;
+    c.fillStyle = '#0f172a';
+    const fin = (i, j) => (i < 4 && j < 4) || (i > cells - 5 && j < 4) || (i < 4 && j > cells - 5);
+    for (let i = 0; i < cells; i++) for (let j = 0; j < cells; j++) { if (fin(i, j)) continue; if (rand() > 0.5) c.fillRect(qx + i * cs, qy + j * cs, cs - 1, cs - 1); }
+    [[0, 0], [cells - 3, 0], [0, cells - 3]].forEach(([i, j]) => {
+      const x = qx + i * cs, y = qy + j * cs;
+      c.fillStyle = '#0f172a'; c.fillRect(x, y, cs * 3, cs * 3); c.fillStyle = '#fff'; c.fillRect(x + cs * .5, y + cs * .5, cs * 2, cs * 2);
+      c.fillStyle = '#0f172a'; c.fillRect(x + cs, y + cs, cs, cs);
+    });
+    c.fillStyle = '#64748b'; c.font = '500 14px ' + FF; c.textAlign = 'center'; c.fillText(t('ui.scan'), W / 2, 622);
+    const bgd = c.createLinearGradient(0, 0, W, 0); bgd.addColorStop(0, c1); bgd.addColorStop(1, c2);
+    c.fillStyle = bgd; rr(c, 24, 650, W - 48, 52, 26); c.fill();
+    c.fillStyle = '#ffffff'; c.font = '700 17px ' + FF; c.fillText(t('ui.wallet'), W / 2, 683);
+    drawTabBar(c, 'ticket'); c.textAlign = 'left';
+  }
+  function drawRoutesOn(c) {
+    const [c1, c2] = palette(), sel = S.route, list = routes();
+    drawHeader(c, t('scr.routes'), t('ui.pick'), 150);
+    list.forEach(([a, b], i) => {
+      const y = 176 + i * 150;
       c.shadowColor = 'rgba(15,23,42,.15)'; c.shadowBlur = 14; c.shadowOffsetY = 5;
-      c.fillStyle = '#fff'; rrect(c, 24, y, 352, 128, 16); c.fill(); c.shadowColor = 'transparent';
-      c.strokeStyle = i === sel ? c1 : '#e2e8f0'; c.lineWidth = i === sel ? 3 : 1.5; rrect(c, 24, y, 352, 128, 16); c.stroke();
-      c.fillStyle = [c1, c2, '#0891b2'][i]; rrect(c, 24, y, 10, 128, 5); c.fill();
-      c.fillStyle = '#334155'; c.font = '700 17px Inter, sans-serif'; c.fillText(a, 52, y + 36);
-      c.fillStyle = '#94a3b8'; c.font = '600 14px Inter, sans-serif'; c.fillText('↓', 52, y + 58);
-      c.fillStyle = '#334155'; c.font = '700 17px Inter, sans-serif'; c.fillText(b, 52, y + 82);
-      c.fillStyle = '#64748b'; c.font = '13px Inter, sans-serif'; c.fillText('Every ' + (5 + i * 2) + ' min · ' + (24 + i * 9) + ' min trip', 52, y + 108);
-      if (i === sel) { c.fillStyle = c1; rrect(c, 286, y + 14, 74, 26, 13); c.fill(); c.fillStyle = '#fff'; c.font = '700 12px Inter, sans-serif'; c.textAlign = 'center'; c.fillText('Selected', 323, y + 32); c.textAlign = 'left'; }
+      c.fillStyle = '#fff'; rr(c, 24, y, 352, 128, 16); c.fill(); c.shadowColor = 'transparent';
+      c.strokeStyle = i === sel ? c1 : '#e2e8f0'; c.lineWidth = i === sel ? 3 : 1.5; rr(c, 24, y, 352, 128, 16); c.stroke();
+      c.fillStyle = [c1, c2, '#0891b2'][i]; rr(c, 24, y, 10, 128, 5); c.fill();
+      c.fillStyle = '#334155'; c.font = '700 17px ' + FF; c.fillText(a, 52, y + 36);
+      c.fillStyle = '#94a3b8'; c.font = '600 14px ' + FF; c.fillText('↓', 52, y + 58);
+      c.fillStyle = '#334155'; c.font = '700 17px ' + FF; c.fillText(b, 52, y + 82);
+      c.fillStyle = '#64748b'; c.font = '13px ' + FF; c.fillText(t('ui.every', 5 + i * 2, 24 + i * 9), 52, y + 108);
+      if (i === sel) { c.fillStyle = c1; rr(c, 276, y + 14, 84, 26, 13); c.fill(); c.fillStyle = '#fff'; c.font = '700 12px ' + FF; c.textAlign = 'center'; c.fillText(t('ui.selected'), 318, y + 32); c.textAlign = 'left'; }
     });
     drawTabBar(c, 'routes');
   }
-
-  /* ---- clickable regions (in 400×800 screen coordinates) ---- */
+  const SCREEN_CV = { map: mapCv, ticket: mock, routes: routesCv };
   const tabHot = [['map', 0], ['ticket', 133], ['routes', 266]].map(([go, x]) => ({ x, y: 724, w: x === 266 ? 134 : 133, h: 76, go }));
   const HOT = {
-    map:    [{ x: 24, y: 566, w: 352, h: 56, go: 'ticket', label: 'Get ticket' }].concat(tabHot),
-    ticket: [{ x: 24, y: 650, w: 352, h: 52, toast: 'Added to wallet ✓' }].concat(tabHot),
+    map:    [{ x: 24, y: 566, w: 352, h: 56, go: 'ticket' }].concat(tabHot),
+    ticket: [{ x: 24, y: 650, w: 352, h: 52, toast: 'ui.walletok' }].concat(tabHot),
     routes: [0, 1, 2].map((i) => ({ x: 24, y: 176 + i * 150, w: 352, h: 128, route: i, go: 'ticket' })).concat(tabHot)
   };
-  const SCREEN_CV = { map: mapCv, ticket: mock, routes: routesCv };
-  function hitTest(screen, x, y) {
-    return HOT[screen].find((h) => x >= h.x && x <= h.x + h.w && y >= h.y && y <= h.y + h.h) || null;
-  }
-  function activate(h, screen) {
-    if (h.route !== undefined) { $('route').selectedIndex = h.route; drawMock(); log('<b>prototype</b> route → ' + ROUTES[h.route]); }
-    if (h.toast) { log('<b>prototype</b> ' + h.toast); flash(h.toast); }
+  function hitTest(screen, x, y) { return HOT[screen].find((h) => x >= h.x && x <= h.x + h.w && y >= h.y && y <= h.y + h.h) || null; }
+  function activate(h) {
+    if (h.route !== undefined) { S.route = h.route; $('route').selectedIndex = h.route; refreshContent(); }
+    if (h.toast) flash(t(h.toast));
     if (h.go) navigate(h.go);
   }
-  function navigate(go) {
-    if (go === current) return;
-    current = go; composeAll(); log('<b>prototype</b> screen → ' + go);
-  }
+  function navigate(go) { if (go === current) return; current = go; composeAll(); }
   let toastText = '', toastUntil = 0;
-  function flash(t) { toastText = t; toastUntil = performance.now() + 1200; composeAll(); setTimeout(composeAll, 1250); }
-
+  function flash(txt) { toastText = txt; toastUntil = performance.now() + 1200; composeAll(); setTimeout(composeAll, 1250); }
+  function drawMock() {
+    drawTicketOn(mctx);
+    const ratio = contrast(palette()[0], '#ffffff');
+    setStatus($('uiStatus'), ratio >= 4.5, t('ui.contrast', ratio.toFixed(2), ratio >= 4.5 ? t('ui.pass') : t('ui.fail')));
+    composeAll();
+  }
   function composeAll() {
-    drawMap(); drawRoutes();
+    drawMapOn(mapCv.getContext('2d')); drawRoutesOn(routesCv.getContext('2d'));
     pctx.drawImage(SCREEN_CV[current], 0, 0);
     if (toastText && performance.now() < toastUntil) {
       pctx.fillStyle = 'rgba(15,23,42,.9)'; rrect(pctx, 60, 600, 280, 44, 22); pctx.fill();
-      pctx.fillStyle = '#fff'; pctx.font = '600 15px Inter, sans-serif'; pctx.textAlign = 'center'; pctx.fillText(toastText, 200, 628); pctx.textAlign = 'left';
+      pctx.fillStyle = '#fff'; pctx.font = '600 15px ' + FF; pctx.textAlign = 'center'; pctx.fillText(toastText, 200, 628); pctx.textAlign = 'left';
     }
-    // overview of all three screens
     const c = vctx;
     c.fillStyle = '#e2e8f0'; c.fillRect(0, 0, 1000, 600);
-    c.fillStyle = '#475569'; c.font = '600 14px Inter, sans-serif'; c.fillText('UI MOCKUPS · high fidelity, click to interact', 24, 34);
+    c.fillStyle = '#475569'; c.font = '700 12px Inter, sans-serif'; c.fillText(t('mv.title'), 24, 34);
     ['map', 'ticket', 'routes'].forEach((k, i) => {
       const x = 40 + i * 320, y = 70, w = 240, h = 480;
       c.save(); c.shadowColor = 'rgba(15,23,42,.3)'; c.shadowBlur = 24; c.shadowOffsetY = 10;
@@ -555,14 +823,14 @@
       c.save(); rrect(c, x, y, w, h, 22); c.clip(); c.drawImage(SCREEN_CV[k], x, y, w, h); c.restore();
       c.lineWidth = k === current ? 5 : 2; c.strokeStyle = k === current ? '#4f46e5' : '#94a3b8'; rrect(c, x, y, w, h, 22); c.stroke();
       c.fillStyle = k === current ? '#4f46e5' : '#64748b'; c.font = '700 13px Inter, sans-serif'; c.textAlign = 'center';
-      c.fillText((k === current ? '▶ ' : '') + k.toUpperCase() + (k === current ? ' · shown in simulation' : ''), x + w / 2, 578);
+      c.fillText((k === current ? '▶ ' : '') + t('scr.' + k).toUpperCase() + (k === current ? ' · ' + t('mv.insim') : ''), x + w / 2, 578);
       c.textAlign = 'left';
     });
     document.querySelectorAll('.scr').forEach((b) => b.classList.toggle('active', b.dataset.screen === current));
-    shotCtx2().drawImage(phoneCv, 0, 0);
+    const sc = $('shotCv'); if (sc) sc.getContext('2d').drawImage(phoneCv, 0, 0);
     mockVersion++;
+    scheduleDerived();
   }
-  function shotCtx2() { return $('shotCv').getContext('2d'); }
   mockView.addEventListener('click', (e) => {
     const r = mockView.getBoundingClientRect(), s = mockView.width / r.width;
     const px = (e.clientX - r.left) * s, py = (e.clientY - r.top) * s;
@@ -570,14 +838,185 @@
     if (i < 0 || i > 2 || lx < 0 || lx > 240 || py < 70 || py > 550) return;
     const k = ['map', 'ticket', 'routes'][i], sx = lx * 400 / 240, sy = (py - 70) * 800 / 480;
     const h = hitTest(k, sx, sy);
-    if (k !== current) { current = k; composeAll(); log('<b>mockup</b> viewing ' + k); }
-    if (h) activate(h, k);
+    if (k !== current) { current = k; composeAll(); }
+    if (h) activate(h);
   });
   document.querySelectorAll('.scr').forEach((b) => b.onclick = () => navigate(b.dataset.screen));
-  ['theme', 'pname', 'route'].forEach((id) => $(id).addEventListener('input', drawMock));
-  $('theme').addEventListener('change', () => log('<b>ui</b> palette ' + $('theme').value));
-  $('btnQR').onclick = () => { qrSeed = 1 + Math.floor(Math.random() * 99999); drawMock(); log('<b>ui</b> new QR payload generated'); };
 
+  /* =================== WARPED SCREEN ON A PHOTO (2D canvas) =================== */
+  function tri(ctx, src, s, d) {
+    const [[x0, y0], [x1, y1], [x2, y2]] = s, [[u0, v0], [u1, v1], [u2, v2]] = d;
+    const den = x0 * (y1 - y2) + x1 * (y2 - y0) + x2 * (y0 - y1); if (!den) return;
+    const a = (u0 * (y1 - y2) + u1 * (y2 - y0) + u2 * (y0 - y1)) / den, b = (v0 * (y1 - y2) + v1 * (y2 - y0) + v2 * (y0 - y1)) / den;
+    const c2 = (u0 * (x2 - x1) + u1 * (x0 - x2) + u2 * (x1 - x0)) / den, d2 = (v0 * (x2 - x1) + v1 * (x0 - x2) + v2 * (x1 - x0)) / den;
+    const e = (u0 * (x1 * y2 - x2 * y1) + u1 * (x2 * y0 - x0 * y2) + u2 * (x0 * y1 - x1 * y0)) / den;
+    const f = (v0 * (x1 * y2 - x2 * y1) + v1 * (x2 * y0 - x0 * y2) + v2 * (x0 * y1 - x1 * y0)) / den;
+    const mx = (u0 + u1 + u2) / 3, my = (v0 + v1 + v2) / 3, ex = (p, m) => p + Math.sign(p - m) * 0.6;
+    ctx.save(); ctx.beginPath(); ctx.moveTo(ex(u0, mx), ex(v0, my)); ctx.lineTo(ex(u1, mx), ex(v1, my)); ctx.lineTo(ex(u2, mx), ex(v2, my)); ctx.closePath(); ctx.clip();
+    ctx.transform(a, b, c2, d2, e, f); ctx.drawImage(src, 0, 0); ctx.restore();
+  }
+  function drawWarped(ctx, src, quad, cut) {
+    const H = solveH([[0, 0], [400, 0], [400, 800], [0, 800]], quad), NX = 10, NY = 20;
+    const P = (u, v) => apply(H, u * 400 / NX, v * 800 / NY);
+    ctx.save();
+    try { ctx.filter = 'brightness(0.95)'; } catch (e) { /* ignore */ }
+    for (let j = 0; j < NY; j++) for (let i = 0; i < NX; i++) {
+      const s00 = [i * 400 / NX, j * 800 / NY], s10 = [(i + 1) * 400 / NX, j * 800 / NY], s01 = [i * 400 / NX, (j + 1) * 800 / NY], s11 = [(i + 1) * 400 / NX, (j + 1) * 800 / NY];
+      const d00 = P(i, j), d10 = P(i + 1, j), d01 = P(i, j + 1), d11 = P(i + 1, j + 1);
+      tri(ctx, src, [s00, s10, s01], [d00, d10, d01]); tri(ctx, src, [s10, s11, s01], [d10, d11, d01]);
+    }
+    ctx.restore();
+    if (cut) {
+      const pts = [[cut.l, cut.t], [cut.l + cut.w, cut.t], [cut.l + cut.w, cut.t + cut.h], [cut.l, cut.t + cut.h]].map(([x, y]) => apply(H, x, y));
+      ctx.fillStyle = '#050507'; ctx.beginPath(); pts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath(); ctx.fill();
+    }
+  }
+  function drawComposite(ctx, dx, dy, dw, dh, zoom) {
+    const img = $('photoImg');
+    if (!img.complete || !img.naturalWidth) { ctx.fillStyle = '#cbd5e1'; ctx.fillRect(dx, dy, dw, dh); return; }
+    const iw = img.naturalWidth, ih = img.naturalHeight, q = scn.q;
+    const cx = (q[0][0] + q[1][0] + q[2][0] + q[3][0]) / 4 * iw, cy = (q[0][1] + q[1][1] + q[2][1] + q[3][1]) / 4 * ih;
+    let ch = ih * zoom, cw = ch * dw / dh; if (cw > iw) { cw = iw; ch = cw * dh / dw; }
+    const sx = Math.max(0, Math.min(iw - cw, cx - cw / 2)), sy = Math.max(0, Math.min(ih - ch, cy - ch / 2)), k = dw / cw;
+    ctx.save(); ctx.beginPath(); ctx.rect(dx, dy, dw, dh); ctx.clip();
+    ctx.drawImage(img, sx, sy, cw, ch, dx, dy, dw, dh);
+    drawWarped(ctx, phoneCv, q.map(([fx, fy]) => [dx + (fx * iw - sx) * k, dy + (fy * ih - sy) * k]), scn.cut);
+    ctx.restore();
+  }
+
+  /* =================== STAGE 05 · VARIANT EXPLORER =================== */
+  let varSeed = 0, variantList = [];
+  function withStyle(v, fn) {
+    const o = { p: S.palette, s: S.shape, f: S.font };
+    S.palette = v.palette; S.shape = v.shape; S.font = v.font; syncStyle();
+    try { fn(); } finally { S.palette = o.p; S.shape = o.s; S.font = o.f; syncStyle(); }
+  }
+  function genVariants() {
+    const p = $('aiPrompt').value.toLowerCase(), has = (...w) => w.some((x) => p.indexOf(x) >= 0);
+    let pool = [];
+    if (has('warm', 'cald', 'chaud', 'sunset', 'apus')) pool.push('sunset', 'graphite');
+    if (has('calm', 'liniști', 'forest', 'verde', 'vert', 'nature')) pool.push('forest', 'indigo');
+    if (has('bold', 'îndrăzneț', 'indraznet', 'audacieux', 'vibrant')) pool.push('sunset', 'indigo');
+    if (has('elegant', 'premium', 'luxe', 'sobru', 'sobre', 'graphite', 'grafit')) pool.push('graphite');
+    if (has('friendly', 'prieten', 'convivial', 'playful', 'jucăuș', 'ludique')) pool.push('indigo', 'sunset');
+    if (has('futur')) pool.push('graphite', 'indigo');
+    if (!pool.length) pool = ['indigo', 'sunset', 'forest', 'graphite'];
+    const sharp = has('sharp', 'angular', 'anguleux', 'precis', 'futur'), round = has('round', 'rotund', 'arrondi', 'soft', 'blând', 'doux');
+    const serifHint = has('elegant', 'premium', 'serif', 'luxe', 'clasic', 'classique'), roundFont = has('friendly', 'prieten', 'convivial', 'playful', 'jucăuș', 'ludique');
+    varSeed++; variantList = [];
+    for (let i = 0; i < 6; i++) {
+      const k = i + varSeed;
+      variantList.push({
+        palette: pool[k % pool.length],
+        shape: sharp ? 'sharp' : round ? 'round' : (k % 2 ? 'sharp' : 'round'),
+        font: serifHint ? (k % 2 ? 'serif' : 'sans') : roundFont ? (k % 2 ? 'round' : 'sans') : ['sans', 'serif', 'round'][k % 3]
+      });
+    }
+    renderVariants();
+  }
+  function renderVariants() {
+    const box = $('variants'); box.innerHTML = '';
+    const tmp = mkCanvas(400, 800);
+    variantList.forEach((v, i) => {
+      const cv = mkCanvas(160, 320); cv.title = t('var.n', i + 1);
+      withStyle(v, () => { drawMapOn(tmp.getContext('2d')); });
+      const x = cv.getContext('2d'); x.drawImage(tmp, 0, 0, 160, 320);
+      cv.onclick = () => { S.palette = v.palette; S.shape = v.shape; S.font = v.font; syncControls(); redrawAll(); setStatus($('interp'), true, t('var.adopted', i + 1, t('pal.' + v.palette))); };
+      box.appendChild(cv);
+    });
+  }
+
+  /* =================== STAGE 06 · PRESENTATION BOARD =================== */
+  const boardCv = $('boardCv'), bctx = boardCv.getContext('2d');
+  let skipPhoto = false;
+  function drawBoard() {
+    const c = bctx, [c1, c2, bg, dark] = palette();
+    const g = c.createLinearGradient(0, 0, 1000, 600); g.addColorStop(0, bg); g.addColorStop(1, '#ffffff');
+    c.fillStyle = g; c.fillRect(0, 0, 1000, 600);
+    c.textAlign = 'left'; c.fillStyle = c1; c.font = '700 13px Inter, sans-serif'; c.fillText(t('bd.title').toUpperCase(), 40, 56);
+    c.fillStyle = dark; c.font = '700 54px ' + FF; c.fillText(t('brand'), 40, 118);
+    c.fillStyle = '#64748b'; c.font = '400 16px ' + FF; c.fillText(t('bd.tag'), 40, 148);
+    // palette
+    c.fillStyle = '#94a3b8'; c.font = '700 11px Inter, sans-serif'; c.fillText(t('bd.palette').toUpperCase(), 40, 188);
+    [c1, c2, '#d4d4d8', dark].forEach((col, i) => { c.fillStyle = col; c.beginPath(); c.ellipse(62 + i * 56, 226, 21, 28, -0.15, 0, 7); c.fill(); });
+    // type + shape
+    c.fillStyle = '#94a3b8'; c.font = '700 11px Inter, sans-serif'; c.fillText(t('bd.type').toUpperCase(), 290, 188);
+    c.fillStyle = dark; c.font = '700 44px ' + FF; c.fillText('Aa', 290, 238);
+    c.fillStyle = '#94a3b8'; c.font = '700 11px Inter, sans-serif'; c.fillText(t('bd.shape').toUpperCase(), 380, 188);
+    rr(c, 380, 204, 52, 44, 16); c.fillStyle = c1; c.fill(); rr(c, 440, 204, 52, 44, 22); c.strokeStyle = c1; c.lineWidth = 3; c.stroke();
+    // mood chips
+    let mx = 40; MOODS.filter((m) => S.moods[m]).forEach((m) => { c.font = '600 12px ' + FF; const w = c.measureText(t('mood.' + m)).width + 22; rrect(c, mx, 270, w, 26, 13); c.fillStyle = c1; c.globalAlpha = 0.12; c.fill(); c.globalAlpha = 1; c.fillStyle = c1; c.fillText(t('mood.' + m), mx + 11, 288); mx += w + 8; });
+    // three screens
+    ['map', 'ticket', 'routes'].forEach((k, i) => {
+      const x = 40 + i * 152, y = 318, w = 136, h = 272;
+      c.save(); c.shadowColor = 'rgba(15,23,42,.3)'; c.shadowBlur = 18; c.shadowOffsetY = 8; c.fillStyle = '#fff'; rrect(c, x, y, w, h, 16); c.fill(); c.restore();
+      c.save(); rrect(c, x, y, w, h, 16); c.clip(); c.drawImage(SCREEN_CV[k], x, y, w, h); c.restore();
+      c.strokeStyle = '#111827'; c.lineWidth = 3; rrect(c, x, y, w, h, 16); c.stroke();
+    });
+    // photo composite
+    c.save(); c.shadowColor = 'rgba(15,23,42,.3)'; c.shadowBlur = 24; c.shadowOffsetY = 10; c.fillStyle = '#fff'; rrect(c, 520, 36, 440, 528, 22); c.fill(); c.restore();
+    c.save(); rrect(c, 520, 36, 440, 528, 22); c.clip();
+    if (skipPhoto) { c.fillStyle = '#cbd5e1'; c.fillRect(520, 36, 440, 528); } else drawComposite(c, 520, 36, 440, 528, 0.8);
+    c.restore();
+    c.fillStyle = '#94a3b8'; c.font = '11px Inter, sans-serif'; c.textAlign = 'right'; c.fillText(t('bd.footer'), 960, 588); c.textAlign = 'left';
+  }
+  $('btnBoard').onclick = () => {
+    const save = () => boardCv.toBlob((b) => { const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'visual-concept-board.png'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000); });
+    try { boardCv.toDataURL(); save(); } catch (e) { skipPhoto = true; drawBoard(); try { save(); } catch (e2) { /* ignore */ } skipPhoto = false; setTimeout(drawBoard, 50); }
+  };
+
+  /* =================== AUTOMOTIVE COMPARISON =================== */
+  function cover(ctx, src, w, h) {
+    const sw = src.width, sh = src.height, k = Math.max(w / sw, h / sh), dw = sw * k, dh = sh * k;
+    ctx.fillStyle = '#e5e7eb'; ctx.fillRect(0, 0, w, h); ctx.drawImage(src, (w - dw) / 2, (h - dh) / 2, dw, dh);
+  }
+  function renderCompare() {
+    const c1 = $('cmpCv1').getContext('2d'), c2 = $('cmpCv2').getContext('2d'), c3 = $('cmpCv3').getContext('2d'), c4 = $('cmpCv4').getContext('2d');
+    cover(c1, moodCv, 600, 400); cover(c2, wire, 600, 400); cover(c3, mockView, 600, 400);
+    c4.fillStyle = '#e5e7eb'; c4.fillRect(0, 0, 600, 400); drawComposite(c4, 0, 0, 600, 400, 0.85);
+  }
+  let derivedTimer = 0;
+  function scheduleDerived() { clearTimeout(derivedTimer); derivedTimer = setTimeout(() => { drawBoard(); renderCompare(); }, 60); }
+  document.querySelectorAll('.cmp-card').forEach((cd) => cd.addEventListener('click', () => goStep(+cd.dataset.go)));
+
+  /* =================== CONTROLS & REFRESH =================== */
+  function refreshContent() { drawMock(); }
+  function redrawAll() { syncStyle(); drawMood(); drawIA(); drawWire(); drawAutoWire(); drawMock(); }
+  function buildMoods() {
+    const box = $('moods'); box.innerHTML = '';
+    MOODS.forEach((m) => { const b = document.createElement('button'); b.className = 'mood' + (S.moods[m] ? ' active' : ''); b.textContent = t('mood.' + m);
+      b.onclick = () => { S.moods[m] = !S.moods[m]; b.classList.toggle('active', !!S.moods[m]); drawMood(); scheduleDerived(); }; box.appendChild(b); });
+  }
+  function buildPals() {
+    const box = $('pals'); box.innerHTML = '';
+    Object.keys(PAL).forEach((k) => { const b = document.createElement('button'); b.className = 'pal' + (S.palette === k ? ' active' : ''); b.dataset.pal = k;
+      b.innerHTML = '<i style="background:linear-gradient(135deg,' + PAL[k][0] + ',' + PAL[k][1] + ')"></i>' + t('pal.' + k);
+      b.onclick = () => { S.palette = k; syncControls(); redrawAll(); }; box.appendChild(b); });
+  }
+  function buildRouteSelect() {
+    const sel = $('route'); sel.innerHTML = '';
+    routes().forEach(([a, b], i) => { const o = document.createElement('option'); o.value = i; o.textContent = a + ' → ' + b; sel.appendChild(o); });
+    sel.selectedIndex = S.route;
+  }
+  function buildEnvChips() {
+    const box = $('envChips'); box.innerHTML = '';
+    [1, 2, 3, 4].forEach((n) => { const b = document.createElement('button'); b.className = 'chip'; b.textContent = t('env.' + n);
+      b.onclick = () => { $('envPrompt').value = t('envp.' + n); render3D(); }; box.appendChild(b); });
+  }
+  function syncControls() {
+    $('shape').value = S.shape; $('font').value = S.font; $('homeScreen').value = S.home; $('route').selectedIndex = S.route;
+    document.querySelectorAll('#pals .pal').forEach((b) => b.classList.toggle('active', b.dataset.pal === S.palette));
+  }
+  function suggestStyle() {
+    const votes = { palette: {}, shape: {}, font: {} }, add = (g, k, n) => { votes[g][k] = (votes[g][k] || 0) + (n || 1); };
+    const rules = { calm: [['forest', 'round', 'sans']], bold: [['sunset', 'sharp', 'sans']], futuristic: [['graphite', 'sharp', 'sans']], friendly: [['indigo', 'round', 'round']], premium: [['graphite', 'sharp', 'serif']], playful: [['sunset', 'round', 'round']] };
+    let any = false;
+    MOODS.forEach((m) => { if (S.moods[m]) { any = true; const [p, s, f] = rules[m][0]; add('palette', p); add('shape', s); add('font', f); } });
+    if (!any) return;
+    const best = (o) => Object.keys(o).sort((a, b) => o[b] - o[a])[0];
+    S.palette = best(votes.palette); S.shape = best(votes.shape); S.font = best(votes.font);
+    syncControls(); redrawAll();
+  }
   /* =================== STEP 4 · THREE.JS SCENE =================== */
   const canvas = $('stage');
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
@@ -727,29 +1166,29 @@
     Object.assign(ENV, e);
     $('light').value = 1; $('depth').value = e.haze;
     const token = ++envToken;
-    setStatus($('interp'), true, 'Loading environment…');
+    setStatus($('interp'), true, t('env.loading'));
     loadEnv(e.hdr).then((d) => {
       if (token !== envToken) return;
       ENV.data = d; applyLive();
-      setStatus($('interp'), true, 'Interpreted as: ' + (e.label || ''));
+      setStatus($('interp'), true, t('env.interp', e.label || ''));
     }).catch(() => {
-      setStatus($('interp'), false, 'Could not load the environment image (needs internet).');
+      setStatus($('interp'), false, t('env.err'));
       scene.background = new THREE.Color(0x0b1220); applyLive();
     });
   }
   function interpret(prompt) {
-    const p = prompt.toLowerCase(), has = (...w) => w.some((x) => new RegExp('\\b' + x + '\\b').test(p));
+    const p = prompt.toLowerCase(), has = (...w) => hasWord(p, w);
     const e = { hdr: 'hub', exposure: 1, keyColor: 0xffffff, keyI: 0.8, rimColor: 0x93c5fd, haze: 0.12, hazeColor: '220,230,240', blur: true };
     const tags = [];
-    if (has('studio', 'clean', 'plain')) { e.hdr = 'studio'; e.haze = 0; tags.push('studio softboxes'); }
-    else if (has('street', 'city', 'outdoor', 'outside', 'plaza', 'bus', 'tram')) { e.hdr = 'city'; tags.push('city street'); }
-    else { tags.push('transit hub'); }
-    if (has('sunset', 'golden', 'warm', 'dusk')) { if (e.hdr !== 'studio') e.hdr = 'sunset'; e.keyColor = 0xffb070; e.rimColor = 0xff7a3d; e.exposure = 1.05; tags.push('golden hour'); }
-    if (has('bright', 'day', 'sunny', 'morning', 'daytime')) { e.exposure = 1.3; e.keyI = 1.1; tags.push('bright daylight'); }
-    if (has('night', 'dark', 'evening')) {
-      e.exposure = 0.22; e.keyI = 0.5; e.keyColor = 0x9fb2ff; e.rimColor = 0x818cf8; e.haze = 0.5; e.hazeColor = '10,16,40'; tags.push('night');
+    if (has('studio', 'clean', 'plain', 'curat', 'simplu', 'épuré', 'epure')) { e.hdr = 'studio'; e.haze = 0; tags.push(t('tag.studio')); }
+    else if (has('street', 'city', 'outdoor', 'outside', 'plaza', 'bus', 'tram', 'stradă', 'strada', 'oraș', 'oras', 'rue', 'ville', 'extérieur', 'exterieur', 'dehors', 'autobuz', 'tramvai')) { e.hdr = 'city'; tags.push(t('tag.city')); }
+    else { tags.push(t('tag.hub')); }
+    if (has('sunset', 'golden', 'warm', 'dusk', 'apus', 'auriu', 'aurie', 'cald', 'caldă', 'coucher', 'dorée', 'doree', 'chaud', 'crépuscule')) { if (e.hdr !== 'studio') e.hdr = 'sunset'; e.keyColor = 0xffb070; e.rimColor = 0xff7a3d; e.exposure = 1.05; tags.push(t('tag.golden')); }
+    if (has('bright', 'day', 'sunny', 'morning', 'daytime', 'ziua', 'zi', 'luminos', 'luminoasă', 'soare', 'jour', 'lumineuse', 'matin')) { e.exposure = 1.3; e.keyI = 1.1; tags.push(t('tag.bright')); }
+    if (has('night', 'dark', 'evening', 'noapte', 'noaptea', 'seara', 'nuit', 'soir')) {
+      e.exposure = 0.22; e.keyI = 0.5; e.keyColor = 0x9fb2ff; e.rimColor = 0x818cf8; e.haze = 0.5; e.hazeColor = '10,16,40'; tags.push(t('tag.night'));
     }
-    if (has('rain', 'fog', 'mist', 'foggy', 'rainy')) { e.haze = 0.55; e.exposure *= 0.85; if (e.hazeColor === '220,230,240') e.hazeColor = '170,185,200'; tags.push('fog / rain'); }
+    if (has('rain', 'fog', 'mist', 'foggy', 'rainy', 'ploaie', 'ceață', 'ceata', 'pluie', 'brouillard')) { e.haze = 0.55; e.exposure *= 0.85; if (e.hazeColor === '220,230,240') e.hazeColor = '170,185,200'; tags.push(t('tag.fog')); }
     e.label = tags.join(' · ');
     return { env: e, tags };
   }
@@ -809,7 +1248,7 @@
   (function loop() {
     requestAnimationFrame(loop);
     const dt = clock.getDelta(), t = clock.elapsedTime;
-    if (step !== 4 || mode !== '3d') return;
+    if (step !== 5 || mode !== '3d') return;
     if (lastTexVersion !== mockVersion) { screenTex.needsUpdate = true; lastTexVersion = mockVersion; }
     if ($('auto').checked && !dragging) rotY += dt * +$('spin').value;
     phone.rotation.y = rotY + Math.sin(t * 0.5) * 0.04; phone.rotation.x = rotX + Math.sin(t * 0.7) * 0.02;
@@ -852,7 +1291,7 @@
   function apply(H, x, y) { const w = H[6] * x + H[7] * y + H[8]; return [(H[0] * x + H[1] * y + H[2]) / w, (H[3] * x + H[4] * y + H[5]) / w]; }
 
   function layoutPhoto() {
-    const host = $('view4'), W = host.clientWidth, H = host.clientHeight;
+    const host = $('view5'), W = host.clientWidth, H = host.clientHeight;
     const iw = photoImg.naturalWidth || 1000, ih = photoImg.naturalHeight || 667, ar = iw / ih;
     sw = W / H > ar ? H * ar : W; sh = W / H > ar ? H : W / ar;
     photoStage.style.width = sw + 'px'; photoStage.style.height = sh + 'px';
@@ -897,7 +1336,7 @@
     $('credit').style.display = m === 'photo' ? 'block' : 'none';
     canvas.style.display = hazeEl.style.display = m === '3d' ? 'block' : 'none';
     if (m === 'photo') layoutPhoto(); else { resize(); lastTexVersion = -1; }
-    $('hint').textContent = m === 'photo' ? 'Click the buttons on the phone screen in the photo' : 'Click buttons on the phone · drag to rotate · scroll to zoom';
+    updateHint();
   }
   function photoHit(e) {
     const r = photoStage.getBoundingClientRect();
@@ -925,47 +1364,78 @@
   };
   function pickScene(prompt) {
     const p = prompt.toLowerCase();
-    const k = /\b(studio|clean|white|plain|wall|minimal)\b/.test(p) ? 'hand' : 'sit';
+    const k = hasWord(p, ['studio', 'clean', 'white', 'plain', 'wall', 'minimal', 'curat', 'alb', 'perete', 'simplu', 'épuré', 'blanc', 'mur']) ? 'hand' : 'sit';
     if (k !== sceneKey && SCENES[k]) setScene(k);
   }
   addEventListener('resize', () => { if (mode === 'photo') layoutPhoto(); });
 
-  /* =================== STEP NAVIGATION =================== */
-  const HINTS = {
-    1: ['Untick "Tickets database" to see what breaks', 'Blueprint of data flow'],
-    2: ['Change the home screen and watch the tap count', 'Grayscale · no colour yet'],
-    3: ['Click a screen to select it · click its buttons to navigate', 'High-fidelity mockups'],
-    4: ['Click buttons on the phone · drag to rotate · scroll to zoom', 'Interactive 3D prototype']
-  };
+  /* =================== NAVIGATION & INIT =================== */
+  function hasWord(p, words) {
+    return words.some((w) => new RegExp('(^|[^a-z\\u00c0-\\u024f])' + w + '([^a-z\\u00c0-\\u024f]|$)').test(p));
+  }
   const done = new Set();
-  function go(n) {
-    step = Math.max(1, Math.min(4, n));
+  function updateHint() {
+    const s = step;
+    $('hint').textContent = s === 5 ? (mode === 'photo' ? t('hint.5p') : t('hint.53')) : t('hint.' + s);
+    $('badge').textContent = t('badge.' + s);
+  }
+  function goStep(n) {
+    step = Math.max(1, Math.min(7, n));
     document.querySelectorAll('.panel').forEach((p) => p.classList.toggle('on', +p.dataset.step === step));
     document.querySelectorAll('.view').forEach((v) => v.classList.toggle('on', v.id === 'view' + step));
-    for (let i = 1; i < step; i++) done.add(i);
+    if (step <= 6) for (let i = 1; i < step; i++) done.add(i);
     document.querySelectorAll('#tabs button').forEach((b) => {
       const s = +b.dataset.step;
       b.classList.toggle('active', s === step);
       b.classList.toggle('done', s !== step && done.has(s));
     });
-    $('btnPrev').disabled = step === 1;
-    $('btnNext').disabled = step === 4;
-    $('hint').textContent = HINTS[step][0];
-    $('badge').textContent = 'Step ' + step + ' · ' + HINTS[step][1];
-    if (step === 4) { resize(); lastTexVersion = -1; if (mode === 'photo') layoutPhoto(); }
-    log('→ step ' + step);
+    $('btnPrev').disabled = step === 1 || step === 7;
+    $('btnNext').disabled = step >= 6;
+    if (step === 5) { resize(); lastTexVersion = -1; if (mode === 'photo') layoutPhoto(); }
+    if (step === 6) drawBoard();
+    if (step === 7) renderCompare();
+    updateHint();
   }
-  document.querySelectorAll('#tabs button').forEach((b) => b.onclick = () => go(+b.dataset.step));
-  $('btnPrev').onclick = () => go(step - 1);
-  $('btnNext').onclick = () => go(step + 1);
+  document.querySelectorAll('#tabs button').forEach((b) => b.onclick = () => goStep(+b.dataset.step));
+  $('btnPrev').onclick = () => goStep(step - 1);
+  $('btnNext').onclick = () => goStep(step + 1);
+
+  function setWf(sketch) { S.sketch = sketch; $('wfSketch').classList.toggle('active', sketch); $('wfClean').classList.toggle('active', !sketch); drawWire(); scheduleDerived(); }
+  $('wfSketch').onclick = () => setWf(true);
+  $('wfClean').onclick = () => setWf(false);
+  $('chkNotes').onchange = (e) => { S.notes = e.target.checked; drawWire(); };
+  $('homeScreen').onchange = (e) => { S.home = e.target.value; current = S.home; redrawAll(); };
+  $('shape').onchange = (e) => { S.shape = e.target.value; redrawAll(); };
+  $('font').onchange = (e) => { S.font = e.target.value; redrawAll(); };
+  $('pname').addEventListener('input', (e) => { S.name = e.target.value; S.nameEdited = true; drawMock(); });
+  $('route').onchange = (e) => { S.route = e.target.selectedIndex; drawMock(); };
+  $('btnQR').onclick = () => { S.qrSeed = 1 + Math.floor(Math.random() * 99999); drawMock(); };
+  $('btnSuggest').onclick = suggestStyle;
+  $('btnVariants').onclick = genVariants;
+  $('photoImg').addEventListener('load', scheduleDerived);
+
+  function setLang(l) {
+    LANG = l; try { localStorage.setItem('lab-lang', l); } catch (e) { /* ignore */ }
+    applyI18n(); buildMoods(); buildPals(); buildRouteSelect(); buildEnvChips();
+    $('pname').placeholder = t('ui.name');
+    if (!envEdited) $('envPrompt').value = t('s5.envdef');
+    syncControls(); redrawAll();
+    if (variantList.length) renderVariants();
+    if (ENV.data) setStatus($('interp'), true, t('env.interp', ENV.label || ''));
+    updateHint();
+  }
+  let envEdited = false;
+  $('envPrompt').addEventListener('input', () => { envEdited = true; });
+  document.querySelectorAll('#lang button').forEach((b) => b.onclick = () => setLang(b.dataset.lang));
 
   /* ---- init ---- */
-  drawArch(); drawWire(); drawMock(); updateArch();
+  applyI18n(); buildMoods(); buildPals(); buildRouteSelect(); buildEnvChips();
+  $('pname').placeholder = t('ui.name'); $('envPrompt').value = t('s5.envdef');
+  syncStyle(); syncControls(); redrawAll();
+  setScene('sit'); setMode('photo');
   applyEnv(interpret($('envPrompt').value).env);
-  setStatus($('interp'), true, 'Interpreted as: transit hub · night');
-  go(1);
-  setScene('sit'); setMode('photo'); composeAll();
-  log('Ready. Work through the four steps like a design + dev team.');
+  genVariants();
+  goStep(1);
 })();
 </script>
 </body>
